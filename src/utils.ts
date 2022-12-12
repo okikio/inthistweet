@@ -7,6 +7,7 @@ export async function getMediaURL(url: string) {
   const parsedURL = new URL(inputURL.pathname, globalThis.location.origin);
   parsedURL.pathname = "/api/twitter" + inputURL.pathname;
   parsedURL.search = inputURL.search;
+  console.log(parsedURL.href)
 
   const response = await fetch(inputURL, {
     headers: {
