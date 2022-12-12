@@ -1,29 +1,98 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
 import Search from '../components/search.svelte';
 
-import { Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
-import FluentSearch24Regular from '~icons/fluent/search-24-regular';
+import { IconButton, Button, TextBlock } from 'fluent-svelte';
+
+import Logo from "~icons/local/logo";
+import MdiGithub from '~icons/mdi/github';
+import MdiTwitter from '~icons/mdi/twitter';
 ---
 
-<Layout title="Download Twitter Media">
+<Layout title="Twitter Media">
+	<section class="social-media">
+		<menu class="flex justify-center gap-4">
+			<IconButton href="https://okikio.dev" rel="noopener">
+				<Logo class="logo" />
+			</IconButton>
+
+			<div class="flex-grow" />
+			
+			<Button class="flex gap-2" variant="standard" href="https://github.com/okikio/twitter-media" rel="noopener">
+				<MdiGithub />	GitHub
+			</Button>
+
+			<Button class="flex gap-2" variant="standard" href="https://twitter.com/@okikio_dev" rel="noopener">
+				<MdiTwitter /> Twitter
+			</Button>
+		</menu>
+	</section>
+
+	<header class="py-4 sm:py-8 md:py-14 text-center">
+		<div class="title">
+			<TextBlock variant="display">Twitter Media</TextBlock>
+		</div>
+	
+		<div class="text-gray-900/60 dark:text-gray-200/80">
+			<TextBlock variant="body">
+				Enter a Tweet URL to download the video/image in it.
+			</TextBlock>
+		</div>
+	</header>
+
 	<main>
 		<Search client:load />
 	</main>
+
+	<footer class="copyright py-4 sm:py-8">
+		<TextBlock variant="body">
+			<span>© {new Date().getFullYear()} </span>
+			<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
+		</TextBlock>
+	</footer>
 </Layout>
 
 <style>
+	.social-media,
+	header,
+	footer,
 	main {
 		margin: auto;
-		padding: 1.5rem;
+		padding: 0.75rem;
 		max-width: 60ch;
 	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
+
+	@sm {
+		.social-media,
+		header,
+		footer,
+		main {
+			padding: 1.5rem;
+		}
+	}
+
+	:global(.title .text-block.type-display) {
+		@apply pb-4;
+		@apply lt-sm:text-4xl lt-md:text-6xl;
+	}
+
+	:global(.icon-button svg.logo) {
+		inline-size: auto;
+		flex-shrink: 0;
+	}
+
+	.copyright {
+		text-align: center;
+	}
+
+	.copyright-link {
+		color: var(--fds-accent-default);
+		display: inline-flex;
+		align-items: center;
+		@apply gap-1;
+	}
+
+	.copyright-link:hover {
+		text-decoration: underline;
 	}
 </style>

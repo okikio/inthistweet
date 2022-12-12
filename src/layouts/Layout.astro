@@ -11,7 +11,23 @@ const { title } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="manifest" href="/manifest.json">
+		<meta name="robots" content="index, follow">
+		<link rel="search" href={Astro.site?.origin?.toString() + "/open-search.xml" } type="application/opensearchdescription+xml" title="Twitter Media">
+		
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+		<meta name="theme-color" content="#ffff00" media="(prefers-color-scheme: dark)">
+
+		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
+		<script>
+			import "../scripts/measure";
+		</script>
+
+		<link href="https://twitter.com/okikio_dev" rel="me" />
+		<link rel="webmention" href="https://webmention.io/okikio.dev/webmention" />
+		<link rel="pingback" href="https://webmention.io/okikio.dev/xmlrpc" />
+		<link rel="pingback" href="https://webmention.io/webmention?forward=https://okikio.dev/endpoint" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
@@ -43,6 +59,7 @@ const { title } = Astro.props;
 		content: "";
 		z-index: -1;
 	}
+
 	@media(prefers-color-scheme: dark) {
 		body:before {
 			background-image: url(/bloom-mica-dark.png);

@@ -1,45 +1,50 @@
 <script lang="ts">
-  import { TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
-  import FluentArrowUpRight24Filled from '~icons/fluent/arrow-up-right-24-filled';
-  import FluentSearch24Regular from '~icons/fluent/search-24-regular';
+  import { writable } from "svelte/store";
+
+  import { Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
   import { getMediaURL } from "../utils";
 
-  import Logo from "~icons/local/logo";
+  import FluentSearch24Regular from "~icons/fluent/search-24-regular";
+  import { onMount } from "svelte";
 
-  let value = '';
+  let value = "";
+  let loading = false;
 
   let type: string | null | undefined = null;
   let url: string | null | undefined = null;
-  let error: string | null = null;
+  let error = writable<string | null>(null);
 
-  async function onSearch (e: Event) {
-    e.preventDefault();
-    error = null;
+  onMount(() => {
+    const url = new URL(globalThis.location.href);
+    value = url.searchParams.get('q') ?? "";
+    onSearch();
+  })
+
+  async function onSearch(e?: Event) {
+    error.set(null);
+    e?.preventDefault?.();
+    if (value.length <= 0) return;
+    loading = true;
+
     try {
       const result = await getMediaURL(value);
       url = result.url;
       type = result.type;
+
+      const newURL = new URL(globalThis.location.href);
+      newURL.search = "?q=" + value;
+      globalThis.history.pushState(null, "", newURL)
     } catch (e) {
-      error = (e ?? '').toString();
       console.error(e);
+      error.set((e ?? "").toString());
     }
+
+    loading = false;
   }
 </script>
 
-<div class="pb-14 text-center">
-  <TextBlock variant="display">
-    Twitter Media
-  </TextBlock>
-
-  <div class="text-gray-900/60 dark:text-gray-200/80">
-    <TextBlock variant="body">
-      Enter a Tweet URL to download the video/image in it.
-    </TextBlock>
-  </div>
-</div>
-
 <form on:submit={onSearch}>
-  <TextBox 
+  <TextBox
     bind:value
     type="search"
     placeholder="Type URL here..."
@@ -51,20 +56,31 @@
   </TextBox>
 </form>
 
-<div class="pt-14">
-  <div class="p-2">
-  <TextBlock variant="bodyLarge">
-    Results
-  </TextBlock>
+<div class="py-2 text-center">
+  <Button variant="hyperlink" on:click={() => {
+    value = "https://twitter.com/elonmusk/status/1585341984679469056";
+    onSearch();
+  }}>Sample</Button>
 </div>
-  <div class="results">
 
-    {#if !(url && type && url.length > 0)}
-      <TextBlock variant="body">Empty...</TextBlock>
-    {:else if typeof error == "string"}
-      <TextBlock>
-        {error}
-      </TextBlock>
+<section class="pt-14">
+  <div class="p-2">
+    <TextBlock variant="bodyLarge">Results</TextBlock>
+  </div>
+  
+  <div class="results">
+    {#if loading}
+      <span class="text-blue-900/60 dark:text-blue-300/60">
+        <TextBlock variant="body">Loading...</TextBlock>
+      </span>
+    {:else if !(url && type && url.length > 0) && $error == null}
+      <span class="text-gray-900/60 dark:text-gray-300/60">
+        <TextBlock variant="body">Empty...</TextBlock>
+      </span>
+    {:else if typeof $error == "string"}
+      <span class="text-yellow-700 dark:text-orange-300">
+        <TextBlock>{$error} </TextBlock>
+      </span>
     {:else if url && type && url.length > 0}
       {#if type == "video"}
         <video controls class="w-full max-h-[500px] bg-black">
@@ -75,16 +91,7 @@
       {/if}
     {/if}
   </div>
-</div>
-
-<div class="copyright">
-  <TextBlock variant="body">
-    © {new Date().getFullYear()} 
-    <a class="copyright-link" href="https://okikio.dev" target="_blank" rel="noopener">
-      <Logo /> Okiki Ojo 
-    </a>
-  </TextBlock>
-</div>
+</section>
 
 <style>
   .results {
@@ -97,23 +104,6 @@
     font-size: var(--fds-body-font-size);
     font-weight: 400;
     line-height: 20px;
-    min-inline-size: 320px;
     padding: 16px;
   }
-
-  .copyright {
-    text-align: center;
-  }
-
-  .copyright-link {
-    color: var(--fds-accent-default);
-    display: inline-flex;
-    align-items: center;
-    @apply gap-1;
-  }
-
-  .copyright-link .icon {
-    opacity: 0.3;
-  }
 </style>
-

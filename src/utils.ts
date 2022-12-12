@@ -1,12 +1,14 @@
 export async function getMediaURL(url: string) {
-  console.log(url)
-  const parsedUrl = new URL(url);
-  if (parsedUrl.hostname !== "twitter.com") {
+  const inputURL = new URL(url);
+  if (inputURL.hostname !== "twitter.com") {
     throw new Error("Not a twitter url")
   }
 
-  parsedUrl.hostname = "vxtwitter.com"
-  const response = await fetch(parsedUrl, {
+  const parsedURL = new URL(inputURL.pathname, globalThis.location.origin);
+  parsedURL.pathname = "/api/twitter" + inputURL.pathname;
+  parsedURL.search = inputURL.search;
+
+  const response = await fetch(inputURL, {
     headers: {
       "User-Agent": "TelegramBot (like TwitterBot)",
     },

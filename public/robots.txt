@@ -1,0 +1,3 @@
+Sitemap: https://media.twitter.com/sitemap.xml
+User-agent: *
+Allow: /

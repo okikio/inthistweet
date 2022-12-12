@@ -1,0 +1,69 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "max-age=480, must-revalidate, public"
+        },
+        {
+          "key": "Accept-CH",
+          "value": "DPR, Viewport-Width, Width"
+        },
+        {
+          "key": "X-UA-Compatible",
+          "value": "IE=edge"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data:; script-src 'self' https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self'; manifest-src 'self'; media-src 'self'; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "sync-xhr=(self)"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/take-measurement",
+      "destination": "https://analytics.bundlejs.com/api/collect"
+    },
+    {
+      "source": "/api/twitter/:path(.*)",
+      "destination": "https://vxtwitter.com/:path*"
+    }
+  ],
+  "github": {
+    "silent": true,
+    "autoJobCancelation": true
+  }
+}

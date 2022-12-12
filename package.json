@@ -20,6 +20,8 @@
     "unplugin-icons": "^0.14.14"
   },
   "devDependencies": {
-    "@iconify-json/fluent": "^1.1.17"
+    "@iconify-json/fluent": "^1.1.17",
+    "@iconify-json/fluent-emoji": "^1.1.7",
+    "@iconify-json/mdi": "^1.1.36"
   }
 }

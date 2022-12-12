@@ -1,0 +1,37 @@
+{
+  "name": "Twitter Media",
+  "short_name": "Twttr media",
+  "id": "media-twitter",
+  "start_url": "/",
+  "dir": "ltr",
+  "display": "standalone",
+  "theme_color": "#ffff00",
+  "background_color": "#ffff00",
+  "description": "Quick and easy twitter media downloader",
+  "icons": [
+    {
+      "src": "/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "lang": "en",
+  "screenshots": [],
+  "share_target": {
+    "url_template": "/?q={q}",
+    "action": "/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "url": "q"
+    }
+  },
+  "orientation": "natural",
+  "categories": [
+    "productivity",
+    "utility",
+    "text"
+  ],
+  "scope": "/"
+}

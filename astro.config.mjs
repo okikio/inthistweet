@@ -10,6 +10,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://media.okikio.dev",
   integrations: [svelte(), tailwind()],
   vite: {
     server: {
