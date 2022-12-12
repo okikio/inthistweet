@@ -8,7 +8,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
-import netlify from "@astrojs/netlify";
+import netlify from "@astrojs/netlify/edge-functions";
 
 // https://astro.build/config
 export default defineConfig({

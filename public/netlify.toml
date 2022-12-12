@@ -1,17 +1,3 @@
-# The following redirect is intended for use with most SPAs that handle
-# routing internally.
-[[redirects]]
-  from = "/api/twitter/*"
-  to = "https://vxtwitter.com/:splat"
-  status = 200
-  headers = {X-From = "Netlify", Access-Control-Allow-Origin = "*"}
-
-[[headers]]
-  # Define which paths this specific [[headers]] block will cover.
-  for = "/api/twitter/*"
-    [headers.values]
-    Access-Control-Allow-Origin = "*"
-
 [[headers]]
   for = "/*"
     [headers.values]

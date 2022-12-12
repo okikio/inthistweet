@@ -2,8 +2,6 @@
   import { writable } from "svelte/store";
 
   import { Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
-  import { getMediaURL } from "../utils";
-
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
   import { onMount } from "svelte";
 
@@ -27,7 +25,9 @@
     loading = true;
 
     try {
-      const result = await getMediaURL(value);
+      const result = await (await fetch("/api/twitter?url=" + encodeURIComponent(value))).json();
+      console.log({ result })
+
       url = result.url;
       type = result.type;
 

@@ -56,10 +56,6 @@
     {
       "source": "/take-measurement",
       "destination": "https://analytics.bundlejs.com/api/collect"
-    },
-    {
-      "source": "/api/twitter/:path(.*)",
-      "destination": "https://vxtwitter.com/:path*"
     }
   ],
   "github": {

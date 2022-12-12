@@ -1,35 +1,29 @@
+import { load } from "cheerio";
+
 export async function getMediaURL(url: string) {
-  const inputURL = new URL(url);
-  if (inputURL.hostname !== "twitter.com") {
+  const parsedURL = new URL(url);
+  if (parsedURL.hostname !== "twitter.com") {
     throw new Error("Not a twitter url")
   }
 
-  const parsedURL = new URL(inputURL.pathname, globalThis.location.origin);
-  parsedURL.pathname = "/api/twitter" + inputURL.pathname;
-  parsedURL.search = inputURL.search;
-  console.log(parsedURL.href)
+  parsedURL.hostname = "vxtwitter.com";
 
-  const response = await fetch(inputURL, {
-    mode: 'no-cors',
+  const response = await fetch(parsedURL, {
     headers: {
       "User-Agent": "TelegramBot (like TwitterBot)",
-      'Content-Type': "text/plain"
     },
-  })
-
+  });
   if (!response.ok) {
     throw new Error(`Failed to fetch tweet: ${response.status}`)
   }
 
   const html = await response.text();
-
-  const { parseFromString: parse } = new DOMParser();
-  const $ = parse(html, "text/html").querySelector;
+  const $ = load(html);
 
   const getMetaContent = (name: string) => {
     const value =
-      $(`meta[name="twitter:${name}"]`)?.getAttribute("content") ||
-      $(`meta[property="og:${name}"]`)?.getAttribute("content")
+      $(`meta[name="twitter:${name}"]`)?.attr("content") ||
+      $(`meta[property="og:${name}"]`)?.attr("content")
     return value
   }
 
@@ -38,6 +32,7 @@ export async function getMediaURL(url: string) {
   const media = video || image;
 
   const type = video ? "video" : "image";
+  if (typeof media !== "string") throw new Error("No media in tweet")
 
   return { type, url: media };
 }
