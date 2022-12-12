@@ -3,15 +3,18 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 import svelte from "@astrojs/svelte";
 import Icons from 'unplugin-icons/vite';
-import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 
 // https://astro.build/config
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
+import sitemap from "@astrojs/sitemap";
+
+// https://astro.build/config
 export default defineConfig({
   site: "https://media.okikio.dev",
-  integrations: [svelte(), tailwind()],
+  integrations: [svelte(), tailwind(), sitemap()],
   vite: {
     server: {
       cors: true
