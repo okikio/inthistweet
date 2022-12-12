@@ -10,8 +10,10 @@ export async function getMediaURL(url: string) {
   console.log(parsedURL.href)
 
   const response = await fetch(inputURL, {
+    mode: 'no-cors',
     headers: {
       "User-Agent": "TelegramBot (like TwitterBot)",
+      'Content-Type': "text/plain"
     },
   })
 

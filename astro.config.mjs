@@ -1,20 +1,23 @@
 import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
-import svelte from "@astrojs/svelte";
 import Icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 
 // https://astro.build/config
+import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
-
-// https://astro.build/config
 import sitemap from "@astrojs/sitemap";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://media.okikio.dev",
   integrations: [svelte(), tailwind(), sitemap()],
+  output: "server",
+  adapter: netlify({
+    dist: new URL('./dist/', import.meta.url)
+  }),
   vite: {
     server: {
       cors: true

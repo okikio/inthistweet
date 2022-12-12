@@ -25,3 +25,6 @@
     X-UA-Compatible = "IE=edge"
     Content-Security-Policy = "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data:; script-src 'self' https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self'; manifest-src 'self'; media-src 'self'; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
     Permissions-Policy = "sync-xhr=(self)"
+
+[functions]
+directory = "dist/functions"
