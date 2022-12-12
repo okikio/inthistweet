@@ -8,8 +8,7 @@
   let value = "";
   let loading = false;
 
-  let type: string | null | undefined = null;
-  let url: string | null | undefined = null;
+  let results: Array<{ type?: string | null, url?: string | null }> = [];
   let error = writable<string | null>(null);
 
   onMount(() => {
@@ -26,10 +25,8 @@
 
     try {
       const result = await (await fetch("/api/twitter?url=" + encodeURIComponent(value))).json();
-      console.log({ result })
-
-      url = result.url;
-      type = result.type;
+      results = result;
+      console.log(results)
 
       const newURL = new URL(globalThis.location.href);
       newURL.search = "?q=" + value;
@@ -73,22 +70,26 @@
       <span class="text-blue-900/60 dark:text-blue-300/60">
         <TextBlock variant="body">Loading...</TextBlock>
       </span>
-    {:else if !(url && type && url.length > 0) && $error == null}
-      <span class="text-gray-900/60 dark:text-gray-300/60">
-        <TextBlock variant="body">Empty...</TextBlock>
-      </span>
-    {:else if typeof $error == "string"}
-      <span class="text-yellow-700 dark:text-orange-300">
-        <TextBlock>{$error} </TextBlock>
-      </span>
-    {:else if url && type && url.length > 0}
-      {#if type == "video"}
-        <video controls class="w-full max-h-[500px] bg-black">
-          <source src={url} />
-        </video>
-      {:else if type === "image"}
-        <img src={url} />
-      {/if}
+    {:else}
+      {#each results as { url, type }}
+        {#if !(url && type && url.length > 0) && $error == null}
+          <span class="text-gray-900/60 dark:text-gray-300/60">
+            <TextBlock variant="body">Empty...</TextBlock>
+          </span>
+        {:else if typeof $error == "string"}
+          <span class="text-yellow-700 dark:text-orange-300">
+            <TextBlock>{$error} </TextBlock>
+          </span>
+        {:else if url && type && url.length > 0}
+          {#if type == "video"}
+            <video controls class="w-full max-h-[500px] bg-black">
+              <source src={url} />
+            </video>
+          {:else}
+            <img src={url} />
+          {/if}
+        {/if}
+      {/each}
     {/if}
   </div>
 </section>
