@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-    <ShortName>Twitter Media</ShortName>
+    <ShortName>Twtter media</ShortName>
     <Description>Quick and easy twitter media downloader</Description>
     <Image width="16" height="16" type="image/x-icon">https://okikio.dev/favicon.ico</Image>
     <InputEncoding>UTF-8</InputEncoding>
     <Contact>hey@okikio.dev</Contact>
-    <Url type="text/html" template="https://bundlejs.com/?q={searchTerms}"/>
+    <Url type="text/html" template="https://media.okikio.dev/?q={searchTerms}"/>
     <moz:SearchForm>https://media.okikio.dev</moz:SearchForm>
 </OpenSearchDescription>
