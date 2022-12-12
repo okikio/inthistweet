@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import Search from '../components/search.svelte';
+
+import { Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
+import FluentSearch24Regular from '~icons/fluent/search-24-regular';
+---
+
+<Layout title="Download Twitter Media">
+	<main>
+		<Search client:load />
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+</style>

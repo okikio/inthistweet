@@ -1,0 +1,55 @@
+---
+import "fluent-svelte/theme.css";
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="background">
+		<slot />
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 124, 58, 237;
+		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+	}
+	html {
+		font-family: var(--fds-font-family-text), system-ui, sans-serif;
+    background-color: var(--fds-solid-background-base);
+    color: var(--fds-text-primary);
+    font-family: var(--fds-font-family-text);
+    font-size: var(--fds-body-font-size);
+    font-weight: 400;
+	}
+	body:before {
+		background-image: url(/bloom-mica-light.png);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		content: "";
+		z-index: -1;
+	}
+	@media(prefers-color-scheme: dark) {
+		body:before {
+			background-image: url(/bloom-mica-dark.png);
+		}
+	}
+	code {
+		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+			Bitstream Vera Sans Mono, Courier New, monospace;
+	}
+</style>
