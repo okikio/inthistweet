@@ -3,7 +3,7 @@
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Strict-Transport-Security: max-age=300
   Cache-Control: max-age=480, stale-while-revalidate=360, public
   Accept-CH: DPR, Viewport-Width, Width
   X-UA-Compatible: IE=edge
@@ -11,6 +11,6 @@
   Permissions-Policy: sync-xhr=(self)
 
 /
-  Link: <https://video.twimg.com/>; rel="preconnect"
-  Link: <https://pbs.twimg.com/>; rel="preconnect"
-  Link: <https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4>; rel="preload"; as="video"
+  Link: <https://video.twimg.com/>; rel=preconnect
+  Link: <https://pbs.twimg.com/>; rel=preconnect
+  Link: <https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4>; rel=preload; as=video; crossorigin=anonymous
