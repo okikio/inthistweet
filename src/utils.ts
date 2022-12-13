@@ -23,6 +23,15 @@ function getTweetDetails(res: object) {
   })
 }
 
+function getCardDetails(res: object) {
+  // @ts-ignore
+  const card_binding_values = res.card.binding_values;
+  const thumbnail_image_original = card_binding_values?.thumbnail_image_original?.image_value.url;
+  if (!("thumbnail_image_original" in card_binding_values)) return [];
+
+  return { type: "photo", url: thumbnail_image_original };
+}
+
 export async function getMediaURL(url: string) {
   const parsedURL = new URL(url);
   if (parsedURL.hostname !== "twitter.com") {
@@ -45,11 +54,19 @@ export async function getMediaURL(url: string) {
       arr = [...arr].concat(getTweetDetails(obj));
     }
 
+    if ("card" in obj) {
+      arr = [...arr].concat(getCardDetails(obj));
+    }
+
     while ("quoted_tweet" in obj) {
       obj = obj.quoted_tweet;
 
       if ("mediaDetails" in obj) {
         arr = [...arr].concat( getTweetDetails(obj) );
+      }
+
+      if ("card" in obj) {
+        arr = [...arr].concat(getCardDetails(obj));
       }
     }
 

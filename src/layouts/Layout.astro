@@ -5,6 +5,7 @@ export interface Props {
 }
 
 const { title } = Astro.props;
+const url = new URL(Astro.url).searchParams.get('q') ?? '';
 ---
 
 <!DOCTYPE html>
@@ -19,10 +20,11 @@ const { title } = Astro.props;
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 		<meta name="theme-color" content="#ffff00" media="(prefers-color-scheme: dark)">
 
+		<link rel="preconnect" href="https://video.twimg.com" />
+		<link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" />
+		<link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/>
+
 		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
-		<script>
-			import "../scripts/measure";
-		</script>
 
 		<link href="https://twitter.com/okikio_dev" rel="me" />
 		<link rel="webmention" href="https://webmention.io/okikio.dev/webmention" />
@@ -42,6 +44,8 @@ const { title } = Astro.props;
 		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
 	}
 	html {
+		scrollbar-gutter: stable both-edges;
+		
 		font-family: var(--fds-font-family-text), system-ui, sans-serif;
     background-color: var(--fds-solid-background-base);
     color: var(--fds-text-primary);

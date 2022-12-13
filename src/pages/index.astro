@@ -41,7 +41,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 	</header>
 
 	<main>
-		<Search client:load />
+		<Search value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
 	</main>
 
 	<footer class="copyright py-4 sm:py-8">
@@ -50,6 +50,12 @@ import MdiTwitter from '~icons/mdi/twitter';
 			<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
 		</TextBlock>
 	</footer>
+
+	<script>
+		import Measure from "../scripts/measure";
+		Measure(window);
+		console.log("Measure")
+	</script>
 </Layout>
 
 <style>

@@ -25,7 +25,7 @@ export function removeTrailingSlash(url) {
   return url && url.length > 1 && url.endsWith("/") ? url.slice(0, -1) : url;
 }
 
-(window => {
+export default function (window: Window & typeof globalThis) {
   const apiRoute = "/take-measurement"; // "/api/collect";
 
   const {
@@ -44,11 +44,12 @@ export function removeTrailingSlash(url) {
   // const attr = script.getAttribute.bind(script);
   const attr = (id: string) => {
     return ({
-      "data-host-url": "https://bundlejs.com",
-      "data-domains": "bundlejs.com,bundle.js.org,bundlesize.com",
+      "data-host-url": "https://media.okikio.dev",
+      "data-domains": "media.okikio.dev,okikio.dev,bundlejs.com,bundle.js.org,bundlesize.com",
       "data-website-id": "72683bf5-0839-42eb-84e4-5d34f619a31c"
     })[id];
   };
+  
   const website = attr("data-website-id");
   const hostUrl = attr("data-host-url");
   const autoTrack = attr("data-auto-track") !== "false";
@@ -246,4 +247,4 @@ export function removeTrailingSlash(url) {
 
     update();
   }
-})(window);
+};

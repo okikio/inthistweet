@@ -5,7 +5,7 @@
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
   import { onMount } from "svelte";
 
-  let value = "";
+  export let value = "";
   let loading = false;
 
   let results: Array<{ type?: string | null, url?: string | null }> = [];
@@ -54,10 +54,42 @@
 </form>
 
 <div class="py-2 text-center">
-  <Button variant="hyperlink" on:click={() => {
-    value = "https://twitter.com/elonmusk/status/1585341984679469056";
-    onSearch();
-  }}>Sample</Button>
+  <Button 
+    variant="hyperlink" 
+    on:click={() => {
+      value = "https://twitter.com/elonmusk/status/1585341984679469056";
+      onSearch();
+    }}
+  >
+    Sample 1
+  </Button>
+  <Button 
+    variant="hyperlink" 
+    on:click={() => {
+      value = "https://twitter.com/d__raptis/status/1602303242813186051?s=20&t=ctkPSBYauoo4tkxoHtEP_Q";
+      onSearch();
+    }}
+  >
+    Sample 2
+  </Button>
+  <Button 
+    variant="hyperlink" 
+    on:click={() => {
+      value = "https://twitter.com/MKBHD/status/1600227210031468572?s=20&t=ctkPSBYauoo4tkxoHtEP_Q";
+      onSearch();
+    }}
+  >
+    Sample 3
+  </Button>
+  <Button 
+    variant="hyperlink" 
+    on:click={() => {
+      value = "https://twitter.com/artalar_dev/status/1602270191248969731?s=20&t=8x2nQwnRczCok7d_QI_DXA";
+      onSearch();
+    }}
+  >
+    Sample 4
+  </Button>
 </div>
 
 <section class="pt-14">
@@ -70,27 +102,28 @@
       <span class="text-blue-900/60 dark:text-blue-300/60">
         <TextBlock variant="body">Loading...</TextBlock>
       </span>
+    {:else if !(results.length > 0) && $error == null}
+      <span class="text-gray-900/60 dark:text-gray-300/60">
+        <TextBlock variant="body">Empty...</TextBlock>
+      </span>
     {:else}
-      {#each results as { url, type }}
-        {#if !(url && type && url.length > 0) && $error == null}
-          <span class="text-gray-900/60 dark:text-gray-300/60">
-            <TextBlock variant="body">Empty...</TextBlock>
-          </span>
-        {:else if typeof $error == "string"}
+      {#each results as { url, type } (url)}
+        {#if typeof $error == "string"}
           <span class="text-yellow-700 dark:text-orange-300">
             <TextBlock>{$error} </TextBlock>
           </span>
         {:else if url && type && url.length > 0}
           {#if type == "video"}
-            <video controls class="w-full max-h-[500px] bg-black">
+            <video controls preload="auto" class="w-full max-h-[500px] bg-black">
               <source src={url} />
             </video>
           {:else}
-            <img src={url} />
+            <img src={url} loading="eager" />
           {/if}
         {/if}
       {/each}
     {/if}
+    
   </div>
 </section>
 
@@ -106,5 +139,9 @@
     font-weight: 400;
     line-height: 20px;
     padding: 16px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 </style>
