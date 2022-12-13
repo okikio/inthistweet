@@ -9,7 +9,7 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="background">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 		<meta name="theme-color" content="#ffff00" media="(prefers-color-scheme: dark)">
 
 		<link rel="preconnect" href="https://video.twimg.com" />
-		<link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" />
+		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
 		<link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/>
 
 		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
@@ -34,7 +34,7 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="background">
+	<body>
 		<slot />
 	</body>
 </html>
@@ -44,17 +44,24 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
 	}
 	html {
-		scrollbar-gutter: stable both-edges;
-		
 		font-family: var(--fds-font-family-text), system-ui, sans-serif;
     background-color: var(--fds-solid-background-base);
     color: var(--fds-text-primary);
     font-family: var(--fds-font-family-text);
     font-size: var(--fds-body-font-size);
-    font-weight: 400;
+    font-weight: 400;  
+		color-scheme: dark light; 
+		scrollbar-gutter: stable; 
 	}
-	body:before {
+	.background {
 		background-image: url(/bloom-mica-light.png);
+		background-attachment: fixed;
+		background-size: cover;
+		background-position: center center;
+	}
+	.background:before {
+		background-image: url(/bloom-mica-light.png);
+		filter: blur(5px) saturate(200deg);
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -65,7 +72,8 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 	}
 
 	@media(prefers-color-scheme: dark) {
-		body:before {
+		.background,
+		.background:before {
 			background-image: url(/bloom-mica-dark.png);
 		}
 	}

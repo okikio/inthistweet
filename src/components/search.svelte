@@ -17,7 +17,13 @@
     onSearch();
   })
 
-  async function onSearch(e?: Event) {
+  globalThis?.addEventListener?.('popstate', (event) => { 
+    const url = new URL(globalThis.location.href);
+    value = url.searchParams.get('q') ?? "";
+    onSearch(undefined, true);
+  });
+
+  async function onSearch(e?: Event, popState = false) {
     error.set(null);
     e?.preventDefault?.();
     if (value.length <= 0) return;
@@ -28,9 +34,11 @@
       results = result;
       console.log(results)
 
-      const newURL = new URL(globalThis.location.href);
-      newURL.search = "?q=" + value;
-      globalThis.history.pushState(null, "", newURL)
+      if (!popState) {
+        const newURL = new URL(globalThis.location.href);
+        newURL.search = "?q=" + value;
+        globalThis.history.pushState(null, "", newURL)
+      }
     } catch (e) {
       console.error(e);
       error.set((e ?? "").toString());
