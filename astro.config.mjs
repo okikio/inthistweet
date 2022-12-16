@@ -18,6 +18,11 @@ export default defineConfig({
   adapter: netlify({
     dist: new URL('./dist/', import.meta.url)
   }),
+  experimental: {
+    prerender: true,
+    errorOverlay: true,
+    contentCollections: false,
+  },
   vite: {
     server: {
       cors: true

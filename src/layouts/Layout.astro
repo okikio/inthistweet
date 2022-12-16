@@ -21,9 +21,10 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 		<meta name="theme-color" content="#ffff00" media="(prefers-color-scheme: dark)">
 
 		<link rel="preconnect" href="https://video.twimg.com" />
-		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
-		<link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/>
+		<link rel="preconnect" href="https://pbs.twimg.com" />
 
+		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
+		<!-- <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/> -->
 		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
 
 		<link href="https://twitter.com/okikio_dev" rel="me" />

@@ -1,5 +1,3 @@
-import { load } from "cheerio";
-
 /** 
  * The above is the recommended way to load the ESM module, as it only
  * loads it on demand, thus when not natively supported by the runtime or
@@ -71,34 +69,5 @@ export async function getMediaURL(url: string) {
     }
 
     return arr;
-  } else {
-
-    const response = await fetch(parsedURL, {
-      headers: {
-        "User-Agent": "TelegramBot (like TwitterBot)",
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch tweet: ${response.status}`)
-    }
-
-    const html = await response.text();
-    const $ = load(html);
-
-    const getMetaContent = (name: string) => {
-      const value =
-        $(`meta[name="twitter:${name}"]`)?.attr("content") ||
-        $(`meta[property="og:${name}"]`)?.attr("content")
-      return value
-    }
-
-    const video = getMetaContent("video");
-    const image = getMetaContent("image");
-    const media = video || image;
-
-    const type = video ? "video" : "photo";
-    if (typeof media !== "string") throw new Error("No media in tweet")
-
-    return [{ type, url: media }];
   }
 }
