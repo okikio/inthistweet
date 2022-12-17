@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-    <ShortName>in this tweet</ShortName>
-    <Description>Quick and easy twitter image/video downloader</Description>
-    <Image width="16" height="16" type="image/x-icon">https://inthistweet.app/favicon.ico</Image>
+    <ShortName>inthistweet</ShortName>
+    <Description>Quick and easy twitter image/video downloader. Enter a Tweet URL...</Description>
+    <Image width="64" height="64" type="image/png">https://inthistweet.app/favicon/favicon_x64.png</Image>
     <InputEncoding>UTF-8</InputEncoding>
     <Contact>hey@okikio.dev</Contact>
     <Url type="text/html" template="https://inthistweet.app/?q={searchTerms}"/>

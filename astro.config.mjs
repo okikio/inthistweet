@@ -10,10 +10,21 @@ import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 import netlify from "@astrojs/netlify/edge-functions";
 
+import serviceWorker from "astrojs-service-worker";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://inthistweet.app",
-  integrations: [svelte(), tailwind(), sitemap({ customPages: ['https://inthistweet.app/'] })],
+  integrations: [
+    svelte(), 
+    tailwind(), 
+    sitemap({ customPages: ['https://inthistweet.app/'] }), 
+    serviceWorker({
+      workbox: {
+        
+      }
+    })
+  ],
   output: "server",
   adapter: netlify({
     dist: new URL('./dist/', import.meta.url)

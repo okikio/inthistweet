@@ -5,7 +5,6 @@ import Search from '../components/search.svelte';
 import { IconButton, Button, TextBlock } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
-import LogoShort from "~icons/local/logo-short";
 
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
@@ -13,12 +12,12 @@ import MdiTwitter from '~icons/mdi/twitter';
 export const prerender = true;
 ---
 
-<Layout title="In this tweet">
+<Layout title="In this tweet" description="Quick and easy twitter image/video downloader. Enter a Tweet URL, click search, and download the image/videos in it.">
 	<section class="social-media">
 		<menu class="flex justify-center gap-4">
 			<Button href="/" variant="standard" rel="noopener">
 				<span class="flex flex-row gap-2">
-				<Logo class="logo" />
+					<Logo class="logo" />
 				</span>
 			</Button>
 

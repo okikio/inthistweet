@@ -1,19 +1,495 @@
 {
-  "name": "Twitter Media",
-  "short_name": "Twttr media",
-  "id": "media-twitter",
+  "name": "In this tweet",
+  "short_name": "inthistweet",
+  "id": "inthistweet",
   "start_url": "/",
   "dir": "ltr",
   "display": "standalone",
-  "theme_color": "#ffff00",
-  "background_color": "#ffff00",
-  "description": "Quick and easy twitter media downloader",
+  "theme_color": "#232323",
+  "background_color": "#232323",
+  "description": "Quick and easy twitter image/video downloader. Enter a Tweet URL, click search, and download the image/videos in it.",
   "icons": [
     {
       "src": "/favicon/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "/favicon/maskable_icon_x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/maskable_icon_x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/maskable_icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/windows11/SmallTile.scale-100.png",
+      "sizes": "71x71"
+    },
+    {
+      "src": "/favicon/windows11/SmallTile.scale-125.png",
+      "sizes": "89x89"
+    },
+    {
+      "src": "/favicon/windows11/SmallTile.scale-150.png",
+      "sizes": "107x107"
+    },
+    {
+      "src": "/favicon/windows11/SmallTile.scale-200.png",
+      "sizes": "142x142"
+    },
+    {
+      "src": "/favicon/windows11/SmallTile.scale-400.png",
+      "sizes": "284x284"
+    },
+    {
+      "src": "/favicon/windows11/Square150x150Logo.scale-100.png",
+      "sizes": "150x150"
+    },
+    {
+      "src": "/favicon/windows11/Square150x150Logo.scale-125.png",
+      "sizes": "188x188"
+    },
+    {
+      "src": "/favicon/windows11/Square150x150Logo.scale-150.png",
+      "sizes": "225x225"
+    },
+    {
+      "src": "/favicon/windows11/Square150x150Logo.scale-200.png",
+      "sizes": "300x300"
+    },
+    {
+      "src": "/favicon/windows11/Square150x150Logo.scale-400.png",
+      "sizes": "600x600"
+    },
+    {
+      "src": "/favicon/windows11/Wide310x150Logo.scale-100.png",
+      "sizes": "310x150"
+    },
+    {
+      "src": "/favicon/windows11/Wide310x150Logo.scale-125.png",
+      "sizes": "388x188"
+    },
+    {
+      "src": "/favicon/windows11/Wide310x150Logo.scale-150.png",
+      "sizes": "465x225"
+    },
+    {
+      "src": "/favicon/windows11/Wide310x150Logo.scale-200.png",
+      "sizes": "620x300"
+    },
+    {
+      "src": "/favicon/windows11/Wide310x150Logo.scale-400.png",
+      "sizes": "1240x600"
+    },
+    {
+      "src": "/favicon/windows11/LargeTile.scale-100.png",
+      "sizes": "310x310"
+    },
+    {
+      "src": "/favicon/windows11/LargeTile.scale-125.png",
+      "sizes": "388x388"
+    },
+    {
+      "src": "/favicon/windows11/LargeTile.scale-150.png",
+      "sizes": "465x465"
+    },
+    {
+      "src": "/favicon/windows11/LargeTile.scale-200.png",
+      "sizes": "620x620"
+    },
+    {
+      "src": "/favicon/windows11/LargeTile.scale-400.png",
+      "sizes": "1240x1240"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.scale-100.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.scale-125.png",
+      "sizes": "55x55"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.scale-150.png",
+      "sizes": "66x66"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.scale-200.png",
+      "sizes": "88x88"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.scale-400.png",
+      "sizes": "176x176"
+    },
+    {
+      "src": "/favicon/windows11/StoreLogo.scale-100.png",
+      "sizes": "50x50"
+    },
+    {
+      "src": "/favicon/windows11/StoreLogo.scale-125.png",
+      "sizes": "63x63"
+    },
+    {
+      "src": "/favicon/windows11/StoreLogo.scale-150.png",
+      "sizes": "75x75"
+    },
+    {
+      "src": "/favicon/windows11/StoreLogo.scale-200.png",
+      "sizes": "100x100"
+    },
+    {
+      "src": "/favicon/windows11/StoreLogo.scale-400.png",
+      "sizes": "200x200"
+    },
+    {
+      "src": "/favicon/windows11/SplashScreen.scale-100.png",
+      "sizes": "620x300"
+    },
+    {
+      "src": "/favicon/windows11/SplashScreen.scale-125.png",
+      "sizes": "775x375"
+    },
+    {
+      "src": "/favicon/windows11/SplashScreen.scale-150.png",
+      "sizes": "930x450"
+    },
+    {
+      "src": "/favicon/windows11/SplashScreen.scale-200.png",
+      "sizes": "1240x600"
+    },
+    {
+      "src": "/favicon/windows11/SplashScreen.scale-400.png",
+      "sizes": "2480x1200"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-unplated_targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/favicon/windows11/Square44x44Logo.altform-lightunplated_targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-512-512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-192-192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-144-144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-96-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-72-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/favicon/android/android-launchericon-48-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/favicon/ios/16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/favicon/ios/20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/favicon/ios/29.png",
+      "sizes": "29x29"
+    },
+    {
+      "src": "/favicon/ios/32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/favicon/ios/40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/favicon/ios/50.png",
+      "sizes": "50x50"
+    },
+    {
+      "src": "/favicon/ios/57.png",
+      "sizes": "57x57"
+    },
+    {
+      "src": "/favicon/ios/58.png",
+      "sizes": "58x58"
+    },
+    {
+      "src": "/favicon/ios/60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/favicon/ios/64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/favicon/ios/72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/favicon/ios/76.png",
+      "sizes": "76x76"
+    },
+    {
+      "src": "/favicon/ios/80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/favicon/ios/87.png",
+      "sizes": "87x87"
+    },
+    {
+      "src": "/favicon/ios/100.png",
+      "sizes": "100x100"
+    },
+    {
+      "src": "/favicon/ios/114.png",
+      "sizes": "114x114"
+    },
+    {
+      "src": "/favicon/ios/120.png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "/favicon/ios/128.png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/favicon/ios/144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/favicon/ios/152.png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/favicon/ios/167.png",
+      "sizes": "167x167"
+    },
+    {
+      "src": "/favicon/ios/180.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/favicon/ios/192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon/ios/256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/favicon/ios/512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/favicon/ios/1024.png",
+      "sizes": "1024x1024"
+    },
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "lang": "en",
@@ -31,7 +507,13 @@
   "categories": [
     "productivity",
     "utility",
-    "text"
+    "text",
+    "social",
+    "photo",
+    "photo & video",
+    "video",
+    "multimedia",
+    "developer tools"
   ],
   "scope": "/"
 }

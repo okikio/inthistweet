@@ -2,9 +2,10 @@
 import "fluent-svelte/theme.css";
 export interface Props {
 	title: string;
+	description: string;
 }
 
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 const url = new URL(Astro.url).searchParams.get('q') ?? '';
 ---
 
@@ -12,29 +13,79 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 <html lang="en" class="background">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="generator" content={Astro.generator} />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>{title}</title>
+
 		<link rel="manifest" href="/manifest.json">
 		<meta name="robots" content="index, follow">
-		<link rel="search" href={Astro.site?.origin?.toString() + "/open-search.xml" } type="application/opensearchdescription+xml" title="in this tweet">
+
+		<link rel="search" href={Astro.site?.origin?.toString() + "/open-search.xml" } type="application/opensearchdescription+xml" title="inthistweet: Twitter URL...">
+		<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
 		
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-		<meta name="theme-color" content="#ffff00" media="(prefers-color-scheme: dark)">
+		<meta name="theme-color" content="#232323" media="(prefers-color-scheme: dark)">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+
+		<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#745eff">
+
+		<meta name="msapplication-TileColor" content="#232323">
+		<meta name="msapplication-config" content="/favicon/browserconfig.xml">
+
+		<meta name="title" property="og:title" content={title} />
+		<meta name="twitter:title" itemprop="name" content={title} />
+		<meta name="apple-mobile-web-app-title" content={title} />
+
+		<meta name="description" property="og:description" content={description} />
+		<meta property="twitter:description" itemprop="description" content={description} />
+
+		<meta name="keywords" content="twitter media,twitter image/video downloader,tweet video download,tweet image download" />
+
+		<meta name="og:locale" content="en_Us" />
+		<meta property="og:type" content="website" />
+
+		<meta name="web-author" content="Okiki Ojo" />
+		<meta property="article:author" content="Okiki Ojo" />
+		<meta name="contact" content="hey@okikio.dev" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta property="twitter:image:alt" content="in this tweet's logo" />
+
+		<meta name="twitter:site" content="@okikio_dev" />
+		<meta name="twitter:creator" content="@okikio_dev" />
+
+		<meta property="image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
+		<meta property="og:image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
+		<meta name="twitter:image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
+
+		<meta name="twitter:url" property="og:site_name" content={Astro.site?.origin.toString()} />
+
+		<link rel="canonical" href={Astro.request.url.toString()} />
+		<meta itemprop="url" content={Astro.request.url.toString()} />
+		<meta name="shortlink" content={Astro.request.url.toString()} />
+		<meta property="og:url" content={Astro.request.url.toString()} />
 
 		<link rel="preconnect" href="https://video.twimg.com" />
 		<link rel="preconnect" href="https://pbs.twimg.com" />
-
-		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
-		<!-- <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/> -->
-		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
 
 		<link href="https://twitter.com/okikio_dev" rel="me" />
 		<link rel="webmention" href="https://webmention.io/okikio.dev/webmention" />
 		<link rel="pingback" href="https://webmention.io/okikio.dev/xmlrpc" />
 		<link rel="pingback" href="https://webmention.io/webmention?forward=https://okikio.dev/endpoint" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
 		
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
+
+		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
+		<!-- <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(url)}`} as="fetch" crossorigin="anonymous"/> -->
+
+		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
 	</head>
 	<body>
 		<slot />
