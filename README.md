@@ -7,7 +7,7 @@
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
 
 Quick and easy twitter image/video downloader. 
-Enter a Tweet URL, click search, and download the image/videos in it.
+Enter a Tweet URL, click search, and download the image/videos in it to share, create a meme, and/or to store.
 
 [inthistweet.app](https://inthistweet.app)
 
