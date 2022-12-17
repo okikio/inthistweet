@@ -54,8 +54,9 @@
     type="search"
     placeholder="Type URL here..."
     searchButton={false}
+    class="search-box"
   >
-    <TextBoxButton slot="buttons" on:click={onSearch} aria-label="Search Button">
+    <TextBoxButton class="search-button" slot="buttons" on:click={onSearch} aria-label="Search Button">
       <FluentSearch24Regular />
     </TextBoxButton>
   </TextBox>
@@ -136,6 +137,16 @@
 </section>
 
 <style>
+  :global(.search-box input[type="search"].text-box) {
+    min-block-size: 40px;
+  }
+
+  :global(button[type="button"].search-button) {
+    min-block-size: 40px;
+    min-block-size: 32px;
+    min-inline-size: 36px;
+  }
+
   .results {
     background-color: var(--fds-solid-background-quarternary);
     border: 1px solid var(--fds-surface-stroke-flyout);
