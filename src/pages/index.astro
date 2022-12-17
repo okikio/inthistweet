@@ -33,7 +33,7 @@ export const prerender = true;
 		</menu>
 	</section>
 
-	<header class="pt-24 py-4 sm:py-8 md:py-14 text-center">
+	<header class="pt-24 py-4 sm:py-8 md:pt-14 text-center">
 		<div class="title">
 			<TextBlock variant="display">
 				<span class="inline-flex items-center gap-6 font-[family:Inter]">
@@ -43,9 +43,11 @@ export const prerender = true;
 			</TextBlock>
 		</div>
 	
-		<div class="text-gray-900/60 dark:text-gray-200/80">
+		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] mx-auto">
 			<TextBlock variant="body">
-				Enter a Tweet URL to download the video/image in it.
+				<span class="leading-7">
+				Enter a Tweet URL, click search, and download the image/videos. 
+			</span>
 			</TextBlock>
 		</div>
 	</header>

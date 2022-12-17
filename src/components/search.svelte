@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from "svelte/store";
 
-  import { Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
+  import { InfoBar, Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
   import { onMount } from "svelte";
 
@@ -101,7 +101,7 @@
   </Button>
 </div>
 
-<section class="pt-14">
+<section class="pt-7">
   <div class="p-2">
     <TextBlock tag="h2" variant="bodyLarge">Results</TextBlock>
   </div>
@@ -135,6 +135,14 @@
     
   </div>
 </section>
+
+<div class="py-7">
+  <InfoBar title="Note" closable={false} class="rounded-xl" severity={"attention"}>
+    <div class="text-gray-900/80 dark:text-gray-200/80">
+        You can quickly and easily store the image/video, share the image/video and/or, create a meme from the image/video.
+    </div>
+  </InfoBar>
+</div>
 
 <style>
   :global(.search-box input[type="search"].text-box) {
