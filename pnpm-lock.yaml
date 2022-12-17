@@ -5,6 +5,7 @@ specifiers:
   '@astrojs/sitemap': ^1.0.0
   '@astrojs/svelte': ^1.0.2
   '@astrojs/tailwind': ^2.1.3
+  '@fontsource/inter': ^4.5.14
   '@iconify-json/fluent': ^1.1.17
   '@iconify-json/fluent-emoji': ^1.1.7
   '@iconify-json/mdi': ^1.1.38
@@ -21,6 +22,7 @@ dependencies:
   '@astrojs/sitemap': 1.0.0
   '@astrojs/svelte': 1.0.2_svelte@3.55.0
   '@astrojs/tailwind': 2.1.3_tailwindcss@3.2.4
+  '@fontsource/inter': 4.5.14
   astro: 1.7.1
   fluent-svelte: 1.6.0
   svelte: 3.55.0
@@ -1394,6 +1396,10 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@fontsource/inter/4.5.14:
+    resolution: {integrity: sha512-JDC9AocdPLuGsASkvWw9hS5gtHE7K9dOwL98XLrk5yjYqxy4uVnScG58NUvFMJDVJRl/7c8Wnap6PEs+7Zvj1Q==}
+    dev: false
 
   /@iconify-json/fluent-emoji/1.1.7:
     resolution: {integrity: sha512-nyggdePr01/Y/y/w3HLpyO7LPV4BBCUd0Fn+Y14ruZ9VW75bfIJn9yJym8ivFjhrZCwJT+GnEpqOLOteCUPhvg==}

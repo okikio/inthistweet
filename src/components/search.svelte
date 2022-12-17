@@ -55,13 +55,13 @@
     placeholder="Type URL here..."
     searchButton={false}
   >
-    <TextBoxButton slot="buttons" on:click={onSearch}>
+    <TextBoxButton slot="buttons" on:click={onSearch} aria-label="Search Button">
       <FluentSearch24Regular />
     </TextBoxButton>
   </TextBox>
 </form>
 
-<div class="py-2 text-center">
+<div class="py-6 text-center">
   <Button 
     variant="hyperlink" 
     on:click={() => {
@@ -102,7 +102,7 @@
 
 <section class="pt-14">
   <div class="p-2">
-    <TextBlock variant="bodyLarge">Results</TextBlock>
+    <TextBlock tag="h2" variant="bodyLarge">Results</TextBlock>
   </div>
   
   <div class="results">
@@ -111,7 +111,7 @@
         <TextBlock variant="body">Loading...</TextBlock>
       </span>
     {:else if !(results.length > 0) && $error == null}
-      <span class="text-gray-900/60 dark:text-gray-300/60">
+      <span class="text-gray-900/60 dark:text-gray-300/90">
         <TextBlock variant="body">Empty...</TextBlock>
       </span>
     {:else}

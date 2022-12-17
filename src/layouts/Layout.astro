@@ -92,12 +92,15 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 	</body>
 </html>
 <style is:global>
+	@import "@fontsource/inter/600";
+	@import "@fontsource/inter/800";
+
 	:root {
 		--accent: 124, 58, 237;
 		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
 	}
 	html {
-		font-family: var(--fds-font-family-text), system-ui, sans-serif;
+		font-family: "Inter", var(--fds-font-family-text), system-ui, sans-serif;
     background-color: var(--fds-solid-background-base);
     color: var(--fds-text-primary);
     font-family: var(--fds-font-family-text);
