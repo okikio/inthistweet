@@ -19,7 +19,7 @@ export default defineConfig({
     dist: new URL('./dist/', import.meta.url)
   }),
   experimental: {
-    prerender: true,
+    prerender: false,
     errorOverlay: true,
     contentCollections: false,
   },
