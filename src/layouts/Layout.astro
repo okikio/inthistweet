@@ -110,13 +110,13 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 		scrollbar-gutter: stable; 
 	}
 	.background {
-		background-image: url(/bloom-mica-light.png);
+		background-image: url(/bloom-mica-light.webp);
 		background-attachment: fixed;
 		background-size: cover;
 		background-position: center center;
 	}
 	.background:before {
-		background-image: url(/bloom-mica-light.png);
+		background-image: url(/bloom-mica-light.webp);
 		filter: blur(5px) saturate(200deg);
 		/* position: fixed; */
 		background-repeat: no-repeat;
@@ -131,7 +131,7 @@ const url = new URL(Astro.url).searchParams.get('q') ?? '';
 	@media(prefers-color-scheme: dark) {
 		.background,
 		.background:before {
-			background-image: url(/bloom-mica-dark.png);
+			background-image: url(/bloom-mica-dark.webp);
 		}
 	}
 	code {
