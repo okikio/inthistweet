@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Search from '../components/search.svelte';
 
-import { Button, TextBlock } from 'fluent-svelte';
+import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
 
@@ -23,7 +23,7 @@ export const prerender = true;
 
 			<div class="flex-grow" />
 			
-			<Button class="flex gap-2" variant="hyperlink" href="https://github.com/okikio/twitter-media" rel="noopener">
+			<Button class="flex gap-2" variant="hyperlink" href="https://github.com/okikio/inthistweet" rel="noopener">
 				<MdiGithub />	GitHub
 			</Button>
 
@@ -33,7 +33,7 @@ export const prerender = true;
 		</menu>
 	</section>
 
-	<header class="pt-24 py-4 sm:py-8 md:pt-14 text-center">
+	<header class="pt-8 py-4 sm:py-8 md:pt-14 text-center">
 		<div class="title">
 			<TextBlock variant="display">
 				<span class="inline-flex items-center gap-6 font-[family:Inter]">
@@ -46,7 +46,7 @@ export const prerender = true;
 		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] mx-auto">
 			<TextBlock variant="body">
 				<span class="leading-7">
-				Enter a Tweet URL, click search, and download the image/videos. 
+				Enter a Tweet URL, click search, and download the images/videos. 
 			</span>
 			</TextBlock>
 		</div>
@@ -113,6 +113,7 @@ export const prerender = true;
 		text-align: center;
 	}
 
+	:global(.link),
 	.copyright-link {
 		color: var(--fds-accent-default);
 		display: inline-flex;

@@ -3,6 +3,7 @@
 
   import { InfoBar, Button, TextBlock, TextBox, TextBoxButton } from "fluent-svelte";
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
+  import FluentOpen24Regular from '~icons/fluent/open-24-regular';
   import { onMount } from "svelte";
 
   export let value = "";
@@ -48,7 +49,7 @@
   }
 </script>
 
-<form on:submit={onSearch}>
+<form on:submit={onSearch} class="flex flex-row gap-2">
   <TextBox
     bind:value
     type="search"
@@ -60,6 +61,12 @@
       <FluentSearch24Regular />
     </TextBoxButton>
   </TextBox>
+
+  {#if value && value.length > 0}
+    <Button variant="accent" class="search-button" href={value} aria-label="Open tweet in new-tab" title="Open tweet in new-tab" target="_blank">
+      <FluentOpen24Regular />
+    </Button>
+  {/if}
 </form>
 
 <div class="py-6 text-center">
@@ -137,9 +144,23 @@
 </section>
 
 <div class="py-7">
-  <InfoBar title="Note" closable={false} class="rounded-xl" severity={"attention"}>
+  <InfoBar title="Note" closable={false} class="rounded-xl" severity={"success"}>
     <div class="text-gray-900/80 dark:text-gray-200/80">
-        You can quickly and easily store the image/video, share the image/video and/or, create a meme from the image/video.
+        You can quickly and easily store the image/video, share them and/or, create a meme from the them, the world is your oyester. 
+    </div>
+  </InfoBar>
+  <br>
+  <InfoBar title="Fun fact" closable={false} class="rounded-xl" severity={"attention"}>
+    <div class="text-gray-900/80 dark:text-gray-200/80">
+        Download images and videos for gallary tweets, quote tweets, normal image and video posts and even the preview images for links, it can handle it all.
+        <br>
+        <br>
+        I created this because I wanted to 
+        <ol role="list" class="list">
+          <li>Try using <a class="link" href="https://fluent-svelte.vercel.app/" rel="noopener">fluent-svelte</a> (Fluent UI is pretty cool)</li>
+          <li>Use <a class="link" href="https://astro.build" rel="noopener">Astro</a> to create a tool people may like to use</li>
+          <li>I wanted an open-source tool for downloading twitter image/video; the ones that currently exist are kinda sus.</li>
+        </ol>
     </div>
   </InfoBar>
 </div>
@@ -153,6 +174,24 @@
     min-block-size: 40px;
     min-block-size: 32px;
     min-inline-size: 36px;
+  }
+  
+  .list {
+    @apply py-1 list-decimal;
+    @apply pl-[2ch];
+    @apply pt-2;
+  }
+
+  .list li {
+    font: inherit;  
+    display: list-item;
+    text-align: -webkit-match-parent;
+    @apply pl-2;
+    @apply pb-0.5;
+  }
+
+  .list li::marker {
+    @apply text-[color:#745EFF] dark:text-[color:#DE93F1];
   }
 
   .results {

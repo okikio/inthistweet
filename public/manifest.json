@@ -500,7 +500,7 @@
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
-      "url": "q"
+      "text": "q"
     }
   },
   "orientation": "natural",

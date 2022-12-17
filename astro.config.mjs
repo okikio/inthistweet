@@ -20,7 +20,7 @@ export default defineConfig({
     tailwind(), 
     sitemap({ customPages: ['https://inthistweet.app/'] }), 
     serviceWorker({
-      registration: { autoRegister: false },
+      // registration: { autoRegister: false },
       // @ts-ignore
       workbox: {
         skipWaiting: false,

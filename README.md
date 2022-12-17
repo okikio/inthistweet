@@ -7,7 +7,9 @@
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
 
 Quick and easy twitter image/video downloader. 
-Enter a Tweet URL, click search, and download the image/videos in it to share, create a meme, and/or to store.
+Enter a Tweet URL, click search, and download the image/videos in it to share, create a meme, and/or to store, the world is your oyester. 
+
+> **Note**: You can download images and videos for gallary tweets, quote tweets, normal image and video posts and even the preview images for links, [inthistweet.app](https://inthistweet.app) can handle it all.
 
 [inthistweet.app](https://inthistweet.app)
 
