@@ -20,8 +20,59 @@ export default defineConfig({
     tailwind(), 
     sitemap({ customPages: ['https://inthistweet.app/'] }), 
     serviceWorker({
+      registration: { autoRegister: false },
+      // @ts-ignore
       workbox: {
-        
+        skipWaiting: false,
+        clientsClaim: false,
+
+        // globDirectory: outDir,
+        globPatterns: ["**/*.{html,js,css,svg,ttf,woff2,png,webp,jpg,jpeg,wasm,ico,json,xml}"], //
+        ignoreURLParametersMatching: [/index\.html\?(.*)/, /\\?(.*)/],
+        cleanupOutdatedCaches: true,
+
+        // Define runtime caching rules.
+        runtimeCaching: [
+          {
+            // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
+            urlPattern:
+              /(\/api\/twitter)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)|(?:bundlejs\.com\/take-measurement)))/,
+            // Apply a network-first strategy.
+            handler: "NetworkFirst",
+            method: "GET",
+            options: {
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+            }
+          },
+          {
+            // Match any request that ends with .png, .jpg, .jpeg, .svg, etc....
+            urlPattern:
+              /workbox\-(.*)\.js|\.(?:png|jpg|jpeg|svg|webp|map|ts|wasm|css)$|^https:\/\/(?:cdn\.polyfill\.io)/,
+            // Apply a stale-while-revalidate strategy.
+            handler: "StaleWhileRevalidate",
+            method: "GET",
+            options: {
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Cache `monaco-editor` etc...
+            urlPattern:
+              /(?:chunks|assets|favicon|fonts|giscus)\/(.*)$/,
+            // Apply a network-first strategy.
+            handler: "CacheFirst",
+            method: "GET",
+            options: {
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+            }
+          },
+        ]
       }
     })
   ],
