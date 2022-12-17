@@ -1,34 +1,45 @@
-# Welcome to [Astro](https://astro.build)
+# inthistweet
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/withastro/astro/tree/latest/examples/basics)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/twitter-media)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/twitter-media)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
+![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
 
-![basics](https://user-images.githubusercontent.com/4677417/186188965-73453154-fdec-4d6b-9c34-cb35c248ae5b.png)
+Quick and easy twitter image/video downloader. 
+Enter a Tweet URL, click search, and download the image/videos in it.
 
+[inthistweet.app](https://inthistweet.app)
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+Inside of your [Astro](https://astro.build) project, you'll see the following folders and files:
 
 ```
 /
 ├── public/
+│   ├── ...
 │   └── favicon.svg
 ├── src/
 │   ├── components/
-│   │   └── Card.astro
+│   │   └── search.svelte
+│   ├── icons/
+│   │   └── logo.svg
 │   ├── layouts/
 │   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   ├── pages/
+│   │   ├── api/
+│   │   │   └── twitter.ts
+│   │   └── index.astro
+│   ├── scripts/
+│   │   └── measure.ts
+│   └── utils.ts
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+[Astro](https://astro.build) looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+There's nothing special about `src/components/`, but that's where we like to put any [Astro](https://astro.build)/React/Vue/Svelte/Preact components.
 
 Any static assets, like images, can be placed in the `public/` directory.
 
@@ -47,4 +58,8 @@ All commands are run from the root of the project, from a terminal:
 
 ## 👀 Want to learn more?
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Feel free to check out the [Astro documentation](https://docs.astro.build) or jump into our the [Astro Discord server](https://astro.build/chat).
+
+## License
+
+MIT - © 2022 [Okiki Ojo](https://okikio.dev)

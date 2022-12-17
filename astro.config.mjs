@@ -12,8 +12,8 @@ import netlify from "@astrojs/netlify/edge-functions";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://media.okikio.dev",
-  integrations: [svelte(), tailwind(), sitemap({ customPages: ['https://media.okikio.dev/'] })],
+  site: "https://inthistweet.app",
+  integrations: [svelte(), tailwind(), sitemap({ customPages: ['https://inthistweet.app/'] })],
   output: "server",
   adapter: netlify({
     dist: new URL('./dist/', import.meta.url)

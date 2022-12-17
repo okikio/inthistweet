@@ -44,8 +44,8 @@ export default function (window: Window & typeof globalThis) {
   // const attr = script.getAttribute.bind(script);
   const attr = (id: string) => {
     return ({
-      "data-host-url": "https://media.okikio.dev",
-      "data-domains": "media.okikio.dev,okikio.dev,bundlejs.com,bundle.js.org,bundlesize.com",
+      "data-host-url": "https://inthistweet.app",
+      "data-domains": "inthistweet.app,media.okikio.dev,okikio.dev,bundlejs.com,bundle.js.org,bundlesize.com",
       "data-website-id": "72683bf5-0839-42eb-84e4-5d34f619a31c"
     })[id];
   };

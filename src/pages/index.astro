@@ -5,18 +5,22 @@ import Search from '../components/search.svelte';
 import { IconButton, Button, TextBlock } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
+import LogoShort from "~icons/local/logo-short";
+
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
 
 export const prerender = true;
 ---
 
-<Layout title="Twitter Media">
+<Layout title="In this tweet">
 	<section class="social-media">
 		<menu class="flex justify-center gap-4">
-			<IconButton href="https://okikio.dev" variant="hyperlink" rel="noopener">
+			<Button href="/" variant="standard" rel="noopener">
+				<span class="flex flex-row gap-2">
 				<Logo class="logo" />
-			</IconButton>
+				</span>
+			</Button>
 
 			<div class="flex-grow" />
 			
@@ -32,7 +36,12 @@ export const prerender = true;
 
 	<header class="py-4 sm:py-8 md:py-14 text-center">
 		<div class="title">
-			<TextBlock variant="display">Twitter Media</TextBlock>
+			<TextBlock variant="display">
+				<span class="inline-flex items-center gap-6">
+					In this tweet
+					<Logo class="logo" />
+				</span>
+			</TextBlock>
 		</div>
 	
 		<div class="text-gray-900/60 dark:text-gray-200/80">
@@ -47,16 +56,22 @@ export const prerender = true;
 	</main>
 
 	<footer class="copyright py-4 sm:py-8">
-		<TextBlock variant="body">
-			<span>© {new Date().getFullYear()} </span>
-			<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
-		</TextBlock>
+		<div class="flex flex-row flex-wrap gap-x-8 gap-y-4 justify-center">
+			<div>
+				<span> © {new Date().getFullYear()} </span>
+				<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
+			</div>
+
+			<div>
+				<span>Inspired by </span>
+				<a class="copyright-link" href="https://github.com/egoist/download-twitter-video" rel="noopener">egoist</a>
+			</div>
+		</div>
 	</footer>
 
 	<script>
 		import Measure from "../scripts/measure";
 		Measure(window);
-		console.log("Measure")
 	</script>
 </Layout>
 
@@ -68,6 +83,10 @@ export const prerender = true;
 		margin: auto;
 		padding: 0.75rem;
 		max-width: 60ch;
+	}
+
+	.logo-short {
+		height: 1em;
 	}
 
 	@sm {
