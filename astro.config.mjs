@@ -11,7 +11,7 @@ import sitemap from "@astrojs/sitemap";
 
 import serviceWorker from "astrojs-service-worker"; 
 
-import netlify from "@astrojs/netlify/edge-functions";                                                                                                                                         │
+import netlify from "@astrojs/netlify/edge-functions";
 import vercel from "@astrojs/vercel/edge";
 import cloudflare from "@astrojs/cloudflare";
 import deno from "@astrojs/deno";
@@ -19,30 +19,25 @@ import node from "@astrojs/node";
 
 const adapter = (ssr) => {
   switch (ssr) {
-    case "netlify": {
+    case "netlify": 
       return netlify({
         dist: new URL('./dist/', import.meta.url)
       });
-    }
 
-    case "vercel": {
+    case "vercel": 
       return vercel();
-    }
-
-    case "cloudflare": {
+    
+    case "cloudflare": 
       return cloudflare();
-    }
 
-    case "deno": {
+    case "deno": 
       return deno();
-    }
-
+    
     case "node": 
-    default: {
+    default: 
       return node({
         mode: 'standalone'
       });
-    }
   }
 }
 
@@ -111,7 +106,7 @@ export default defineConfig({
     })
   ],
   output: "server",
-  adapter: adapter(process.env.SSR_MODE),
+  adapter: adapter(process.env?.SSR_MODE ?? 'netlify'),
   experimental: {
     prerender: false,
     errorOverlay: true,
