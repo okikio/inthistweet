@@ -12,7 +12,7 @@ import sitemap from "@astrojs/sitemap";
 import serviceWorker from "astrojs-service-worker"; 
 
 import netlify from "@astrojs/netlify/edge-functions";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel/edge";
 import cloudflare from "@astrojs/cloudflare";
 import deno from "@astrojs/deno";
 import node from "@astrojs/node";  
