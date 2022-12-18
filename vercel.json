@@ -43,11 +43,20 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data:; script-src 'self' https://okikio.dev https://*.okikio.dev https://inthistweet.app https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self'; manifest-src 'self'; media-src 'self'; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
+          "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data:; script-src 'self' https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self'; manifest-src 'self'; media-src 'self' https:; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
         },
         {
           "key": "Permissions-Policy",
           "value": "sync-xhr=(self)"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://video.twimg.com/>; rel=preconnect, <https://pbs.twimg.com/>; rel=preconnect, <https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4>; rel=preload; as=video; crossorigin=anonymous"
         }
       ]
     }
