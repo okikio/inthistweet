@@ -179,8 +179,8 @@
     <div style="overflow: hidden; height: {$heightSpring}px" class="w-full">
       <div bind:this={el} class="w-full" >
         {#if !(results.length > 0) && $error == null}
-          <span class="text-gray-900/60 dark:text-{loading ? "blue" : "gray"}-300/90" transition:blur="{{amount: 10}}">
-            <TextBlock variant="body">{loading ? "Loading" : "Empty"}..."</TextBlock>
+          <span class="text-gray-900/60 {loading ? "dark:text-blue-300/90" : "dark:text-gray-300/90"}" transition:blur="{{amount: 10}}">
+            <TextBlock variant="body">{loading ? "Loading" : "Empty"}...</TextBlock>
           </span>
         {:else}
           <div class="w-full">
