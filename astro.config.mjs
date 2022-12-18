@@ -8,9 +8,43 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
-import netlify from "@astrojs/netlify/edge-functions";
 
-import serviceWorker from "astrojs-service-worker";
+import serviceWorker from "astrojs-service-worker"; 
+
+import netlify from "@astrojs/netlify/edge-functions";                                                                                                                                         │
+import vercel from "@astrojs/vercel/edge";
+import cloudflare from "@astrojs/cloudflare";
+import deno from "@astrojs/deno";
+import node from "@astrojs/node";  
+
+const adapter = (ssr) => {
+  switch (ssr) {
+    case "netlify": {
+      return netlify({
+        dist: new URL('./dist/', import.meta.url)
+      });
+    }
+
+    case "vercel": {
+      return vercel();
+    }
+
+    case "cloudflare": {
+      return cloudflare();
+    }
+
+    case "deno": {
+      return deno();
+    }
+
+    case "node": 
+    default: {
+      return node({
+        mode: 'standalone'
+      });
+    }
+  }
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -77,9 +111,7 @@ export default defineConfig({
     })
   ],
   output: "server",
-  adapter: netlify({
-    dist: new URL('./dist/', import.meta.url)
-  }),
+  adapter: adapter(process.env.SSR_MODE),
   experimental: {
     prerender: false,
     errorOverlay: true,
