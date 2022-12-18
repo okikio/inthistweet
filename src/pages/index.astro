@@ -90,6 +90,11 @@ export const prerender = true;
 		height: 1em;
 	}
 
+	.logo :global(path) {
+		@apply stroke-black;
+		@apply dark:stroke-white;
+	}
+
 	@sm {
 		.social-media,
 		header,
