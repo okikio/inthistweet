@@ -91,7 +91,7 @@ export default defineConfig({
           {
             // Cache `monaco-editor` etc...
             urlPattern:
-              /(?:chunks|assets|favicon|fonts|giscus)\/(.*)$/,
+              /^(?:https:\/\/(?:.*)\.twimg\.com)|(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
             // Apply a network-first strategy.
             handler: "CacheFirst",
             method: "GET",

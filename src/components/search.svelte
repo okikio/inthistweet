@@ -44,12 +44,6 @@
   let results: Array<{ type?: string | null; url?: string | null }> = [];
   let error = writable<string | null>(null);
 
-  onMount(() => {
-    const url = new URL(globalThis.location.href);
-    value = url.searchParams.get("q") ?? "";
-    onSearch();
-  });
-
   globalThis?.addEventListener?.("popstate", (event) => {
     const url = new URL(globalThis.location.href);
     value = url.searchParams.get("q") ?? "";
@@ -67,21 +61,42 @@
       const result = await (
         await fetch("/api/twitter?url=" + encodeURIComponent(value))
       ).json();
-      results = result;
-      console.log(results);
 
-      if (!popState) {
+      if ("error" in result) { throw new Error(result.error); }
+      results = result;
+      console.log(results); 
+
+      if (!popState && !$error) {
         const newURL = new URL(globalThis.location.href);
         newURL.search = "?q=" + value;
         globalThis.history.pushState(null, "", newURL);
       }
     } catch (e) {
-      console.error(e);
       error.set((e ?? "").toString());
+      console.warn(e);
     }
 
     loading = false;
   }
+
+  if (value && value.length > 0) {
+    onSearch();
+  }
+
+  onMount(() => {
+    if (!value || value.length == 0) {
+      const url = new URL(globalThis.location?.href);
+      value = url.searchParams.get("q") ?? "";
+      onSearch();
+    }
+  });
+
+  const samples = [
+    "https://twitter.com/elonmusk/status/1585341984679469056",
+    "https://twitter.com/dsaezgil/status/1535647141829324800",
+    "https://twitter.com/dubdotsh/status/1595831742195269635",
+    "https://twitter.com/okikio_dev/status/1604321740699697155"
+  ]
 </script>
 
 <form on:submit={onSearch} class="flex flex-row gap-2">
@@ -92,6 +107,7 @@
     searchButton={false}
     clearButton={false}
     class="search-box"
+    autofocus
   >
     <div slot="buttons" class="flex flex-row gap-1">
       {#if value && value.length > 0}
@@ -128,46 +144,20 @@
   {/if}
 </form>
 
-<div class="py-6 text-center">
-  <Button
-    variant="hyperlink"
-    on:click={() => {
-      value = "https://twitter.com/elonmusk/status/1585341984679469056";
-      onSearch();
-    }}
-  >
-    Sample 1
-  </Button>
-  <Button
-    variant="hyperlink"
-    on:click={() => {
-      value =
-        "https://twitter.com/d__raptis/status/1602303242813186051?s=20&t=ctkPSBYauoo4tkxoHtEP_Q";
-      onSearch();
-    }}
-  >
-    Sample 2
-  </Button>
-  <Button
-    variant="hyperlink"
-    on:click={() => {
-      value =
-        "https://twitter.com/MKBHD/status/1600227210031468572?s=20&t=ctkPSBYauoo4tkxoHtEP_Q";
-      onSearch();
-    }}
-  >
-    Sample 3
-  </Button>
-  <Button
-    variant="hyperlink"
-    on:click={() => {
-      value =
-        "https://twitter.com/artalar_dev/status/1602270191248969731?s=20&t=8x2nQwnRczCok7d_QI_DXA";
-      onSearch();
-    }}
-  >
-    Sample 4
-  </Button>
+<div class="py-6 flex flex-wrap gap-2 justify-center">
+  {#each samples as sample, i} 
+    <Button
+      variant={"hyperlink"}
+      data-selected={sample == value}
+      data-href={sample}
+      on:click={() => {
+        value = sample;
+        onSearch();
+      }}
+    >
+      Sample {i + 1}
+    </Button>
+  {/each}
 </div>
 
 <section class="pt-7">
@@ -176,20 +166,30 @@
   </div>
 
   <div class="results">
-    <div style="overflow: hidden; height: {$heightSpring}px" class="w-full">
-      <div bind:this={el} class="w-full" >
-        {#if !(results.length > 0) && $error == null}
-          <span class="text-gray-900/60 {loading ? "dark:text-blue-300/90" : "dark:text-gray-300/90"}" transition:blur="{{amount: 10}}">
-            <TextBlock variant="body">{loading ? "Loading" : "Empty"}...</TextBlock>
-          </span>
+    <div style="overflow: hidden; height: {$heightSpring}px" class="w-full gap-[inherit]">
+      <div bind:this={el} class="w-full gap-[inherit]" >
+        {#if !(results.length > 0) || $error !== null}
+          {#if typeof $error == "string"}
+            <span 
+              class="text-yellow-700 dark:text-orange-300" 
+              in:blur="{{ delay: 400, amount: 10 }}" 
+              out:blur="{{  amount: 10 }}"
+            >
+              <TextBlock>{$error}</TextBlock>
+            </span>
+          {:else}
+            <span 
+              class="text-gray-900/60 {loading ? "dark:text-blue-300/90" : "dark:text-gray-300/90"}" 
+              in:blur="{{ delay: 400, amount: 10 }}" 
+              out:blur="{{  amount: 10 }}"
+            >
+              <TextBlock variant="body">{loading ? "Loading" : "Empty"}...</TextBlock>
+            </span>
+          {/if}
         {:else}
-          <div class="w-full">
+          <div class="w-full flex flex-col gap-[inherit]">
             {#each results as { url, type } (url)}
-              {#if typeof $error == "string"}
-                <span class="text-yellow-700 dark:text-orange-300" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" >
-                  <TextBlock>{$error}</TextBlock>
-                </span>
-              {:else if url && type && url.length > 0}
+              {#if url && type && url.length > 0}
                 {#if type == "video"}
                   <video
                     controls
@@ -215,8 +215,9 @@
   <InfoBar
     title="Note"
     closable={false}
-    class="rounded-xl"
+    class="docs-info"
     severity={"success"}
+    id="note"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80">
       You can quickly and easily store the image/video, share them and/or,
@@ -227,8 +228,9 @@
   <InfoBar
     title="Fun fact"
     closable={false}
-    class="rounded-xl"
+    class="docs-info"
     severity={"attention"}
+    id="fun-fact"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80">
       Download images and videos for gallary tweets, quote tweets, normal image
@@ -272,6 +274,10 @@
     min-inline-size: 36px;
   }
 
+  :global(button.button.style-hyperlink[data-selected="true"]) {
+    background-color: var(--fds-subtle-fill-secondary);
+  }
+
   .list {
     @apply py-1 list-decimal;
     @apply pl-[2ch];
@@ -305,5 +311,16 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+
+  :global(.info-bar.docs-info) {
+    @apply rounded-xl;
+    --fds-control-corner-radius: theme('borderRadius.lg');
+  }
+
+  :global(.info-bar.docs-info#note .info-bar-content),
+  :global(.info-bar.docs-info#fun-fact .info-bar-content) {
+    margin-block-end: 15px;
+    margin-block-start: 13px;
   }
 </style>
