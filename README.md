@@ -1,7 +1,7 @@
 # inthistweet
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/twitter-media)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/twitter-media)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/inthistweet)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/inthistweet)
 
 ![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
