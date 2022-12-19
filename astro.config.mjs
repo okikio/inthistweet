@@ -69,7 +69,7 @@ export default defineConfig({
             // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
             urlPattern,
             // Apply a network-first strategy.
-            handler: "StaleWhileRevalidate",
+            handler: "NetworkFirst",
             method: "GET",
             options: {
               cacheableResponse: {
