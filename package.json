@@ -34,8 +34,9 @@
     "@astrojs/vercel": "^2.3.6",
     "@iconify-json/fluent": "^1.1.17",
     "@iconify-json/fluent-emoji": "^1.1.7",
-    "@iconify-json/mdi": "^1.1.38",
-    "astro": "^1.7.1",
-    "astrojs-service-worker": "^0.0.8"
+    "@iconify-json/mdi": "^1.1.39",
+    "astro": "^1.6.15",
+    "astrojs-service-worker": "^0.0.8",
+    "workbox-core": "^6.5.4"
   }
 }

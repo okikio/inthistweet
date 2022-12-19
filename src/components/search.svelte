@@ -185,6 +185,7 @@
               {#if url && type && url.length > 0}
                 {#if type == "video"}
                   <video
+                    crossorigin="anonymous"
                     controls
                     preload="auto"
                     class="w-full max-h-[500px] bg-black"
@@ -193,7 +194,7 @@
                     <source src={url} />
                   </video>
                 {:else}
-                  <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" />
+                  <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" crossorigin="anonymous" />
                 {/if}
               {/if}
             {/each}
@@ -310,6 +311,11 @@
     --height: 20px;
     overflow: hidden;
     height: var(--height);
+  }
+
+  img, video {
+    display: block;
+    @apply w-full;
   }
 
   :global(.info-bar.docs-info) {

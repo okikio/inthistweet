@@ -15,7 +15,9 @@ import netlify from "@astrojs/netlify/edge-functions";
 import vercel from "@astrojs/vercel/serverless";
 import cloudflare from "@astrojs/cloudflare";
 import deno from "@astrojs/deno";
-import node from "@astrojs/node";  
+import node from "@astrojs/node";
+
+import { createPartialResponse } from './utils.mjs';
 
 const adapter = (ssr) => {
   switch (ssr) {
@@ -64,8 +66,42 @@ export default defineConfig({
         runtimeCaching: [
           {
             // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
+            urlPattern: ({ request }) => {
+              const { destination } = request;
+
+              return destination === 'video' || destination === 'audio';
+            },
+            // Apply a network-first strategy.
+            handler: "StaleWhileRevalidate",
+            method: "GET",
+            options: {
+              cacheableResponse: {
+                statuses: [0, 200]
+              },
+              plugins: [
+                {
+                  async cachedResponseWillBeUsed ({ request, cachedResponse, })  {
+                    // Only return a sliced response if there's something valid in the cache,
+                    // and there's a Range: header in the request.
+                    if (cachedResponse && request.headers.has('range')) {
+                      return await createPartialResponse(request, cachedResponse);
+                    }
+                    // If there was no Range: header, or if cachedResponse wasn't valid, just
+                    // pass it through as-is.
+                    return cachedResponse;
+                  }
+                }
+              ]
+            },
+            matchOptions: {
+              ignoreSearch: true,
+              ignoreVary: true
+            }
+          },
+          {
+            // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
             urlPattern:
-              /(?:^https:\/\/(?:.*)\.twimg\.com)|(\/api\/twitter)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)|(?:bundlejs\.com\/take-measurement)))/,
+              /(?:^https:\/\/(?:.*)\.twimg\.com)|(?:\/api\/twitter)|(?:\/take-measurement$)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)))/,
             // Apply a network-first strategy.
             handler: "NetworkFirst",
             method: "GET",
@@ -107,11 +143,11 @@ export default defineConfig({
   ],
   output: "server",
   adapter: adapter(process.env?.SSR_MODE ?? 'netlify'),
-  experimental: {
-    prerender: false,
-    errorOverlay: true,
-    contentCollections: false,
-  },
+  // experimental: {
+  //   prerender: false,
+  //   errorOverlay: true,
+  //   contentCollections: false,
+  // },
   vite: {
     server: {
       cors: true
