@@ -50,11 +50,11 @@ export async function getMediaURL(url: string) {
 
   if (exec) {
     const id = exec.pathname.groups.id;
-    console.log(id)
     const url = `https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en`;
+    console.log({ url })
+    
     const res = await (await fetch(url)).json();
-    // console.log({ url })
-    // console.log(res)
+    console.log(res)
 
     let obj = res;
     let arr: ReturnType<typeof getTweetDetails> = [];
