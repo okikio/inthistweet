@@ -137,7 +137,7 @@
 </form>
 
 <div class="py-6 flex flex-wrap gap-2 justify-center items-center">
-  <span class="text-[color:var(--fds-system-caution)] bg-[color:var(--fds-system-background-caution)] px-3 py-0.5 rounded-full">Examples:</span>
+  <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples:</span>
   {#each samples as sample, i} 
     <Button
       variant={"hyperlink"}
@@ -326,5 +326,10 @@
   :global(.info-bar.docs-info#fun-fact .info-bar-content) {
     margin-block-end: 23px;
     margin-block-start: 21px;
+  }
+
+  :global(.info-bar.docs-info#note .info-bar-content h5),
+  :global(.info-bar.docs-info#fun-fact .info-bar-content h5) {
+    padding-block-end: 8px;
   }
 </style>
