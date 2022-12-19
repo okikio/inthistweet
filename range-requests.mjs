@@ -334,3 +334,47 @@ export async function createPartialResponse(request, originalResponse) {
     });
   }
 }
+
+
+/**
+ * The range request plugin makes it easy for a request with a 'Range' header to
+ * be fulfilled by a cached response.
+ *
+ * It does this by intercepting the `cachedResponseWillBeUsed` plugin callback
+ * and returning the appropriate subset of the cached response body.
+ *
+ * @memberof workbox-range-requests
+ */
+export default class RangeRequestsPlugin {
+  /**
+   * @param {Object} options
+   * @param {Request} options.request The original request, which may or may not
+   * contain a Range: header.
+   * @param {Response} options.cachedResponse The complete cached response.
+   * @return {Promise<Response>} If request contains a 'Range' header, then a
+   * new response with status 206 whose body is a subset of `cachedResponse` is
+   * returned. Otherwise, `cachedResponse` is returned as-is.
+   *
+   * @private
+   */
+  cachedResponseWillBeUsed = async ({
+    request,
+    cachedResponse,
+  }) => {
+    // Only return a sliced response if there's something valid in the cache,
+    // and there's a Range: header in the request.
+    if (cachedResponse && request.headers.has('range')) {
+      return await createPartialResponse(request, cachedResponse);
+    }
+
+    // If there was no Range: header, or if cachedResponse wasn't valid, just
+    // pass it through as-is.
+    return cachedResponse;
+  };
+}
+
+export function urlPattern({ request }) {
+  const { destination } = request;
+
+  return destination === 'video' || destination === 'audio';
+}

@@ -17,7 +17,8 @@ import cloudflare from "@astrojs/cloudflare";
 import deno from "@astrojs/deno";
 import node from "@astrojs/node";
 
-import { createPartialResponse } from './utils.mjs';
+import RangeRequestsPlugin from './range-requests.mjs';
+import { urlPattern } from './range-requests.mjs';
 
 const adapter = (ssr) => {
   switch (ssr) {
@@ -66,11 +67,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
-            urlPattern: ({ request }) => {
-              const { destination } = request;
-
-              return destination === 'video' || destination === 'audio';
-            },
+            urlPattern,
             // Apply a network-first strategy.
             handler: "StaleWhileRevalidate",
             method: "GET",
@@ -79,23 +76,12 @@ export default defineConfig({
                 statuses: [0, 200]
               },
               plugins: [
-                {
-                  async cachedResponseWillBeUsed ({ request, cachedResponse, })  {
-                    // Only return a sliced response if there's something valid in the cache,
-                    // and there's a Range: header in the request.
-                    if (cachedResponse && request.headers.has('range')) {
-                      return await createPartialResponse(request, cachedResponse);
-                    }
-                    // If there was no Range: header, or if cachedResponse wasn't valid, just
-                    // pass it through as-is.
-                    return cachedResponse;
-                  }
-                }
-              ]
-            },
-            matchOptions: {
-              ignoreSearch: true,
-              ignoreVary: true
+                new RangeRequestsPlugin()
+              ],
+              matchOptions: {
+                ignoreSearch: true,
+                ignoreVary: true
+              }
             }
           },
           {

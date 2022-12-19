@@ -1,5 +1,7 @@
 ---
 import "fluent-svelte/theme.css";
+import "@fontsource/inter-tight/variable.css";
+import "@fontsource/inter/variable.css";
 export interface Props {
 	title: string;
 	description: string;
@@ -107,8 +109,6 @@ const result = async () => {
 	</body>
 </html>
 <style is:global>
-	@import "@fontsource/inter-tight/variable";
-	@import "@fontsource/inter/variable";
 	:root {
 		--accent: 124, 58, 237;
 		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
