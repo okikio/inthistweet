@@ -86,7 +86,7 @@
     "https://twitter.com/elonmusk/status/1585341984679469056",
     "https://twitter.com/dsaezgil/status/1535647141829324800",
     "https://twitter.com/dubdotsh/status/1595831742195269635",
-    "https://twitter.com/okikio_dev/status/1604321740699697155",
+    // "https://twitter.com/okikio_dev/status/1604321740699697155",
     "https://twitter.com/davidb27111/status/1602670914231050242"
   ]
 </script>
@@ -136,7 +136,8 @@
   {/if}
 </form>
 
-<div class="py-6 flex flex-wrap gap-2 justify-center">
+<div class="py-6 flex flex-wrap gap-2 justify-center items-center">
+  <span class="text-[color:var(--fds-system-caution)] bg-[color:var(--fds-system-background-caution)] px-3 py-0.5 rounded-full">Examples:</span>
   {#each samples as sample, i} 
     <Button
       variant={"hyperlink"}
@@ -225,7 +226,7 @@
     id="fun-fact"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80">
-      What's in this tweet?! Download videos and images for gifs, gallary tweets, quote tweets, normal video and image 
+      Download videos and images for gifs, gallary tweets, quote tweets, normal video and image 
       posts and even the preview images for links, it can handle it
       all.
       <br />
@@ -316,9 +317,14 @@
     --fds-control-corner-radius: theme('borderRadius.lg');
   }
 
+  :global(.info-bar.docs-info#note .info-bar-icon),
+  :global(.info-bar.docs-info#fun-fact .info-bar-icon) {
+    margin-block-start: 24px;
+  }
+
   :global(.info-bar.docs-info#note .info-bar-content),
   :global(.info-bar.docs-info#fun-fact .info-bar-content) {
-    margin-block-end: 15px;
-    margin-block-start: 13px;
+    margin-block-end: 23px;
+    margin-block-start: 21px;
   }
 </style>
