@@ -97,7 +97,7 @@ const result = async () => {
 		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
 		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
 
-		{_url && _url.length > 0 ? <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(_url)}`} as="fetch" crossorigin="anonymous"/> : null}
+		{_url && _url.length > 0 ? <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(_url)}`} as="fetch" type="application/json" crossorigin="anonymous" /> : null}
 		
 		{(await result?.())?.map?.(({ url, type}) => {
 			if (url && url.length > 0) return <link rel="preload" href={url} as={type == "photo" ? "image" : type} />
