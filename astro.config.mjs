@@ -65,7 +65,7 @@ export default defineConfig({
           {
             // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
             urlPattern:
-              /(\/api\/twitter)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)|(?:bundlejs\.com\/take-measurement)))/,
+              /(?:^https:\/\/(?:.*)\.twimg\.com)|(\/api\/twitter)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)|(?:bundlejs\.com\/take-measurement)))/,
             // Apply a network-first strategy.
             handler: "NetworkFirst",
             method: "GET",
@@ -91,7 +91,7 @@ export default defineConfig({
           {
             // Cache `monaco-editor` etc...
             urlPattern:
-              /^(?:https:\/\/(?:.*)\.twimg\.com)|(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
+              /(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
             // Apply a network-first strategy.
             handler: "CacheFirst",
             method: "GET",
