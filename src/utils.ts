@@ -9,12 +9,12 @@ function getTweetDetails(res: object) {
   // @ts-ignore
   return (res.mediaDetails as Record<string, string>[]).map(({ type, media_url_https, video_info }) => {
     const vid_info = video_info as unknown as { variants: Array<{ bitrate?: number; url: string }> };
-    if (type == "video") {
+    if (type == "video" || type == "animated_gif") {
       const variants = vid_info.variants
         .filter(x => typeof x.bitrate == "number")
         .sort((a, b) => (b.bitrate as number) - (a.bitrate as number));
 
-      return { type, url: variants[0].url };
+      return { type: "video", url: variants[0].url };
     }
 
     return { type, url: media_url_https };
@@ -43,7 +43,9 @@ export async function getMediaURL(url: string) {
 
   if (exec) {
     const id = exec.pathname.groups.id;
-    const res = await (await fetch(`https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en`)).json();
+    const url = `https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en`;
+    const res = await (await fetch(url)).json();
+    console.log({ url })
     console.log(res)
 
     let obj = res;

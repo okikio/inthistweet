@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { spring, tweened } from "svelte/motion";
-  import { cubicOut } from "svelte/easing";
   import { writable } from "svelte/store";
 	import { blur } from 'svelte/transition';
 
@@ -30,13 +28,7 @@
   }
 
   let el: HTMLElement;
-
-  const heightSpring = tweened(20, {
-		duration: 300,
-		easing: cubicOut
-  });
   $: heightStore = syncHeight(el);
-  $: heightSpring.set($heightStore || 20);
 
   export let value = "";
   let loading = false;
@@ -55,7 +47,6 @@
     e?.preventDefault?.();
     if (value.length <= 0) return;
     loading = true;
-    // results = [];
 
     try {
       const result = await (
@@ -95,7 +86,8 @@
     "https://twitter.com/elonmusk/status/1585341984679469056",
     "https://twitter.com/dsaezgil/status/1535647141829324800",
     "https://twitter.com/dubdotsh/status/1595831742195269635",
-    "https://twitter.com/okikio_dev/status/1604321740699697155"
+    "https://twitter.com/okikio_dev/status/1604321740699697155",
+    "https://twitter.com/davidb27111/status/1602670914231050242"
   ]
 </script>
 
@@ -166,8 +158,8 @@
   </div>
 
   <div class="results">
-    <div style="overflow: hidden; height: {$heightSpring}px" class="w-full gap-[inherit]">
-      <div bind:this={el} class="w-full gap-[inherit]" >
+    <div class="results-child"  style="--height: {$heightStore}px;">
+      <div bind:this={el} class="w-full gap-[inherit]">
         {#if !(results.length > 0) || $error !== null}
           {#if typeof $error == "string"}
             <span 
@@ -220,8 +212,8 @@
     id="note"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80">
-      You can quickly and easily store the image/video, share them and/or,
-      create a meme from the them, the world is your oyester.
+      You can store the videos, images, and gifs, share them and/or,
+      create a meme from the them, the world is your oyester. 
     </div>
   </InfoBar>
   <br />
@@ -233,12 +225,12 @@
     id="fun-fact"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80">
-      Download images and videos for gallary tweets, quote tweets, normal image
-      and video posts and even the preview images for links, it can handle it
+      What's in this tweet?! Download videos and images for gifs, gallary tweets, quote tweets, normal video and image 
+      posts and even the preview images for links, it can handle it
       all.
       <br />
       <br />
-      I created this because I wanted to
+      I created this as a side-quest to
       <ol role="list" class="list">
         <li>
           Try using <a
@@ -252,8 +244,7 @@
           > to create a tool people may like to use
         </li>
         <li>
-          I wanted an open-source tool for downloading twitter image/video; the
-          ones that currently exist are kinda sus.
+          I found the other twitter video and image downloaders kinda sus, thus, an open-source tool for downloading twitter videos and images (la pièce de résistance).
         </li>
       </ol>
     </div>
@@ -311,6 +302,13 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+  }
+  .results-child {
+    @apply w-full gap-[inherit] transition-[height] duration-300 ease-[cubic-bezier(0.33,_1,_0.68,_1)];
+
+    --height: 20px;
+    overflow: hidden;
+    height: var(--height);
   }
 
   :global(.info-bar.docs-info) {

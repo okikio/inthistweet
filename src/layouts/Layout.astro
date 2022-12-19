@@ -89,38 +89,45 @@ const result = async () => {
 		<link rel="pingback" href="https://webmention.io/webmention?forward=https://okikio.dev/endpoint" />
 
 		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
-		
 		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
-
 		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
 
+		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
+
 		{_url && _url.length > 0 ? <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(_url)}`} as="fetch" crossorigin="anonymous"/> : null}
+		
 		{(await result?.())?.map?.(({ url, type}) => {
 			if (url && url.length > 0) return <link rel="preload" href={url} as={type == "photo" ? "image" : type} />
 			return null;
 		})}
-
-		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
-		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 <style is:global>
+	@import "@fontsource/inter-tight/variable";
+	@import "@fontsource/inter/variable";
 	:root {
 		--accent: 124, 58, 237;
 		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
 
-	/* Font Families */
-	--fds-font-family-fallback: -apple-system, "Segoe UI", "Open Sans", ui-sans-serif, system-ui,
-		BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-	--fds-font-family-text: -apple-system, "Segoe UI Variable Text", "Seoge UI Variable Static Text", 
-		var(--fds-font-family-fallback);
-	--fds-font-family-small: -apple-system, "Segoe UI Variable Small", "Seoge UI Variable Static Small",
-		var(--fds-font-family-fallback);
-	--fds-font-family-display: -apple-system, "Segoe UI Variable Display", "Seoge UI Variable Static Display",
-		var(--fds-font-family-fallback);
+		/* Font Families */
+		--fds-font-family-fallback: "InterVariable", "Inter TightVariable", -apple-system, "Segoe UI", "Open Sans", ui-sans-serif, system-ui,
+			BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+		--fds-font-family-text: "Segoe UI Variable Text", "Seoge UI Variable Static Text", 
+			var(--fds-font-family-fallback);
+		--fds-font-family-small: "Segoe UI Variable Small", "Seoge UI Variable Static Small",
+			var(--fds-font-family-fallback);
+		--fds-font-family-display: "Segoe UI Variable Display", "Seoge UI Variable Static Display",
+			var(--fds-font-family-fallback);
+	}
+	.title-display {
+		/* Font Families */
+		--fds-font-family-display: "Inter TightVariable", -apple-system, "Segoe UI Variable Display", "Seoge UI Variable Static Display",
+			var(--fds-font-family-fallback);
+    font-family: var(--fds-font-family-display);
 	}
 	html {
 		font-family: "Inter", var(--fds-font-family-text), system-ui, sans-serif;

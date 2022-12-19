@@ -12,7 +12,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 export const prerender = true;
 ---
 
-<Layout title="Twitter image and video downloader - inthistweet.app" description="Quick and easy twitter image/video downloader. Enter a Tweet URL, click search, and download the image/videos in it to share, create a meme, and/or to store.">
+<Layout title="Videos, gifs and images downloader for twitter - What's in this tweet?" description="Quick and easy twitter video, gif and image downloader. Enter a Tweet URL, click search, and download the resulting videos, gifs, and images in it to share, create a meme, and/or to store.">
 	<section class="social-media">
 		<menu class="flex justify-center gap-4">
 			<Button href="/" variant="standard" rel="noopener" aria-label="Go home">
@@ -36,17 +36,17 @@ export const prerender = true;
 	<header class="pt-8 py-4 sm:py-8 md:pt-14 text-center">
 		<div class="title">
 			<TextBlock variant="display">
-				<span class="inline-flex items-center gap-6 font-[family:Inter]">
+				<span class="inline-flex items-center gap-6 title-display">
 					In this tweet
 					<Logo class="logo" />
 				</span>
 			</TextBlock>
 		</div>
 	
-		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] mx-auto">
+		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] lg:max-w-[60ch] xl:max-w-[75ch] mx-auto">
 			<TextBlock variant="body">
 				<span class="leading-7">
-					Enter a Tweet URL, click search, and download the images/videos. 
+					Enter a Tweet URL, click search, and download the videos, gifs and images. 
 				</span>
 			</TextBlock>
 		</div>
@@ -83,7 +83,8 @@ export const prerender = true;
 	main {
 		margin: auto;
 		padding: 0.75rem;
-		max-width: 60ch;
+
+		@apply max-w-[60ch] lg:max-w-[75ch] xl:max-w-[80ch];
 	}
 
 	.logo-short {
