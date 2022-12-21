@@ -136,21 +136,24 @@
   {/if}
 </form>
 
-<div class="py-6 flex flex-wrap gap-2 justify-center items-center">
-  <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples:</span>
-  {#each samples as sample, i} 
-    <Button
-      variant={"hyperlink"}
-      data-selected={sample == value}
-      data-href={sample}
-      on:click={() => {
-        value = sample;
-        onSearch();
-      }}
-    >
-      Sample {i + 1}
-    </Button>
-  {/each}
+<div class="py-6">
+  <div class="flex gap-2 xsm:justify-center items-center overflow-auto">
+    <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples:</span>
+    {#each samples as sample, i} 
+      <Button
+        class="break-keep whitespace-nowrap"
+        variant={"hyperlink"}
+        data-selected={sample == value}
+        data-href={sample}
+        on:click={() => {
+          value = sample;
+          onSearch();
+        }}
+      >
+        Sample {i + 1}
+      </Button>
+    {/each}
+  </div>
 </div>
 
 <section class="pt-7">
@@ -189,7 +192,7 @@
                     controls
                     preload="auto"
                     class="w-full max-h-[500px] bg-black"
-                    in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" 
+                    in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{ amount: 10 }}" 
                   >
                     <source src={url} />
                   </video>
