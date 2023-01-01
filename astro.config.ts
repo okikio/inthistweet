@@ -58,6 +58,11 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: false,
 
+        additionalManifestEntries: [
+          "/",
+          "https://inthistweet.app"
+        ],
+
         // globDirectory: outDir,
         globPatterns: ["**/*.{html,js,css,svg,ttf,woff2,png,webp,jpg,jpeg,wasm,ico,json,xml}"], //
         ignoreURLParametersMatching: [/index\.html\?(.*)/, /\\?(.*)/],
