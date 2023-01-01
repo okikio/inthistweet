@@ -136,8 +136,8 @@
   {/if}
 </form>
 
-<div class="py-6">
-  <div class="flex gap-2 xsm:justify-center items-center overflow-auto">
+<div class="overflow-auto">
+  <div class="flex gap-2 xsm:justify-center items-center my-6">
     <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples:</span>
     {#each samples as sample, i} 
       <Button
