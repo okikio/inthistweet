@@ -2,12 +2,13 @@
   "name": "In this tweet",
   "short_name": "In this tweet",
   "id": "inthistweet",
-  "start_url": "/",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
   "dir": "ltr",
   "display": "standalone",
   "theme_color": "#232323",
   "background_color": "#232323",
-  "description": "Quick and easy twitter image/video downloader. Enter a Tweet URL, click search, and download the image/videos in it.",
+  "description": "Quick & easy twitter image, video, and gif downloader. Enter a Tweet URL, click search, and download the images and videos in it.",
   "icons": [
     {
       "src": "/favicon/favicon.svg",
@@ -45,9 +46,34 @@
     }
   ],
   "lang": "en",
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile-1.png",
+      "type": "image/png",
+      "sizes": "1082x2400",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-mobile-2.png",
+      "type": "image/png",
+      "sizes": "1082x2400",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/images/screenshot-desktop-1.png",
+      "type": "image/png",
+      "sizes": "3206x2184",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshot-desktop-2.png",
+      "type": "image/png",
+      "sizes": "3206x2184",
+      "form_factor": "wide"
+    }
+  ],
   "share_target": {
-    "url_template": "/?q={q}",
+    "url_template": "/?q={q}&utm_source=share",
     "action": "/",
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
@@ -66,6 +92,5 @@
     "video",
     "multimedia",
     "developer tools"
-  ],
-  "scope": "/"
+  ]
 }

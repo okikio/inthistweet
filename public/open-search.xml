@@ -5,6 +5,6 @@
     <Image width="64" height="64" type="image/png">https://inthistweet.app/favicon/favicon_x64.png</Image>
     <InputEncoding>UTF-8</InputEncoding>
     <Contact>hey@okikio.dev</Contact>
-    <Url type="text/html" template="https://inthistweet.app/?q={searchTerms}"/>
+    <Url type="text/html" template="https://inthistweet.app/?q={searchTerms}&utm_source=search"/>
     <moz:SearchForm>https://inthistweet.app</moz:SearchForm>
 </OpenSearchDescription>
