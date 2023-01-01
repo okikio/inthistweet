@@ -6,7 +6,7 @@
   "scope": "/",
   "dir": "ltr",
   "display": "standalone",
-  "author": "Okiki Ojo",
+  "author": "@okikio",
   "theme_color": "#232323",
   "background_color": "#232323",
   "description": "Quick & easy twitter image, video, and gif downloader. Enter a Tweet URL, click search, and download the images and videos in it.",
