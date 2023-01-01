@@ -60,13 +60,13 @@
       "form_factor": "narrow"
     },
     {
-      "src": "/images/screenshot-desktop-1.png",
+      "src": "/screenshot-desktop-1.png",
       "type": "image/png",
       "sizes": "3206x2184",
       "form_factor": "wide"
     },
     {
-      "src": "/images/screenshot-desktop-2.png",
+      "src": "/screenshot-desktop-2.png",
       "type": "image/png",
       "sizes": "3206x2184",
       "form_factor": "wide"
