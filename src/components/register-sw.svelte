@@ -69,7 +69,7 @@
     return promise;
   }
 
-  const intervalMS = 60 * 60 * 1000;
+  const intervalMS = 60 * 1000;
 
   function RegisterServiceWorker() {
     const { offlineReady, needRefresh, updateServiceWorker } = createServiceWorker({
