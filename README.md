@@ -2,16 +2,11 @@
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/inthistweet)
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/inthistweet)
-[![Upvote on ProductHunt](./public/product-hunt-badge-light.svg#gh-light-mode-only)![Follow on Twitter](./public/product-hunt-badge-dark.svg#gh-dark-mode-only)](https://twitter.com/@inthistweet_dev)
+[![Upvote on ProductHunt](./public/product-hunt-badge-dark.svg)](https://www.producthunt.com/posts/in-this-tweet?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-in-this-tweet)
+[![Follow on Twitter](./public/twitter-badge-dark.svg)](https://twitter.com/@inthistweet_dev)
 
-<a href="https://www.producthunt.com/posts/in-this-tweet?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-in-this-tweet" rel="noopener" target="_blank">
- <img src="./public/product-hunt-badge-light.svg#gh-light-mode-only" alt="Upvote on ProductHunt" width="38" height="32 loading="eager" />
- <img src="./public/product-hunt-badge-dark.svg#gh-dark-mode-only" alt="Upvote on ProductHunt" width="38" height="32 loading="eager" />
-</a>
-<a href="https://twitter.com/@inthistweet_dev" rel="noopener" target="_blank">
- <img src="./public/twitter-badge-light.svg#gh-light-mode-only" alt="Follow on Twitter" width="38" height="32 loading="eager" />
- <img src="./public/twitter-badge-dark.svg#gh-dark-mode-only" alt="Follow on Twitter" width="38" height="32 loading="eager" />
-</a>
+<!-- ![Upvote on ProductHunt(./public/product-hunt-badge-dark.svg#gh-dark-mode-only) -->
+<!-- ![Follow on Twitter](./public/twitter-badge-dark.svg#gh-dark-mode-only) -->
 
 ![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
