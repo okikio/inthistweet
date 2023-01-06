@@ -5,6 +5,7 @@ import Search from '../components/search.svelte';
 import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
+import ProductHuntLogo from "~icons/local/product-hunt-logo";
 
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
@@ -14,7 +15,7 @@ export const prerender = true;
 
 <Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store.">
 	<section class="social-media">
-		<menu class="flex justify-center gap-4">
+		<menu class="flex justify-center gap-1 sm:gap-4">
 			<Button href="/" variant="standard" rel="noopener" aria-label="Go home">
 				<span class="flex flex-row items-center gap-2">
 					<Logo class="logo" /><span class="lt-sm:hidden font-[family:Inter]">In this tweet</span>
@@ -29,6 +30,10 @@ export const prerender = true;
 
 			<Button class="flex gap-2" variant="hyperlink" href="https://twitter.com/@inthistweet_dev" rel="noopener">
 				<MdiTwitter /> Twitter
+			</Button>
+
+			<Button class="flex gap-2" variant="hyperlink" href="https://www.producthunt.com/posts/in-this-tweet?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-in&#0045;this&#0045;tweet" rel="noopener">
+				<ProductHuntLogo /> Product Hunt
 			</Button>
 		</menu>
 	</section>
@@ -55,6 +60,29 @@ export const prerender = true;
 	<main>
 		<Search value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
 	</main>
+	
+	<div>
+		<a href="https://www.producthunt.com/posts/in-this-tweet?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-in&#0045;this&#0045;tweet" target="_blank" rel="noopener">
+			<img 
+				src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=373878&theme=neutral" 
+				alt="in&#0032;this&#0032;tweet - ✨&#0032;Futuristic&#0032;✨&#0032;twitter&#0032;video&#0044;&#0032;gif&#0032;and&#0032;image&#0032;downloader&#0046; | Product Hunt" 
+				style="width: 250px; height: 54px;" 
+				width="250" 
+				height="54" 
+				class="text-center mx-auto block dark:hidden"
+				loading="lazy"
+			/>
+			<img 
+				src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=373878&theme=dark" 
+				alt="in&#0032;this&#0032;tweet - ✨&#0032;Futuristic&#0032;✨&#0032;twitter&#0032;video&#0044;&#0032;gif&#0032;and&#0032;image&#0032;downloader&#0046; | Product Hunt" 
+				style="width: 250px; height: 54px;" 
+				width="250" 
+				height="54" 
+				class="text-center mx-auto hidden dark:block"
+				loading="lazy"
+			/>
+		</a>
+	</div>
 
 	<footer class="copyright py-4 sm:py-8">
 		<div class="flex flex-row flex-wrap gap-x-8 gap-y-4 justify-center">

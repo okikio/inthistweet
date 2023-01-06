@@ -2,6 +2,7 @@
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/inthistweet)
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/inthistweet)
+[![Upvote on ProductHunt](./public/product-hunt-badge-light.svg#gh-light-mode-only)![Follow on Twitter](./public/product-hunt-badge-dark.svg#gh-dark-mode-only)](https://twitter.com/@inthistweet_dev)
 [![Follow on Twitter](./public/twitter-badge-light.svg#gh-light-mode-only)![Follow on Twitter](./public/twitter-badge-dark.svg#gh-dark-mode-only)](https://twitter.com/@inthistweet_dev)
 
 ![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
