@@ -72,46 +72,41 @@
   const intervalMS = 60 * 60 * 1000;
 
   function RegisterServiceWorker() {
-    const { offlineReady, needRefresh, updateServiceWorker } =
-      createServiceWorker({
-        onOfflineReady() {
-         customToast("success", "App ready to work offline");
-        },
-        onNeedRefresh() {
-          customToast(
-            "update",
-            "New content available, click on reload button to update",
-            {
-              duration: Infinity,
-              async updateClick() {
-                await toastPromise(updateServiceWorker(true), {
-                  loading: "Updating...",
-                  success: "Update Successful",
-                  error: "Error Updating",
-                });
-              },
-              dismissClick() {
-                close();
-              },
-            }
-          );
-        },
-        onRegistered(r) {
-          console.log("SW Registered: small change", r);
-          r &&
-            setInterval(() => {
-              r.update();
-            }, intervalMS);
-        },
-        onRegisterError(error) {
-          console.log("SW registration error", error);
-        },
-      });
-
-    function close() {
-      offlineReady.set(false);
-      needRefresh.set(false);
-    }
+    const { offlineReady, needRefresh, updateServiceWorker } = createServiceWorker({
+      onOfflineReady() {
+        customToast("success", "App ready to work offline");
+      },
+      onNeedRefresh() {
+        customToast(
+          "update",
+          "New content available, click on reload button to update",
+          {
+            duration: Infinity,
+            async updateClick() {
+              await toastPromise(updateServiceWorker(true), {
+                loading: "Updating...",
+                success: "Update Successful",
+                error: "Error Updating",
+              });
+            },
+            dismissClick() {
+              offlineReady.set(false);
+              needRefresh.set(false);
+            },
+          }
+        );
+      },
+      onRegistered(r) {
+        console.log("SW Registered: small change", r);
+        r &&
+          setInterval(() => {
+            r.update();
+          }, intervalMS);
+      },
+      onRegisterError(error: any) {
+        console.log("SW registration error", error);
+      },
+    });
   }
 
   if ("navigator" in globalThis) {

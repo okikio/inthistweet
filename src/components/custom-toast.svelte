@@ -5,6 +5,18 @@
   import FluentDismiss24Regular from "~icons/fluent/dismiss-24-regular";
   import FluentArrowClockwise24Regular from '~icons/fluent/arrow-clockwise-24-regular';
 
+  export const prefersReducedMotion = (() => {
+      // Cache result
+      let shouldReduceMotion;
+      return () => {
+          if (shouldReduceMotion === undefined && typeof window !== 'undefined') {
+              const mediaQuery = matchMedia('(prefers-reduced-motion: reduce)');
+              shouldReduceMotion = !mediaQuery || mediaQuery.matches;
+          }
+          return shouldReduceMotion;
+      };
+  })();
+
   export let toast;
   export let position = undefined;
   export let style = '';
@@ -49,9 +61,10 @@
 </script>
 
 <div
-  class="{toast.height ? animation : 'transparent'} {toast.className || ''}"
-  style={toastBarBase + " " + toast.style}
+  class="{toast.height ? animation : 'opacity-0'} {toast.className || ''}"
   data-type={toast.toastType}
+	style="{style}; {toastBarBase} {toast.style}"
+	style:--factor={factor}
 >
   {#if toast.icon}
     <div style={iconContainer} class="icon-container">{toast.icon}</div>
@@ -90,10 +103,10 @@
       type="button"
       class="cancel-button"
       aria-label="Dismiss"
-      onClick={(e) => {
+      on:click={(e) => {
         if (typeof toast?.dismissClick == "function")
           toast?.dismissClick?.(e);
-
+          
         toast_.dismiss(toast.id);
       }}
     >
@@ -191,5 +204,105 @@
 				}
 			}
 		}
+	}
+
+	@-webkit-keyframes enterAnimation {
+		0% {
+			transform: translate3d(0, calc(var(--factor) * -200%), 0) scale(0.6);
+			opacity: 0.5;
+		}
+		100% {
+			transform: translate3d(0, 0, 0) scale(1);
+			opacity: 1;
+		}
+	}
+
+	@keyframes enterAnimation {
+		0% {
+			transform: translate3d(0, calc(var(--factor) * -200%), 0) scale(0.6);
+			opacity: 0.5;
+		}
+		100% {
+			transform: translate3d(0, 0, 0) scale(1);
+			opacity: 1;
+		}
+	}
+
+	@-webkit-keyframes exitAnimation {
+		0% {
+			transform: translate3d(0, 0, -1px) scale(1);
+			opacity: 1;
+		}
+		100% {
+			transform: translate3d(0, calc(var(--factor) * -150%), -1px) scale(0.6);
+			opacity: 0;
+		}
+	}
+
+	@keyframes exitAnimation {
+		0% {
+			transform: translate3d(0, 0, -1px) scale(1);
+			opacity: 1;
+		}
+		100% {
+			transform: translate3d(0, calc(var(--factor) * -150%), -1px) scale(0.6);
+			opacity: 0;
+		}
+	}
+
+	@-webkit-keyframes fadeInAnimation {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeInAnimation {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@-webkit-keyframes fadeOutAnimation {
+		0% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes fadeOutAnimation {
+		0% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
+	.enter {
+		-webkit-animation: enterAnimation 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+		        animation: enterAnimation 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+	}
+
+	.exit {
+		-webkit-animation: exitAnimation 0.4s cubic-bezier(0.06, 0.71, 0.55, 1) forwards;
+		        animation: exitAnimation 0.4s cubic-bezier(0.06, 0.71, 0.55, 1) forwards;
+	}
+
+	.fadeIn {
+		-webkit-animation: fadeInAnimation 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+		        animation: fadeInAnimation 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+	}
+
+	.fadeOut {
+		-webkit-animation: fadeOutAnimation 0.4s cubic-bezier(0.06, 0.71, 0.55, 1) forwards;
+		        animation: fadeOutAnimation 0.4s cubic-bezier(0.06, 0.71, 0.55, 1) forwards;
 	}
 </style>

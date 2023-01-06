@@ -189,7 +189,7 @@ const result = async () => {
   </head>
   <body>
     <slot />
-    <RegisterSw client:load />
+    <RegisterSw client:only="svelte" />
   </body>
 </html>
 <style is:global lang="scss">
@@ -213,6 +213,7 @@ const result = async () => {
     --fds-font-family-display: "Segoe UI Variable Display",
       "Seoge UI Variable Static Display", var(--fds-font-family-fallback);
   }
+
   button {
     @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-90;
     @apply ring-offset-2 ring-offset-black;
