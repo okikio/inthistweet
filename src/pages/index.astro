@@ -12,7 +12,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 export const prerender = true;
 ---
 
-<Layout title="Videos, gifs and images downloader for twitter - What's in this tweet?" description="Quick and easy twitter video, gif and image downloader. Enter a Tweet URL, click search, and download the resulting videos, gifs, and images in it to share, create a meme, and/or to store.">
+<Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store.">
 	<section class="social-media">
 		<menu class="flex justify-center gap-4">
 			<Button href="/" variant="standard" rel="noopener" aria-label="Go home">
@@ -27,7 +27,7 @@ export const prerender = true;
 				<MdiGithub />	GitHub
 			</Button>
 
-			<Button class="flex gap-2" variant="hyperlink" href="https://twitter.com/@okikio_dev" rel="noopener">
+			<Button class="flex gap-2" variant="hyperlink" href="https://twitter.com/@inthistweet_dev" rel="noopener">
 				<MdiTwitter /> Twitter
 			</Button>
 		</menu>
@@ -65,7 +65,7 @@ export const prerender = true;
 
 			<div>
 				<span>Inspired by </span>
-				<a class="copyright-link" href="https://github.com/egoist/download-twitter-video" rel="noopener">egoist</a>
+				<a class="credit-link" href="https://github.com/egoist/download-twitter-video" rel="noopener">egoist</a>
 			</div>
 		</div>
 	</footer>
@@ -120,14 +120,16 @@ export const prerender = true;
 	}
 
 	:global(.link),
-	.copyright-link {
+	.copyright-link,
+	.credit-link {
 		color: var(--fds-accent-default);
 		display: inline-flex;
 		align-items: center;
 		@apply gap-1;
 	}
 
-	.copyright-link:hover {
+	.copyright-link:hover,
+	.credit-link:hover {
 		text-decoration: underline;
 	}
 </style>

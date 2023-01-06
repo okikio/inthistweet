@@ -20,7 +20,7 @@
     "fluent-svelte": "^1.6.0",
     "svelte": "^3.55.0",
     "tailwindcss": "^3.2.4",
-    "unplugin-icons": "^0.14.15",
+    "unplugin-icons": "^0.15.0",
     "urlpattern-polyfill": "^6.0.2"
   },
   "devDependencies": {
@@ -33,9 +33,9 @@
     "@astrojs/tailwind": "^2.1.3",
     "@astrojs/vercel": "^2.4.0",
     "@iconify-json/fluent": "^1.1.17",
-    "@iconify-json/fluent-emoji": "^1.1.7",
+    "@iconify-json/fluent-emoji": "^1.1.10",
     "@iconify-json/mdi": "^1.1.41",
-    "astro": "^1.8.0",
+    "astro": "^1.9.1",
     "astrojs-service-worker": "^0.0.8",
     "workbox-core": "^6.5.4"
   }

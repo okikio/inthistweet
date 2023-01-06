@@ -2,11 +2,12 @@
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/okikio/inthistweet)
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/s/github/okikio/inthistweet)
+[![Follow on Twitter](./public/twitter-badge.svg)](https://twitter.com/@inthistweet_dev)
 
 ![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
 
-Quick and easy twitter image/video downloader. 
+✨ Futuristic ✨ twitter image/video downloader. 
 Enter a Tweet URL, click search, and download the image/videos in it to share, create a meme, and/or to store, the world is your oyester. 
 
 > **Note**: You can download images and videos for gallary tweets, quote tweets, normal image and video posts and even the preview images for links, [inthistweet.app](https://inthistweet.app) can handle it all.
