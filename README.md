@@ -5,6 +5,9 @@
 [![Upvote on ProductHunt](./public/product-hunt-badge-light.svg#gh-light-mode-only)![Follow on Twitter](./public/product-hunt-badge-dark.svg#gh-dark-mode-only)](https://twitter.com/@inthistweet_dev)
 [![Follow on Twitter](./public/twitter-badge-light.svg#gh-light-mode-only)![Follow on Twitter](./public/twitter-badge-dark.svg#gh-dark-mode-only)](https://twitter.com/@inthistweet_dev)
 
+![Follow on Twitter](./public/twitter-badge-light.svg#gh-light-mode-only)
+![Follow on Twitter](./public/twitter-badge-dark.svg#gh-dark-mode-only)
+
 ![in-this-tweet light logo](public/logo-full-light.svg#gh-light-mode-only)
 ![in-this-tweet dark logo](public/logo-full-dark.svg#gh-dark-mode-only)
 
