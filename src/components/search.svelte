@@ -12,6 +12,8 @@
   import FluentDismiss24Regular from "~icons/fluent/dismiss-24-regular";
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
   import FluentOpen24Regular from "~icons/fluent/open-24-regular";
+  import FluentArrowClockwise24Regular from '~icons/fluent/arrow-clockwise-24-regular';
+
   import { onMount } from "svelte";
 
   export function syncHeight(el: HTMLElement, initial = 0) {

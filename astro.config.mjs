@@ -52,7 +52,8 @@ export default defineConfig({
     tailwind(), 
     sitemap({ customPages: ['https://inthistweet.app/'] }), 
     serviceWorker({
-      // registration: { autoRegister: false },
+      // enableInDevelopment: true,
+      registration: { autoRegister: false },
       // @ts-ignore
       workbox: {
         skipWaiting: false,
@@ -146,7 +147,7 @@ export default defineConfig({
     plugins: [
       Icons({
         // experimental
-        autoInstall: true,
+        // autoInstall: true,
         compiler: 'svelte',
         customCollections: {
           // a helper to load icons from the file system

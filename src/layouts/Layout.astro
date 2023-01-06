@@ -2,170 +2,268 @@
 import "fluent-svelte/theme.css";
 import "@fontsource/inter-tight/variable.css";
 import "@fontsource/inter/variable.css";
+
+import RegisterSw from "../components/register-sw.svelte";
+
 export interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description: string;
 }
 
 const { title, description } = Astro.props;
-const _url = new URL(Astro.url).searchParams.get('q') ?? '';
+const _url = new URL(Astro.url).searchParams.get("q") ?? "";
 
 const result = async () => {
-	if (_url && _url.length > 0) {
-		try {
-			const req = await fetch(Astro.url.origin + "/api/twitter?url=" + encodeURIComponent(_url));
-			return req.json() as Promise<{ url: string, type: string }[]>;
-		} catch (e) { console.warn(e); }
-	}
+  if (_url && _url.length > 0) {
+    try {
+      const req = await fetch(
+        Astro.url.origin + "/api/twitter?url=" + encodeURIComponent(_url)
+      );
+      return req.json() as Promise<{ url: string; type: string }[]>;
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 
-	return [];
+  return [];
 };
 ---
 
 <!DOCTYPE html>
 <html lang="en" class="background">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<title>{title}</title>
+    <title>{title}</title>
 
-		<link rel="manifest" href="/manifest.json">
-		<meta name="robots" content="index, follow">
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="robots" content="index, follow" />
 
-		<link rel="search" href={Astro.site?.origin?.toString() + "/open-search.xml" } type="application/opensearchdescription+xml" title="inthistweet: Twitter URL...">
-		<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
-		
-		<meta name="theme-color" content="#e8f0f6" media="(prefers-color-scheme: light)">
-		<meta name="theme-color" content="#1d2026" media="(prefers-color-scheme: dark)">
+    <link
+      rel="search"
+      href={Astro.site?.origin?.toString() + "/open-search.xml"}
+      type="application/opensearchdescription+xml"
+      title="inthistweet: Twitter URL..."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 
-		<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <meta
+      name="theme-color"
+      content="#e8f0f6"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#1d2026"
+      media="(prefers-color-scheme: dark)"
+    />
 
-		<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#745eff">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon/favicon-16x16.png"
+    />
 
-		<meta name="msapplication-TileColor" content="#232323">
-		<meta name="msapplication-config" content="/favicon/browserconfig.xml">
+    <link
+      rel="mask-icon"
+      href="/favicon/safari-pinned-tab.svg"
+      color="#745eff"
+    />
 
-		<meta name="title" property="og:title" content={title} />
-		<meta name="twitter:title" itemprop="name" content={title} />
-		<meta name="apple-mobile-web-app-title" content={title} />
+    <meta name="msapplication-TileColor" content="#232323" />
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
 
-		<meta name="description" property="og:description" content={description} />
-		<meta property="twitter:description" itemprop="description" content={description} />
+    <meta name="title" property="og:title" content={title} />
+    <meta name="twitter:title" itemprop="name" content={title} />
+    <meta name="apple-mobile-web-app-title" content={title} />
 
-		<meta name="keywords" content="twitter media,twitter image/video downloader,tweet video download,tweet image download" />
+    <meta name="description" property="og:description" content={description} />
+    <meta
+      property="twitter:description"
+      itemprop="description"
+      content={description}
+    />
 
-		<meta name="og:locale" content="en_Us" />
-		<meta property="og:type" content="website" />
+    <meta
+      name="keywords"
+      content="twitter media,twitter image/video downloader,tweet video download,tweet image download"
+    />
 
-		<meta name="web-author" content="Okiki Ojo" />
-		<meta property="article:author" content="Okiki Ojo" />
-		<meta name="contact" content="hey@okikio.dev" />
+    <meta name="og:locale" content="en_Us" />
+    <meta property="og:type" content="website" />
 
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta property="twitter:image:alt" content="In this tweet's logo" />
+    <meta name="web-author" content="Okiki Ojo" />
+    <meta property="article:author" content="Okiki Ojo" />
+    <meta name="contact" content="hey@okikio.dev" />
 
-		<meta name="twitter:site" content="@inthistweet_dev" />
-		<meta name="twitter:creator" content="@okikio_dev" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image:alt" content="In this tweet's logo" />
 
-		<meta property="image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
-		<meta property="og:image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
-		<meta name="twitter:image" content={Astro.site?.origin.toString() + "/favicon/social-preview.png" } />
+    <meta name="twitter:site" content="@inthistweet_dev" />
+    <meta name="twitter:creator" content="@okikio_dev" />
 
-		<meta name="twitter:url" property="og:site_name" content={Astro.site?.origin.toString()} />
+    <meta
+      property="image"
+      content={Astro.site?.origin.toString() + "/favicon/social-preview.png"}
+    />
+    <meta
+      property="og:image"
+      content={Astro.site?.origin.toString() + "/favicon/social-preview.png"}
+    />
+    <meta
+      name="twitter:image"
+      content={Astro.site?.origin.toString() + "/favicon/social-preview.png"}
+    />
 
-		<link rel="canonical" href={Astro.request.url.toString()} />
-		<meta itemprop="url" content={Astro.request.url.toString()} />
-		<meta name="shortlink" content={Astro.request.url.toString()} />
-		<meta property="og:url" content={Astro.request.url.toString()} />
+    <meta
+      name="twitter:url"
+      property="og:site_name"
+      content={Astro.site?.origin.toString()}
+    />
 
-		<link rel="preconnect" href="https://video.twimg.com" />
-		<link rel="preconnect" href="https://pbs.twimg.com" />
+    <link rel="canonical" href={Astro.request.url.toString()} />
+    <meta itemprop="url" content={Astro.request.url.toString()} />
+    <meta name="shortlink" content={Astro.request.url.toString()} />
+    <meta property="og:url" content={Astro.request.url.toString()} />
 
-		<link href="https://twitter.com/inthistweet_dev" rel="me" />
-		<link rel="webmention" href="https://webmention.io/inthistweet.app/webmention" />
-		<link rel="pingback" href="https://webmention.io/inthistweet.app/xmlrpc" />
-		<link rel="pingback" href="https://webmention.io/webmention?forward=https://inthistweet.app/endpoint" />
+    <link rel="preconnect" href="https://video.twimg.com" />
+    <link rel="preconnect" href="https://pbs.twimg.com" />
 
-		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
-		<!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
-		<!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
+    <link href="https://twitter.com/inthistweet_dev" rel="me" />
+    <link
+      rel="webmention"
+      href="https://webmention.io/inthistweet.app/webmention"
+    />
+    <link rel="pingback" href="https://webmention.io/inthistweet.app/xmlrpc" />
+    <link
+      rel="pingback"
+      href="https://webmention.io/webmention?forward=https://inthistweet.app/endpoint"
+    />
 
-		<!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
-		<!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
+    <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
+    <!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
+    <!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
 
-		{_url && _url.length > 0 ? <link rel="preload" href={`/api/twitter?url=${encodeURIComponent(_url)}`} as="fetch" type="application/json" crossorigin="anonymous" /> : null}
-		
-		{(await result?.())?.map?.(({ url, type}) => {
-			if (url && url.length > 0) return <link rel="preload" href={url} as={type == "photo" ? "image" : type} />
-			return null;
-		})}
-	</head>
-	<body>
-		<slot />
-	</body>
+    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+    <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
+
+    {
+      _url && _url.length > 0 ? (
+        <link
+          rel="preload"
+          href={`/api/twitter?url=${encodeURIComponent(_url)}`}
+          as="fetch"
+          type="application/json"
+          crossorigin="anonymous"
+        />
+      ) : null
+    }
+
+    {
+      (await result?.())?.map?.(({ url, type }) => {
+        if (url && url.length > 0)
+          return (
+            <link
+              rel="preload"
+              href={url}
+              as={type == "photo" ? "image" : type}
+            />
+          );
+        return null;
+      })
+    }
+  </head>
+  <body>
+    <slot />
+    <RegisterSw client:load />
+  </body>
 </html>
-<style is:global>
-	:root {
-		--accent: 124, 58, 237;
-		--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+<style is:global lang="scss">
+  :root {
+    --accent: 124, 58, 237;
+    --accent-gradient: linear-gradient(
+      45deg,
+      rgb(var(--accent)),
+      #da62c4 30%,
+      white 60%
+    );
 
-		/* Font Families */
-		--fds-font-family-fallback: "InterVariable", "Inter TightVariable", -apple-system, "Segoe UI", "Open Sans", ui-sans-serif, system-ui,
-			BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-		--fds-font-family-text: "Segoe UI Variable Text", "Seoge UI Variable Static Text", 
-			var(--fds-font-family-fallback);
-		--fds-font-family-small: "Segoe UI Variable Small", "Seoge UI Variable Static Small",
-			var(--fds-font-family-fallback);
-		--fds-font-family-display: "Segoe UI Variable Display", "Seoge UI Variable Static Display",
-			var(--fds-font-family-fallback);
-	}
-	.title-display {
-		/* Font Families */
-		--fds-font-family-display: "Inter TightVariable", -apple-system, "Segoe UI Variable Display", "Seoge UI Variable Static Display",
-			var(--fds-font-family-fallback);
+    /* Font Families */
+    --fds-font-family-fallback: "InterVariable", "Inter TightVariable",
+      -apple-system, "Segoe UI", "Open Sans", ui-sans-serif, system-ui,
+      BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    --fds-font-family-text: "Segoe UI Variable Text",
+      "Seoge UI Variable Static Text", var(--fds-font-family-fallback);
+    --fds-font-family-small: "Segoe UI Variable Small",
+      "Seoge UI Variable Static Small", var(--fds-font-family-fallback);
+    --fds-font-family-display: "Segoe UI Variable Display",
+      "Seoge UI Variable Static Display", var(--fds-font-family-fallback);
+  }
+  button {
+    @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-90;
+    @apply ring-offset-2 ring-offset-black;
+    @apply focus:outline-none;
+    @apply transition duration-200 ease-out;
+  }
+  
+  .title-display {
+    /* Font Families */
+    --fds-font-family-display: "Inter TightVariable", -apple-system,
+      "Segoe UI Variable Display", "Seoge UI Variable Static Display",
+      var(--fds-font-family-fallback);
     font-family: var(--fds-font-family-display);
-	}
-	html {
-		font-family: "Inter", var(--fds-font-family-text), system-ui, sans-serif;
+  }
+  html {
+    font-family: "Inter", var(--fds-font-family-text), system-ui, sans-serif;
     background-color: var(--fds-solid-background-base);
     color: var(--fds-text-primary);
     font-family: var(--fds-font-family-text);
     font-size: var(--fds-body-font-size);
-    font-weight: 400;  
-		color-scheme: dark light; 
-		scrollbar-gutter: stable; 
-	}
-	.background {
-		background-image: url(/bloom-mica-light.webp);
-		background-attachment: fixed;
-		background-size: cover;
-		background-position: center center;
-	}
-	.background:before {
-		background-image: url(/bloom-mica-light.webp);
-		filter: blur(5px) saturate(200deg);
-		/* position: fixed; */
-		background-repeat: no-repeat;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		content: "";
-		z-index: -1;
-	}
+    font-weight: 400;
+    color-scheme: dark light;
+    scrollbar-gutter: stable;
+  }
+  .background {
+    background-image: url(/bloom-mica-light.webp);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center center;
+  }
+  .background:before {
+    background-image: url(/bloom-mica-light.webp);
+    filter: blur(5px) saturate(200deg);
+    /* position: fixed; */
+    background-repeat: no-repeat;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    z-index: -1;
+  }
 
-	@media(prefers-color-scheme: dark) {
-		.background,
-		.background:before {
-			background-image: url(/bloom-mica-dark.webp);
-		}
-	}
-	code {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-			Bitstream Vera Sans Mono, Courier New, monospace;
-	}
+  @media (prefers-color-scheme: dark) {
+    .background,
+    .background:before {
+      background-image: url(/bloom-mica-dark.webp);
+    }
+  }
+  code {
+    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  }
 </style>
