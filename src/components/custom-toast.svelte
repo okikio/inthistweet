@@ -55,9 +55,6 @@
     justify-content: center;
     text-align: center;
   `;
-
-  // Use this component in your app:
-  //     toast(RichContent)
 </script>
 
 <div
@@ -106,7 +103,7 @@
       on:click={(e) => {
         if (typeof toast?.dismissClick == "function")
           toast?.dismissClick?.(e);
-          
+
         toast_.dismiss(toast.id);
       }}
     >
