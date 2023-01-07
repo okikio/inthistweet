@@ -135,11 +135,11 @@ export default defineConfig({
   ],
   output: "server",
   adapter: adapter(process.env?.SSR_MODE ?? 'netlify'),
-  // experimental: {
-  //   prerender: false,
+  experimental: {
+    prerender: true,
   //   errorOverlay: true,
   //   contentCollections: false,
-  // },
+  },
   vite: {
     server: {
       cors: true

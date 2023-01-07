@@ -258,7 +258,7 @@
   </InfoBar>
 </div>
 
-<style>
+<style lang="scss">
   :global(.search-box input[type="search"].text-box) {
     min-block-size: 40px;
     padding-inline-end: 0.25rem;
