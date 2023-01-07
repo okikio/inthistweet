@@ -12,7 +12,6 @@
   import FluentDismiss24Regular from "~icons/fluent/dismiss-24-regular";
   import FluentSearch24Regular from "~icons/fluent/search-24-regular";
   import FluentOpen24Regular from "~icons/fluent/open-24-regular";
-  import FluentArrowClockwise24Regular from '~icons/fluent/arrow-clockwise-24-regular';
 
   import { onMount } from "svelte";
 
@@ -101,7 +100,7 @@
     searchButton={false}
     clearButton={false}
     class="search-box"
-    autofocus
+    autofocus={value.length === 0}
   >
     <div slot="buttons" class="flex flex-row gap-1">
       {#if value && value.length > 0}

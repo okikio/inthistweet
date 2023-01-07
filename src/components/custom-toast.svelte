@@ -113,12 +113,17 @@
 </div>
 
 <style lang="scss" global>
+	.toaster .wrapper .message {
+		pointer-events: none;
+		justify-content: end;
+		width: 100%;
+	}
 	.toast {
 		will-change: transform;
 		box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
 
-		max-width: min(250px, 100%);
-		@apply sm:max-w-[425px];
+		max-width: min(350px, 100%);
+		@apply sm:max-w-[450px] w-full;
 
 		// transition-property: background-color, border-color, text-decoration-color,
 		// 	fill, stroke;

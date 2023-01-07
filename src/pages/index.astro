@@ -10,7 +10,7 @@ import ProductHuntLogo from "~icons/local/product-hunt-logo";
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
 
-export const prerender = true;
+// export const prerender = true;
 ---
 
 <Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store.">
@@ -37,7 +37,7 @@ export const prerender = true;
 	<header class="pt-8 py-4 sm:py-8 md:pt-14 text-center">
 		<div class="title">
 			<TextBlock variant="display">
-				<span class="inline-flex items-center gap-6 title-display">
+				<span class="inline-flex items-center gap-6 title-display" id="title-display">
 					In this tweet
 					<Logo class="logo" />
 				</span>
@@ -129,7 +129,7 @@ export const prerender = true;
 		}
 	}
 
-	:global(.title .text-block.type-display) {
+	:global(.title #title-display) {
 		@apply pb-4;
 		@apply lt-sm:text-4xl lt-md:text-6xl;
 	}

@@ -11,8 +11,6 @@
   import CustomToast from "./custom-toast.svelte";
   import { createServiceWorker } from "./service-worker";
 
-  onMount(() => {});
-
   type CustomToastType = ToastType | "update";
   type CustomToastOptions = {
     messageStr?: Renderable | string;
@@ -27,7 +25,7 @@
     options?: ToastOptions & CustomToastOptions
   ) {
     return toast.custom(CustomToast, {
-      position: "top-right",
+      position: "bottom-right",
       className: "toast",
       // @ts-ignore
       toastType: type,
