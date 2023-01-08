@@ -135,10 +135,11 @@ const result = async () => {
       content={Astro.site?.origin.toString()}
     />
 
-    <link rel="canonical" href={Astro.request.url.toString()} />
-    <meta itemprop="url" content={Astro.request.url.toString()} />
-    <meta name="shortlink" content={Astro.request.url.toString()} />
-    <meta property="og:url" content={Astro.request.url.toString()} />
+    <link rel="canonical" href={Astro.site.toString()} />
+    <meta itemprop="url" content={Astro.site.toString()} />
+    <meta name="shortlink" content={Astro.site.toString()} />
+    <meta property="og:url" content={Astro.site.toString()} />
+    <meta name="generator" content={Astro.generator} />
 
     <link rel="preconnect" href="https://video.twimg.com" />
     <link rel="preconnect" href="https://pbs.twimg.com" />
