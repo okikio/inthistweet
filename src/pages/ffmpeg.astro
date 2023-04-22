@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Search from '../components/search.svelte';
+import SearchArgs from '../components/search-args.svelte';
 
 import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
@@ -10,10 +10,10 @@ import ProductHuntLogo from "~icons/local/product-hunt-logo";
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
 
-export const prerender = true;
+// export const prerender = true;
 ---
 
-<Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store." preload>
+<Layout title="FFmpeg Playground - in this tweet?" description="Using ffmpeg to convert between media types, e.g. convert a video from m3u8 to mp4, mp4 to avi, avi to gif, etc... Use it in conjunction with inthisweet.app for even better combinations">
 	<section class="social-media">
 		<menu class="flex justify-center gap-1 sm:gap-4">
 			<Button href="/" variant="standard" rel="noopener" aria-label="Go home">
@@ -38,7 +38,7 @@ export const prerender = true;
 		<div class="title">
 			<TextBlock variant="display">
 				<span class="inline-flex items-center gap-6 title-display" id="title-display">
-					In this tweet
+					FFmpeg Playground
 					<Logo class="logo" />
 				</span>
 			</TextBlock>
@@ -47,14 +47,14 @@ export const prerender = true;
 		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] lg:max-w-[60ch] xl:max-w-[75ch] mx-auto">
 			<TextBlock variant="body">
 				<span class="leading-7">
-					Enter a Tweet URL, click search, and download the videos, gifs and images. 
+					Enter a video or image URL, enter your ffmpeg config, click search, and enjoy. You can also upload files by clicking the folder button. 
 				</span>
 			</TextBlock>
 		</div>
 	</header>
 
 	<main>
-		<Search value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
+		<SearchArgs value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
 	</main>
 	
 	<div>
@@ -86,13 +86,12 @@ export const prerender = true;
 				<span> © {new Date().getFullYear()} </span>
 				<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
 			</div>
-
-			<div>
-				<span>Inspired by </span>
-				<a class="credit-link" href="https://github.com/egoist/download-twitter-video" rel="noopener">egoist</a>
-			</div>
 		</div>
 	</footer>
+
+	<script src="/node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js">
+  // import "@ffmpeg/ffmpeg/dist/ffmpeg.min.js";
+	</script>
 
 	<script>
 		import Measure from "../scripts/measure";
@@ -131,7 +130,7 @@ export const prerender = true;
 
 	:global(.title #title-display) {
 		@apply pb-4;
-		@apply lt-sm:text-4xl lt-md:text-6xl;
+		@apply lt-sm:text-4xl sm:text-6xl;
 	}
 
 	:global(.icon-button svg.logo) {

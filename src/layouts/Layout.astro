@@ -8,13 +8,14 @@ import RegisterSw from "../components/register-sw.svelte";
 export interface Props {
   title: string;
   description: string;
+  preload: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, preload } = Astro.props;
 const _url = new URL(Astro.url).searchParams.get("q") ?? "";
 
 const result = async () => {
-  if (_url && _url.length > 0) {
+  if (_url && _url.length > 0 && preload) {
     try {
       const req = await fetch(
         Astro.url.origin + "/api/twitter?url=" + encodeURIComponent(_url)
@@ -163,7 +164,7 @@ const result = async () => {
     <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
 
     {
-      _url && _url.length > 0 ? (
+      _url && _url.length > 0 && preload ? (
         <link
           rel="preload"
           href={`/api/twitter?url=${encodeURIComponent(_url)}`}
@@ -176,7 +177,7 @@ const result = async () => {
 
     {
       (await result?.())?.map?.(({ url, type }) => {
-        if (url && url.length > 0)
+        if (url && url.length > 0 && preload)
           return (
             <link
               rel="preload"

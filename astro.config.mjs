@@ -10,39 +10,10 @@ import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 
 import serviceWorker from "astrojs-service-worker"; 
-
-import netlify from "@astrojs/netlify/edge-functions";
-import vercel from "@astrojs/vercel/serverless";
-import cloudflare from "@astrojs/cloudflare";
-import deno from "@astrojs/deno";
-import node from "@astrojs/node";
+import adapter from "astro-auto-adapter"; 
 
 import RangeRequestsPlugin from './range-requests.mjs';
 import { urlPattern } from './range-requests.mjs';
-
-const adapter = (ssr) => {
-  switch (ssr) {
-    case "netlify": 
-      return netlify({
-        dist: new URL('./dist/', import.meta.url)
-      });
-
-    case "vercel": 
-      return vercel();
-    
-    case "cloudflare": 
-      return cloudflare();
-
-    case "deno": 
-      return deno();
-    
-    case "node": 
-    default: 
-      return node({
-        mode: 'standalone'
-      });
-  }
-}
 
 // https://astro.build/config
 export default defineConfig({
@@ -134,15 +105,22 @@ export default defineConfig({
     })
   ],
   output: "server",
-  adapter: adapter(process.env?.SSR_MODE ?? 'netlify'),
-  experimental: {
-    prerender: true,
-  //   errorOverlay: true,
-  //   contentCollections: false,
+  adapter: adapter(process.env?.SSR_MODE ?? 'netlify-edge', {
+    netlify: {
+      dist: new URL('./dist/', import.meta.url)
+    },
+  }),
+  server: {
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp"
+    }
   },
+  experimental: { },
   vite: {
-    server: {
-      cors: true
+    ssr: {
+      noExternal: false,
+      external: ["@ffmpeg/ffmpeg", "@ffmpeg/core"]
     },
     plugins: [
       Icons({
@@ -158,7 +136,7 @@ export default defineConfig({
             svg => svg.replace(/^<svg /, '<svg fill="currentColor" '),
           ),
         },
-      })
+      }),
     ]
   }
 });
