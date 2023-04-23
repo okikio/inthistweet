@@ -109,23 +109,15 @@ export default defineConfig({
     netlify: {
       dist: new URL('./dist/', import.meta.url)
     },
-  }),
-  server: {
-    headers: {
-      "Cross-Origin-Opener-Policy": "same-origin",
-      "Cross-Origin-Embedder-Policy": "require-corp"
+    node: {
+      mode: "middleware"
     }
-  },
-  experimental: { },
+  }),
   vite: {
-    ssr: {
-      noExternal: false,
-      external: ["@ffmpeg/ffmpeg", "@ffmpeg/core"]
-    },
     plugins: [
       Icons({
         // experimental
-        // autoInstall: true,
+        autoInstall: true,
         compiler: 'svelte',
         customCollections: {
           // a helper to load icons from the file system

@@ -1,16 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SearchArgs from '../components/search-args.svelte';
+import FFmpegEditor from '../components/ffmpeg.svelte';
+
+import ffmpegURL from "@ffmpeg.wasm/main/dist/ffmpeg.min.js?url";
 
 import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
 import ProductHuntLogo from "~icons/local/product-hunt-logo";
+import FileIconsFfmpeg from '~icons/file-icons/ffmpeg';
 
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
 
-// export const prerender = true;
+Astro.response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+Astro.response.headers.set("Cross-Origin-Embedder-Policy", "require-corp");
+
+export const prerender = true;
 ---
 
 <Layout title="FFmpeg Playground - in this tweet?" description="Using ffmpeg to convert between media types, e.g. convert a video from m3u8 to mp4, mp4 to avi, avi to gif, etc... Use it in conjunction with inthisweet.app for even better combinations">
@@ -23,6 +29,10 @@ import MdiTwitter from '~icons/mdi/twitter';
 			</Button>
 
 			<div class="flex-grow" />
+			
+			<Button class="flex gap-2" variant="hyperlink" href="./ffmpeg">
+				<FileIconsFfmpeg />	FFmpeg
+			</Button>
 			
 			<Button class="flex gap-2" variant="hyperlink" href="https://github.com/okikio/inthistweet" rel="noopener">
 				<MdiGithub />	GitHub
@@ -54,7 +64,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 	</header>
 
 	<main>
-		<SearchArgs value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
+		<FFmpegEditor value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
 	</main>
 	
 	<div>
@@ -67,6 +77,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 				height="54" 
 				class="text-center mx-auto block dark:hidden"
 				loading="lazy"
+				crossorigin="anonymous"
 			/>
 			<img 
 				src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=373878&theme=dark" 
@@ -76,6 +87,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 				height="54" 
 				class="text-center mx-auto hidden dark:block"
 				loading="lazy"
+				crossorigin="anonymous"
 			/>
 		</a>
 	</div>
@@ -89,17 +101,14 @@ import MdiTwitter from '~icons/mdi/twitter';
 		</div>
 	</footer>
 
-	<script src="/node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js">
-  // import "@ffmpeg/ffmpeg/dist/ffmpeg.min.js";
-	</script>
-
+	<script src={ffmpegURL} is:inline></script> 
 	<script>
 		import Measure from "../scripts/measure";
 		Measure(window);
 	</script>
 </Layout>
 
-<style>
+<style lang="scss">
 	.social-media,
 	header,
 	footer,
@@ -130,7 +139,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 
 	:global(.title #title-display) {
 		@apply pb-4;
-		@apply lt-sm:text-4xl sm:text-6xl;
+		@apply lt-xxsm:text-2xl text-4xl sm:text-6xl;
 	}
 
 	:global(.icon-button svg.logo) {

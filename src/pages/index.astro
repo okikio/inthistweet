@@ -6,6 +6,7 @@ import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
 import Logo from "~icons/local/logo";
 import ProductHuntLogo from "~icons/local/product-hunt-logo";
+import FileIconsFfmpeg from '~icons/file-icons/ffmpeg';
 
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
@@ -23,6 +24,10 @@ export const prerender = true;
 			</Button>
 
 			<div class="flex-grow" />
+			
+			<Button class="flex gap-2" variant="hyperlink" href="./ffmpeg">
+				<FileIconsFfmpeg />	FFmpeg
+			</Button>
 			
 			<Button class="flex gap-2" variant="hyperlink" href="https://github.com/okikio/inthistweet" rel="noopener">
 				<MdiGithub />	GitHub
@@ -67,6 +72,7 @@ export const prerender = true;
 				height="54" 
 				class="text-center mx-auto block dark:hidden"
 				loading="lazy"
+				crossorigin="anonymous"
 			/>
 			<img 
 				src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=373878&theme=dark" 
@@ -76,6 +82,7 @@ export const prerender = true;
 				height="54" 
 				class="text-center mx-auto hidden dark:block"
 				loading="lazy"
+				crossorigin="anonymous"
 			/>
 		</a>
 	</div>
@@ -100,7 +107,7 @@ export const prerender = true;
 	</script>
 </Layout>
 
-<style>
+<style lang="scss">
 	.social-media,
 	header,
 	footer,

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ViewUpdate } from "@codemirror/view";
-  import type { FFmpeg } from "@ffmpeg/ffmpeg";
+  import type { ChangeSpec } from "@codemirror/state";
+  import type { FFmpeg } from "@ffmpeg.wasm/main";
 
   import type { Manifest } from "../lib/m3u8/mod";
   // @ts-ignore
@@ -22,38 +23,23 @@
   import FluentOpen24Regular from "~icons/fluent/open-24-regular";
   import FluentFolder24Regular from "~icons/fluent/folder-24-regular";
   import FluentFolder24Filled from "~icons/fluent/folder-24-filled";
+  import FluentRecord24Filled from "~icons/fluent/record-stop-24-filled";
+  import FluentPlay24Filled from '~icons/fluent/play-24-filled'
 
-  
+  import { createFFmpeg, fetchFile, diff, shell } from "./ffmpeg";
 
-
-  // declare global {
-  // import { createFFmpeg as ffmpegCreate, fetchFile as fileFetch } from "@ffmpeg/ffmpeg";
-  //   var FFmpeg = { fetchFile: fileFetch, createFFmpeg: ffmpegCreate }
-  // }
-
-  // @ts-ignore
-  const { createFFmpeg, fetchFile } = self?.FFmpeg as unknown as { fetchFile: typeof fileFetch, createFFmpeg: typeof ffmpegCreate };
-
+  import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
   import { oneDark, color } from "@codemirror/theme-one-dark";
   import { json } from "@codemirror/lang-json";
 
-  import { EditorView } from "@codemirror/view";
+  import { markdown } from "@codemirror/lang-markdown";
+  import { StreamLanguage } from "@codemirror/language";
+
+  import { EditorView, scrollPastEnd } from "@codemirror/view";
   import { basicSetup } from "codemirror";
 
   import { onMount } from "svelte";
-
-  export function syncHeight(el: HTMLElement, initial = 0) {
-    return writable(initial, (set) => {
-      if (!el) {
-        return;
-      }
-      let ro = new ResizeObserver(() => { 
-        if (el) { return set(el.offsetHeight); } 
-      });
-      ro.observe(el);
-      return () => ro.disconnect();
-    });
-  }
+  import { element_is } from "svelte/internal";
 
   interface FFmpegConfig {
     args: string[],
@@ -71,19 +57,27 @@
     forceUseArgs: null,
   }
 
+  const emptyConsole = "No Logs...";
   let ffmpegOpts = Object.assign({}, ffmpegDefaultOpts);
   let ffmpeg: FFmpeg; 
 
   let editorView: EditorView;
+  let consoleView: EditorView;
+
   let searchInputEl: HTMLInputElement;
   let uploadInputEl: HTMLInputElement;
 
   let editorEl: HTMLElement;
+  let consoleEl: HTMLElement;
   let el: HTMLElement;
   $: heightStore = syncHeight(el);
 
+  let abortCtlr = new AbortController();
+
   export let value = "";
-  let loading = false;
+  let loading = writable(false);
+  let initializing = writable(false);
+  let fileUploadMode = false;
 
   let results: Array<{ type?: string | null; url?: string | null }> = [];
   let error = writable<string | null>(null);
@@ -152,69 +146,262 @@
     }
   });
 
-  async function parseM3u8Manifests(arrbuf: ArrayBuffer, value: string, count = 0) {
+  let scrollPos = 0;
+  let sticky = true;
+  onMount(() => {
+    consoleView = new EditorView({
+      doc: emptyConsole,
+      extensions: [
+        basicSetup, 
+        StreamLanguage.define(shell),
+        oneDark,
+        EditorView.editable.of(false),
+        EditorView.lineWrapping,
+        hyperLink,
+        scrollPastEnd(),
+        // EditorView.domEventHandlers({
+        //   scroll({ target }) {
+        //     const dom = consoleView.scrollDOM;
+        //     if (dom === (target as HTMLElement)) {
+        //       scrollPos = dom.scrollTop;
+        //       console.log({
+        //         scrollPos,
+        //         sticky,
+        //         clientHeight: dom.clientHeight
+        //       })
+        //       if (scrollPos + dom.clientHeight > consoleView.contentHeight - 50) {
+        //         sticky = true;
+        //       } else {
+        //         // sticky = false;
+        //       }
+        //     }
+        //   }
+        // }),
+        // EditorView.updateListener.of((update: ViewUpdate) => {
+        //   if (update.docChanged) {
+        //     if (sticky) {
+        //       const tr = consoleView.state.update({
+        //         effects: [EditorView.scrollIntoView(scrollPos)]
+        //       })
+
+        //       consoleView.dispatch(tr)
+        //     }
+        //     // const value = update.state.doc.toString();
+        //     // ffmpegOpts = JSON.parse(value)
+
+        //     // console.log({
+        //     //   ffmpegOpts
+        //     // })
+        //   }
+        // }),
+      ],
+      parent: consoleEl,
+      
+    })
+
+    ffmpeg = createFFmpeg({ 
+      log: true,
+      logger(obj) {
+        if (consoleView) {
+          const doc = consoleView.state.doc;
+          let changes: ChangeSpec[] = []
+
+          if (doc.toString().trim() === emptyConsole) {
+            changes.push({from: 0, to: doc.length })
+          }
+
+          // (Assume view is an EditorView instance holding the document "123".)
+          const message = `[${obj.type}] ${obj.message}\n`;
+          changes.push({ from: doc.length, insert: message });
+
+          let transaction = consoleView.state.update({ changes })
+          // At this point the view still shows the old state.
+          consoleView.dispatch(transaction)
+          // And now it shows the new state.
+        }
+      }
+    });
+
+    (async () => {
+      loading.set(true);
+      initializing.set(true);
+
+      await ffmpeg.load();
+
+      loading.set(false);
+      initializing.set(false);
+    })()
+    
+    const url = new URL(globalThis.location?.href);
+    if (url.searchParams.get("config")?.trim?.()) {
+      try {
+        ffmpegOpts = JSON.parse(url.searchParams.get("config") ?? "{}");
+      } catch (e) {
+        console.warn("Bad JSON for ffmpeg config");
+        ffmpegOpts = Object.assign({}, ffmpegDefaultOpts);
+      }
+    }
+
+    editorView = new EditorView({
+      doc: JSON.stringify(ffmpegOpts, null, 2),
+      extensions: [
+        basicSetup, 
+        json(),
+        oneDark,
+        hyperLink,
+        EditorView.updateListener.of((update: ViewUpdate) => {
+          if (update.docChanged) {
+            const value = update.state.doc.toString();
+            ffmpegOpts = JSON.parse(value)
+
+            console.log({
+              ffmpegOpts
+            })
+          }
+        }),
+      ],
+      parent: editorEl
+    })
+
+    if (url.searchParams.get("q")?.trim?.()) {
+      value = url.searchParams.get("q") ?? "";
+    }
+  });
+
+  onMount(() => {
+    searchInputEl?.addEventListener?.('change', () => { 
+      try {
+        new URL(value);
+        const newURL = new URL(globalThis.location.href);
+        newURL.search = new URLSearchParams({
+          q: value,
+          config: JSON.stringify(ffmpegOpts)
+        }).toString();
+        fileUploadMode = false;
+        globalThis.history.replaceState(null, "", newURL);
+      } catch (e) {}
+    })
+  })
+
+  function getManifest(arrbuf: ArrayBuffer) {
     const toText = new TextDecoder().decode(arrbuf);
     const parser = new m3u8Parser.Parser()
     parser.push(toText);
     parser.end();
-    console.log({ "m3u8 Playlist": toText, parser, manifest: parser.manifest })
+    return parser
+  }
 
-    // const m3u8 = new M3U8Parser({ playlist: toText });
-    // await Promise.all(
-    //   m3u8.getPlaylist().items.map(async ({url}) => {
-    //     if (url) {
-    //       console.log(new URL(url, value).href)
-    //       ffmpeg.FS('writeFile', url, await fetchFile(new URL(url, value).href));
-    //     }
-    //   })
-    // );
-        
-    // console.log({
-    //   m3u8,
-    //   getPlalist: m3u8.getPlaylist(),
-    // })
+  const inc = 10;
+  async function parseM3u8Manifests(arrbuf: ArrayBuffer, value: string) {
+    const parser = getManifest(arrbuf)
 
     const { playlists, segments } = parser.manifest as Manifest;
-    await Promise.all(
-      [...new Set<string | undefined>(
+    const lists = [
+      ...new Set<string | undefined>(
         (playlists && playlists.length > 0 ? playlists : segments)
           .map((x: { uri?: string }) => x.uri)
-      )].map(async (url) => {
-        if (url) {
-          const absURL = new URL(url, value).href;
-          const buf = await fetchFile(absURL);
-          console.log(absURL)
+      )
+    ];
 
-          ffmpeg.FS('writeFile', url, buf);
+    let i = 0;
+    while (i < lists.length) {
+      await Promise.all(
+        [...lists].splice(i, i + inc).map(async (url) => {
+          if (url) {
+            const absURL = new URL(url, value).href;
+            const buf = await fetchFile(absURL, { signal: abortCtlr.signal, });
+            console.log({ absURL })
 
-          if (count <= 5 && (url.endsWith(".m3u8" || url.endsWith("m3u")))) {
-            await parseM3u8Manifests(buf, value, count + 1)
+            ffmpeg.FS('writeFile', url, buf);
+
+            if (/.(m3u8|m3u)$/.test(url)) {
+              const parser2 = getManifest(buf);
+              const { playlists: playlist2, segments: segments2 } = parser2.manifest as Manifest;
+
+              const subList = diff(
+                (playlist2 && playlist2.length > 0 ? playlist2 : segments2)
+                  .map((x: { uri?: string }) => x.uri),
+                lists
+              );
+              console.log({ subList, parser2 })
+              const len = subList.length;
+              for (let j = 0; j < len; j ++) {       
+                const subURLs = subList[j]     
+                if (subURLs) { 
+                  lists.push(subURLs)
+                }
+              }
+            }
           }
+        })
+      );
+
+      i += inc;
+    }
+  }
+
+  async function transcode ({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
+    const { files } = target as HTMLInputElement;
+    const file = files?.[0];
+    error.set(null);
+    loading.set(true);
+
+    try {
+      if (file) {
+        if (ffmpeg && ffmpeg?.isLoaded?.()) {
+          abortCtlr = new AbortController();
+          ffmpeg.FS('writeFile', ffmpegOpts.inFilename, await fetchFile(file, { signal: abortCtlr.signal, }));
+        if (Array.isArray(ffmpegOpts.forceUseArgs)) {
+          await ffmpeg.run(...ffmpegOpts.forceUseArgs);
+        } else {
+          await ffmpeg.run('-i', ffmpegOpts.inFilename, ...ffmpegOpts.args, ffmpegOpts.outFilename);
         }
-      })
-    );
+
+          const data = ffmpeg.FS('readFile', ffmpegOpts.outFilename);
+          const url = URL.createObjectURL(new Blob([data.buffer], { type: ffmpegOpts.mediaType }));
+          results.unshift({
+            url,
+            type: ffmpegOpts.mediaType.startsWith("video") ? "video" : "image"
+          });
+          resultsDep.set(results);
+
+          try {
+            new URL(value);
+            const newURL = new URL(globalThis.location.href);
+            newURL.search = new URLSearchParams({
+              q: value,
+              config: JSON.stringify(ffmpegOpts)
+            }).toString();
+            globalThis.history.pushState(null, "", newURL);
+        } catch (e) {}
+        }
+      }
+    } catch (e) {
+      error.set((e ?? "").toString());
+      console.warn(e);
+    }
+
+    loading.set(false);
   }
 
   async function onSearch(e?: Event, popState = false) {
+    abortCtlr = new AbortController();
     error.set(null);
     e?.preventDefault?.();
 
-    if (e && value.length <= 0) {
-      const { files } = e?.target as HTMLInputElement;
-      if (files) transcode(e as Event & { currentTarget: EventTarget & HTMLInputElement; })
-    }
-
     if (value.length <= 0) return;
-    loading = true;
+    loading.set(true);
 
     try {
       if (ffmpeg && ffmpeg?.isLoaded?.()) {
-        const arrbuf = await fetchFile(value);
+        const arrbuf = await fetchFile(value, { signal: abortCtlr.signal, });
 
-        try {
-          await parseM3u8Manifests(arrbuf, value);
-        } catch (e) {
-          console.warn(`Cannot parse "${value}" as m3u8 playlist`)
+        if (/.(m3u8|m3u)$/.test(value)) {
+          try {
+            await parseM3u8Manifests(arrbuf, value);
+          } catch (e) {
+            console.warn(`Cannot parse "${value}" as m3u8 playlist`)
+          }
         }
 
         ffmpeg.FS('writeFile', ffmpegOpts.inFilename, arrbuf);
@@ -246,105 +433,42 @@
       console.warn(e);
     }
 
-    loading = false;
+    loading.set(false);
   }
 
-  onMount(() => {
-    ffmpeg = createFFmpeg({ log: true });
-    (async () => {
-      loading = true;
-      await ffmpeg.load();
-      loading = false;
-    })()
-    
-    const url = new URL(globalThis.location?.href);
-    if (url.searchParams.get("config")?.trim?.()) {
-      try {
-        ffmpegOpts = JSON.parse(url.searchParams.get("config") ?? "{}");
-      } catch (e) {
-        console.warn("Bad JSON for ffmpeg config");
-        ffmpegOpts = Object.assign({}, ffmpegDefaultOpts);
-      }
-    }
-
-    if (url.searchParams.get("q")?.trim?.()) {
-      value = url.searchParams.get("q") ?? "";
-    }
-
-    editorView = new EditorView({
-      doc: JSON.stringify(ffmpegOpts, null, 2),
-      extensions: [
-        basicSetup, 
-        json(),
-        oneDark,
-        EditorView.updateListener.of((update: ViewUpdate) => {
-          if (update.docChanged) {
-            const value = update.state.doc.toString();
-            ffmpegOpts = JSON.parse(value)
-
-            console.log({
-              ffmpegOpts
-            })
-          }
-        }),
-      ],
-      parent: editorEl
-    })
-  });
-
-  async function transcode ({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
+  function onUpload({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
     const { files } = target as HTMLInputElement;
     const file = files?.[0];
-    error.set(null);
-    loading = true;
-
-    try {
-      if (file) {
-        if (ffmpeg && ffmpeg?.isLoaded?.()) {
-          ffmpeg.FS('writeFile', ffmpegOpts.inFilename, await fetchFile(file));
-        if (Array.isArray(ffmpegOpts.forceUseArgs)) {
-          await ffmpeg.run(...ffmpegOpts.forceUseArgs);
-        } else {
-          await ffmpeg.run('-i', ffmpegOpts.inFilename, ...ffmpegOpts.args, ffmpegOpts.outFilename);
-        }
-
-          const data = ffmpeg.FS('readFile', ffmpegOpts.outFilename);
-          const url = URL.createObjectURL(new Blob([data.buffer], { type: ffmpegOpts.mediaType }));
-          results.unshift({
-            url,
-            type: ffmpegOpts.mediaType.startsWith("video") ? "video" : "image"
-          });
-          resultsDep.set(results);
-
-          const newURL = new URL(globalThis.location.href);
-          newURL.search = new URLSearchParams({
-            q: value,
-            config: JSON.stringify(ffmpegOpts)
-          }).toString();
-          globalThis.history.pushState(null, "", newURL);
-        }
-      }
-    } catch (e) {
-      error.set((e ?? "").toString());
-      console.warn(e);
+    if (file) {
+      value = file.name;
+      fileUploadMode = true;
     }
-
-    loading = false;
   }
 
-  onMount(() => {
-    searchInputEl?.addEventListener?.('change', () => { 
-      const newURL = new URL(globalThis.location.href);
-      newURL.search = new URLSearchParams({
-        q: value,
-        config: JSON.stringify(ffmpegOpts)
-      }).toString();
-      globalThis.history.replaceState(null, "", newURL);
-    })
-  })
+  function run() {
+    if (fileUploadMode) {
+      // @ts-ignore
+      transcode({ target: uploadInputEl })
+    } else {
+      onSearch(undefined);
+    }
+  }
+
+  export function syncHeight(el: HTMLElement, initial = 0) {
+    return writable(initial, (set) => {
+      if (!el) {
+        return;
+      }
+      let ro = new ResizeObserver(() => { 
+        if (el) { return set(el.offsetHeight); } 
+      });
+      ro.observe(el);
+      return () => ro.disconnect();
+    });
+  }
 </script>
 
-<form on:submit={onSearch} class="flex flex-row gap-2">
+<form on:submit={run} class="flex flex-row gap-2">
   <TextBox
     bind:value
     bind:inputElement={searchInputEl}
@@ -359,20 +483,54 @@
       {#if value && value.length > 0}
         <TextBoxButton
           class="search-button clear-button"
-          on:click={() => (value = "")}
+          on:click={() => {
+            (value = "");
+            if (consoleView) {
+              let transaction = consoleView.state.update({
+                changes: [{ from: 0, to: consoleView.state.doc.length }]
+              })
+
+              consoleView.dispatch(transaction)
+            }
+          }}
           aria-label="Clear Search Button"
         >
           <FluentDismiss24Regular />
         </TextBoxButton>
       {/if}
 
-      <TextBoxButton
+      <!-- <TextBoxButton
         class="search-button"
         on:click={onSearch}
         aria-label="Search Button"
       >
         <FluentSearch24Regular />
-      </TextBoxButton>
+      </TextBoxButton> -->
+
+      {#if $loading && !$initializing }
+        <TextBoxButton
+          variant="accent"
+          class="search-button"
+          aria-label="Stop processing"
+          title="Stop processing"
+          on:click={() => {
+            abortCtlr.abort();
+            if (ffmpeg && ffmpeg?.isLoaded?.()) { ffmpeg?.exit?.(); ffmpeg?.load?.(); }
+          }}
+        >
+          <FluentRecord24Filled />
+        </TextBoxButton>
+      {:else}
+        <TextBoxButton
+          variant="accent"
+          class="search-button"
+          aria-label="Start processing"
+          title="Start processing"
+          on:click={run}
+        >
+          <FluentPlay24Filled />
+        </TextBoxButton>
+      {/if}
     </div>
   </TextBox>
 
@@ -382,12 +540,15 @@
     aria-label="Upload file"
     title="Upload file"
   >
-    {#if uploadInputEl?.value }
+    {#if uploadInputEl?.files && uploadInputEl?.files?.length > 0 }
       <FluentFolder24Filled />
     {:else}
       <FluentFolder24Regular />
     {/if}
-    <input type="file" id="file-upload" on:change={transcode} bind:this={uploadInputEl} />
+    <input type="file" id="file-upload" 
+      on:change={onUpload} 
+      bind:this={uploadInputEl} 
+    />
   </Button>
 
   {#if value && value.length > 0}
@@ -413,7 +574,6 @@
         variant={"hyperlink"}
         data-selected={JSON.stringify(sample[1]) === JSON.stringify(ffmpegOpts)}
         on:click={() => {
-          // value = sample;
           const doc = editorView.state.doc;
 
           // (Assume view is an EditorView instance holding the document "123".)
@@ -431,7 +591,8 @@
   </div>
 </div>
 
-<div bind:this={editorEl} class="editor" style:background-color={color.background} />
+<div bind:this={editorEl} class="editor" style:background-color={color.background} style:height={"211px"} />
+<div bind:this={consoleEl} class="editor" style:background-color={color.background} style:height={"300px"}  />
 
 <section class="pt-7">
   <div class="p-2">
@@ -449,13 +610,13 @@
           >
             <TextBlock>{$error}</TextBlock>
           </span>
-        {:else if loading || results.length <= 0}
+        {:else if $loading || $initializing || results.length <= 0}
           <span 
-            class="text-gray-900/60 {loading ? "dark:text-blue-300/90" : "dark:text-gray-300/90"}" 
+            class="text-gray-900/60 {$loading || $initializing ? "dark:text-blue-300/90" : "dark:text-gray-300/90"}" 
             in:blur="{{ delay: 400, amount: 10 }}" 
             out:blur="{{  amount: 10 }}"
           >
-            <TextBlock variant="body">{loading  ? "Loading" : "Empty"}...</TextBlock>
+            <TextBlock variant="body">{$loading || $initializing ? "Loading" : "Empty"}...</TextBlock>
           </span>
         {/if}
         
