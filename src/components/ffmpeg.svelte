@@ -195,7 +195,7 @@
       forceUseArgs: null,
     }],
     ["mp4 -> webm", {
-      args: "-b:v 0 -crf 30 -pass 1 -an -f webm -y".split(" "),
+      args: "-c:v libvpx".split(" "),
       inFilename: 'video.mp4',
       outFilename: 'video.webm',
       mediaType: 'video/webm',

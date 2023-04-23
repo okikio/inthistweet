@@ -79,7 +79,7 @@ export default defineConfig({
             urlPattern:
               /workbox\-(.*)\.js|\.(?:png|jpg|jpeg|svg|webp|map|ts|wasm|css)$|^https:\/\/(?:cdn\.polyfill\.io)/,
             // Apply a stale-while-revalidate strategy.
-            handler: "StaleWhileRevalidate",
+            handler: "NetworkFirst",
             method: "GET",
             options: {
               cacheableResponse: {
@@ -92,7 +92,7 @@ export default defineConfig({
             urlPattern:
               /(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
             // Apply a network-first strategy.
-            handler: "CacheFirst",
+            handler: "NetworkFirst",
             method: "GET",
             options: {
               cacheableResponse: {
@@ -109,9 +109,7 @@ export default defineConfig({
     "netlify-edge": {
       dist: new URL('./dist/', import.meta.url)
     },
-    "vercel-edge": {
-      
-    },
+    "vercel-edge": {},
     node: {
       mode: "middleware"
     }
