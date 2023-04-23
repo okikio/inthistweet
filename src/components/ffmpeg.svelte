@@ -16,6 +16,7 @@
     TextBlock,
     TextBox,
     TextBoxButton,
+    Expander,
   } from "fluent-svelte";
 
   import FluentDismiss24Regular from "~icons/fluent/dismiss-24-regular";
@@ -24,22 +25,22 @@
   import FluentFolder24Regular from "~icons/fluent/folder-24-regular";
   import FluentFolder24Filled from "~icons/fluent/folder-24-filled";
   import FluentRecord24Filled from "~icons/fluent/record-stop-24-filled";
-  import FluentPlay24Filled from '~icons/fluent/play-24-filled'
+  import FluentPlay24Filled from '~icons/fluent/play-24-filled';
 
-  import { createFFmpeg, fetchFile, diff, shell } from "./ffmpeg";
+  import { createFFmpeg, fetchFile, diff, shell, debounce } from "./ffmpeg";
 
   import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
   import { oneDark, color } from "@codemirror/theme-one-dark";
+  import { indentWithTab } from "@codemirror/commands";
   import { json } from "@codemirror/lang-json";
 
   import { markdown } from "@codemirror/lang-markdown";
   import { StreamLanguage } from "@codemirror/language";
 
-  import { EditorView, scrollPastEnd } from "@codemirror/view";
+  import { EditorView, scrollPastEnd, keymap } from "@codemirror/view";
   import { basicSetup } from "codemirror";
 
   import { onMount } from "svelte";
-  import { element_is } from "svelte/internal";
 
   interface FFmpegConfig {
     args: string[],
@@ -75,6 +76,7 @@
   let abortCtlr = new AbortController();
 
   export let value = "";
+  let progress = writable(0);
   let loading = writable(false);
   let initializing = writable(false);
   let fileUploadMode = false;
@@ -85,9 +87,30 @@
   let resultsDep = writable<Array<{ type?: string | null; url?: string | null }>>([]);
 
   const samples = new Map([
+    ["webm -> mp4", {
+      args: ['-c:v', 'libvpx'],
+      inFilename: 'video.webm',
+      outFilename: 'video.mp4',
+      mediaType: 'video/mp4',
+      forceUseArgs: null,
+    }],
     ["avi -> mp4", {
       args: ['-c:v', 'libx264'],
       inFilename: 'video.avi',
+      outFilename: 'video.mp4',
+      mediaType: 'video/mp4',
+      forceUseArgs: null,
+    }],
+    ["mov -> mp4", {
+      args: [],
+      inFilename: 'video.mov',
+      outFilename: 'video.mp4',
+      mediaType: 'video/mp4',
+      forceUseArgs: null,
+    }],
+    ["wmv -> mp4", {
+      args: [],
+      inFilename: 'video.wmv',
       outFilename: 'video.mp4',
       mediaType: 'video/mp4',
       forceUseArgs: null,
@@ -99,11 +122,18 @@
       mediaType: 'video/webm',
       forceUseArgs: null,
     }],
-    ["wav -> mp3", {
-      args: ['-c:a', 'libmp3lame'],
-      inFilename: 'audio.wav',
-      outFilename: 'audio.mp3',
-      mediaType: 'audio/mp3',
+    ["mp4 -> wmv", {
+      args: [],
+      inFilename: 'video.mp4',
+      outFilename: 'video.wmv',
+      mediaType: 'video/x-ms-wmv',
+      forceUseArgs: null,
+    }],
+    ["gif -> mp4", {
+      args: [],
+      inFilename: 'video.gif',
+      outFilename: 'image.mp4',
+      mediaType: 'video/mp4',
       forceUseArgs: null,
     }],
     ["mp4 -> gif", {
@@ -113,6 +143,79 @@
       mediaType: 'image/gif',
       forceUseArgs: null,
     }],
+    ["mp3 -> mp4", {
+      args: ['-c:v', 'libvpx'],
+      inFilename: 'audio.mp3',
+      outFilename: 'video.mp4',
+      mediaType: 'video/mp4',
+      forceUseArgs: null,
+    }],
+    ["wav -> mp3", {
+      args: ['-c:a', 'libmp3lame'],
+      inFilename: 'audio.wav',
+      outFilename: 'audio.mp3',
+      mediaType: 'audio/mpeg',
+      forceUseArgs: null,
+    }],
+
+    
+    ["mp4 -> mov", {
+      args: [],
+      inFilename: 'video.mp4',
+      outFilename: 'video.mov',
+      mediaType: 'video/quicktime',
+      forceUseArgs: null,
+    }],
+    ["mp3 -> wav", {
+      args: ['-c:a', 'libmp3lame'],
+      inFilename: 'audio.mp3',
+      outFilename: 'audio.wav',
+      mediaType: 'video/x-ms-wmv',
+      forceUseArgs: null,
+    }],
+    ["mp4 -> mp3", {
+      args: ['-c:a', 'libmp3lame'],
+      inFilename: 'video.mp4',
+      outFilename: 'audio.mp3',
+      mediaType: 'audio/mpeg',
+      forceUseArgs: null,
+    }],
+    ["webm -> gif", {
+      args: [],
+      inFilename: 'video.webm',
+      outFilename: 'image.gif',
+      mediaType: 'image/gif',
+      forceUseArgs: null,
+    }],
+    ["gif -> webm", {
+      args: [],
+      inFilename: 'image.gif',
+      outFilename: 'video.webm',
+      mediaType: 'video/webm',
+      forceUseArgs: null,
+    }],
+    ["mp4 -> webm", {
+      args: ['-c:v', 'libvpx'],
+      inFilename: 'video.mp4',
+      outFilename: 'video.webm',
+      mediaType: 'video/webm',
+      forceUseArgs: null,
+    }],
+    ["mp4 -> avi", {
+      args: ["-vcodec", "copy", "-acodec", "copy"],
+      inFilename: 'video.mp4',
+      outFilename: 'video.avi',
+      mediaType: 'video/x-msvideo',
+      forceUseArgs: null,
+    }],
+    ["webm -> avi", {
+      args: ['-c:v', 'libvpx'],
+      inFilename: 'video.webm',
+      outFilename: 'video.avi',
+      mediaType: 'video/x-msvideo',
+      forceUseArgs: null,
+    }],
+
     ["m3u8 -> mp4", {
       // args: ["-c", "copy", "-bsf:a", "aac_adtstoasc"],
       inFilename: 'video.m3u8',
@@ -129,9 +232,15 @@
         "aac_adtstoasc",
         "video.mp4"
       ]
+    }],
+    ["mp4 -> m3u8", {
+      args: "-b:v 1M -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000".split(" "),
+      inFilename: 'video.mp4',
+      outFilename: 'video.m3u8',
+      mediaType: 'vnd.apple.mpegURL',
     }]
   ])
-  const samplesArr = Array.from(samples.entries())
+  $: samplesArr = Array.from(samples.entries())
 
   globalThis?.addEventListener?.("popstate", (event) => {
     const url = new URL(globalThis.location.href);
@@ -158,6 +267,7 @@
         EditorView.editable.of(false),
         EditorView.lineWrapping,
         hyperLink,
+        keymap.of([indentWithTab]),
         scrollPastEnd(),
         // EditorView.domEventHandlers({
         //   scroll({ target }) {
@@ -201,6 +311,9 @@
 
     ffmpeg = createFFmpeg({ 
       log: true,
+      progress({ ratio }) {
+        progress.set(ratio)
+      },
       logger(obj) {
         if (consoleView) {
           const doc = consoleView.state.doc;
@@ -226,11 +339,11 @@
       loading.set(true);
       initializing.set(true);
 
-      await ffmpeg.load();
+      await ffmpeg?.load?.();
 
       loading.set(false);
-      initializing.set(false);
-    })()
+      initializing.set(false); 
+    })();
     
     const url = new URL(globalThis.location?.href);
     if (url.searchParams.get("config")?.trim?.()) {
@@ -252,7 +365,11 @@
         EditorView.updateListener.of((update: ViewUpdate) => {
           if (update.docChanged) {
             const value = update.state.doc.toString();
-            ffmpegOpts = JSON.parse(value)
+            try {
+              ffmpegOpts = JSON.parse(value)
+            } catch (e) {
+              console.warn(e)
+            }
 
             console.log({
               ffmpegOpts
@@ -269,7 +386,7 @@
   });
 
   onMount(() => {
-    searchInputEl?.addEventListener?.('change', () => { 
+    searchInputEl?.addEventListener?.('change', debounce(() => { 
       try {
         new URL(value);
         const newURL = new URL(globalThis.location.href);
@@ -277,10 +394,10 @@
           q: value,
           config: JSON.stringify(ffmpegOpts)
         }).toString();
-        fileUploadMode = false;
         globalThis.history.replaceState(null, "", newURL);
+        fileUploadMode = false;
       } catch (e) {}
-    })
+    }, 200))
   })
 
   function getManifest(arrbuf: ArrayBuffer) {
@@ -340,6 +457,11 @@
     }
   }
 
+  resultsDep.subscribe((x) => {
+
+      console.log({ results, resultsDep, x })
+  })
+
   async function transcode ({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
     const { files } = target as HTMLInputElement;
     const file = files?.[0];
@@ -351,17 +473,19 @@
         if (ffmpeg && ffmpeg?.isLoaded?.()) {
           abortCtlr = new AbortController();
           ffmpeg.FS('writeFile', ffmpegOpts.inFilename, await fetchFile(file, { signal: abortCtlr.signal, }));
-        if (Array.isArray(ffmpegOpts.forceUseArgs)) {
-          await ffmpeg.run(...ffmpegOpts.forceUseArgs);
-        } else {
-          await ffmpeg.run('-i', ffmpegOpts.inFilename, ...ffmpegOpts.args, ffmpegOpts.outFilename);
-        }
 
+          if (Array.isArray(ffmpegOpts.forceUseArgs)) {
+            await ffmpeg.run(...ffmpegOpts.forceUseArgs);
+          } else {
+            await ffmpeg.run('-i', ffmpegOpts.inFilename, ...ffmpegOpts.args, ffmpegOpts.outFilename);
+          }
+
+          const { mediaType } = ffmpegOpts;
           const data = ffmpeg.FS('readFile', ffmpegOpts.outFilename);
-          const url = URL.createObjectURL(new Blob([data.buffer], { type: ffmpegOpts.mediaType }));
+          const url = URL.createObjectURL(new Blob([data.buffer], { type: mediaType }));
           results.unshift({
             url,
-            type: ffmpegOpts.mediaType.startsWith("video") ? "video" : "image"
+            type: /^(video|audio)/.test(mediaType) || mediaType === "vnd.apple.mpegURL" ? "video" : "image"
           });
           resultsDep.set(results);
 
@@ -373,7 +497,7 @@
               config: JSON.stringify(ffmpegOpts)
             }).toString();
             globalThis.history.pushState(null, "", newURL);
-        } catch (e) {}
+          } catch (e) {}
         }
       }
     } catch (e) {
@@ -411,14 +535,18 @@
           await ffmpeg.run('-i', ffmpegOpts.inFilename, ...ffmpegOpts.args, ffmpegOpts.outFilename);
         }
 
+        const { mediaType } = ffmpegOpts;
         const data = ffmpeg.FS('readFile', ffmpegOpts.outFilename);
-        const url = URL.createObjectURL(new Blob([data.buffer], { type: ffmpegOpts.mediaType }));
+        const url = URL.createObjectURL(new Blob([data.buffer], { type: mediaType }));
         results.unshift({
           url,
-          type: ffmpegOpts.mediaType.startsWith("video") ? "video" : "image"
+          type: /^(video|audio)/.test(mediaType) || mediaType === "vnd.apple.mpegURL" ? "video" : "image"
         });      
         resultsDep.set(results);
       }
+
+      ffmpeg.exit();
+      ffmpeg.load();
 
       if (!popState) {
         const newURL = new URL(globalThis.location.href);
@@ -443,6 +571,14 @@
       value = file.name;
       fileUploadMode = true;
     }
+  }
+
+  function validURL(value: string) {
+    try {
+      new URL(value);
+      return true;
+    } catch (e) {}
+    return false;
   }
 
   function run() {
@@ -515,7 +651,19 @@
           title="Stop processing"
           on:click={() => {
             abortCtlr.abort();
-            if (ffmpeg && ffmpeg?.isLoaded?.()) { ffmpeg?.exit?.(); ffmpeg?.load?.(); }
+            if (ffmpeg && ffmpeg?.isLoaded?.()) { 
+              ffmpeg?.exit?.(); 
+
+              (async () => {
+                loading.set(true);
+                initializing.set(true);
+
+                await ffmpeg?.load?.();
+
+                loading.set(false);
+                initializing.set(false); 
+              })();
+            }
           }}
         >
           <FluentRecord24Filled />
@@ -551,10 +699,10 @@
     />
   </Button>
 
-  {#if value && value.length > 0}
+  {#if value && value.length > 0 && validURL(value)}
     <Button
       variant="accent"
-      class="search-button"
+      class="open-in-new-tab-button"
       href={value}
       aria-label="Open tweet in new-tab"
       title="Open tweet in new-tab"
@@ -565,38 +713,91 @@
   {/if}
 </form>
 
-<div class="pt-2 overflow-auto">
-  <div class="flex gap-2 xsm:justify-center items-center my-6">
-    <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples:</span>
-    {#each samplesArr as sample, i} 
-      <Button
-        class="break-keep whitespace-nowrap"
-        variant={"hyperlink"}
-        data-selected={JSON.stringify(sample[1]) === JSON.stringify(ffmpegOpts)}
-        on:click={() => {
-          const doc = editorView.state.doc;
+<div class="pt-2 mt-6">
+  <span class="text-[color:var(--fds-text-on-accent-primary)] bg-[color:var(--fds-system-attention)] px-3 py-1 rounded-full">Examples</span>
+  <div class="flex gap-2 flex-wrap content-center overflow-auto">
+    <div class="mt-2 mb-6 flex sm:grid sm:grid-rows-3 sm:grid-cols-5 md:grid-cols-6 gap-x-2 sm:gap-x-4 md:gap-x-6 gap-y-2">
+      {#each samplesArr as sample, i} 
+        <Button
+          class="break-keep whitespace-nowrap"
+          variant={"hyperlink"}
+          data-selected={JSON.stringify(sample[1]) === JSON.stringify(ffmpegOpts)}
+          on:click={() => {
+            const doc = editorView.state.doc;
 
-          // (Assume view is an EditorView instance holding the document "123".)
-          let transaction = editorView.state.update({changes: {from: 0, to: doc.length, insert: JSON.stringify(sample[1], null, 2) }})
-          console.log(transaction.state.doc.toString()) // "0123"
-          // At this point the view still shows the old state.
-          editorView.dispatch(transaction)
-          // And now it shows the new state.
-          // onSearch();
-        }}
-      >
-        {sample[0]}
-      </Button>
-    {/each}
+            // (Assume view is an EditorView instance holding the document "123".)
+            let transaction = editorView.state.update({changes: {from: 0, to: doc.length, insert: JSON.stringify(sample[1], null, 2) }})
+            console.log(transaction.state.doc.toString()) // "0123"
+            // At this point the view still shows the old state.
+            editorView.dispatch(transaction)
+            // And now it shows the new state.
+            // onSearch();
+
+            const newURL = new URL(globalThis.location.href);
+            newURL.searchParams.set("config", JSON.stringify(ffmpegOpts));
+            globalThis.history.replaceState(null, "", newURL);
+          }}
+        >
+          {sample[0]}
+        </Button>
+      {/each}
+    </div>
   </div>
 </div>
 
-<div bind:this={editorEl} class="editor" style:background-color={color.background} style:height={"211px"} />
-<div bind:this={consoleEl} class="editor" style:background-color={color.background} style:height={"300px"}  />
+<div class="pt-2">
+  <Expander>
+    Advanced
+    <svelte:fragment slot="content">
+      FFmpeg Config
+      <div bind:this={editorEl} class="editor" style:background-color={color.background} style:height={"211px"} />
+
+      Logs
+      <div bind:this={consoleEl} class="editor" style:background-color={color.background} style:height={"300px"}  />
+    </svelte:fragment>
+  </Expander>
+</div>
 
 <section class="pt-7">
   <div class="p-2">
     <TextBlock tag="h2" variant="bodyLarge">Results</TextBlock>
+  </div>
+
+  <div class="flex gap-2 px-2 pb-2">
+    <!-- <div class="sm:flex-1"></div> -->
+
+    <Button 
+      variant="accent" 
+      class="cursor-pointer w-full" 
+      on:click={() => {
+        let link = document.createElement("a");
+        results.forEach(({ url }, i) => {
+          if (url) {
+            link.href = url;
+            link.target = "_blank";
+            link.download = "file-1"
+            link.click();
+          }
+        })
+        // @ts-ignore
+        link = null;
+      }}
+    >
+      Download All
+    </Button>
+    <Button 
+      class="cursor-pointer w-full" 
+      on:click={() => {
+        results.forEach(({ url }, i) => {
+          if (url) URL.revokeObjectURL(url);
+        })
+        results = [];
+        resultsDep.set(results);
+      }}
+    >
+      Clear All
+    </Button>
+    
   </div>
 
   <div class="results">
@@ -616,26 +817,42 @@
             in:blur="{{ delay: 400, amount: 10 }}" 
             out:blur="{{  amount: 10 }}"
           >
-            <TextBlock variant="body">{$loading || $initializing ? "Loading" : "Empty"}...</TextBlock>
+            <TextBlock variant="body">{$loading || $initializing ? "Loading..." + (!$initializing ? Math.round($progress * 100) + "%" : "") : "Empty..."}</TextBlock>
           </span>
         {/if}
         
         <div class="w-full flex flex-col gap-[inherit]">
-          {#each $resultsDep as { url, type } (url)}
+          {#each $resultsDep as { url, type }, i (url)}
             {#if url && type && url.length > 0}
-              {#if type == "video"}
-                <video
-                  crossorigin="anonymous"
-                  controls
-                  preload="auto"
-                  class="w-full max-h-[500px] bg-black"
-                  in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{ amount: 10 }}" 
-                >
-                  <source src={url} />
-                </video>
-              {:else}
-                <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" crossorigin="anonymous" />
-              {/if}
+              <div class="flex w-full flex-col">
+                {#if type == "video" || type == "audio"}
+                  <video
+                    crossorigin="anonymous"
+                    controls
+                    preload="auto"
+                    class="w-full max-h-[500px] bg-black"
+                    in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{ amount: 10 }}" 
+                  >
+                    <source src={url} />
+                  </video>
+                {:else}
+                  <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" crossorigin="anonymous" />
+                {/if}
+
+                <div class="flex lt-md:flex-col gap-2 pt-2">
+                  <Button class="w-full" variant="accent" href={url} download="file-to-download">Download</Button>
+                  <Button 
+                    class="cursor-pointer w-full" 
+                    on:click={() => {
+                      if (url) URL.revokeObjectURL(url);
+                      results.splice(i, 1);
+                      resultsDep.set(results);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
             {/if}
           {/each}
         </div>
@@ -694,6 +911,12 @@
 <style lang="scss">
   .file-upload-button {
     position: relative;
+  }
+  .search-button,
+  .open-in-new-tab-button,
+  .file-upload-button,
+  :global(.file-upload-button input) {
+    cursor: pointer;
   }
 
   #file-upload {
