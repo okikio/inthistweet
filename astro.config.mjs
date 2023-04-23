@@ -106,8 +106,11 @@ export default defineConfig({
   ],
   output: "server",
   adapter: adapter(process.env?.SSR_MODE ?? 'netlify-edge', {
-    netlify: {
+    "netlify-edge": {
       dist: new URL('./dist/', import.meta.url)
+    },
+    "vercel-edge": {
+      
     },
     node: {
       mode: "middleware"
