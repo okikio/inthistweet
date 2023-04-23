@@ -323,6 +323,7 @@
   }
 
   :global(.info-bar.docs-info) {
+    @apply select-auto;
     @apply rounded-xl;
     --fds-control-corner-radius: theme('borderRadius.lg');
   }
