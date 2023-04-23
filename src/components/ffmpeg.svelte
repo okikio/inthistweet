@@ -195,7 +195,7 @@
       forceUseArgs: null,
     }],
     ["mp4 -> webm", {
-      args: ['-c:v', 'libvpx'],
+      args: "-b:v 0 -crf 30 -pass 1 -an -f webm -y".split(" "),
       inFilename: 'video.mp4',
       outFilename: 'video.webm',
       mediaType: 'video/webm',
@@ -209,7 +209,7 @@
       forceUseArgs: null,
     }],
     ["webm -> avi", {
-      args: ['-c:v', 'libvpx'],
+      args: ["-vcodec", "copy", "-acodec", "copy"],
       inFilename: 'video.webm',
       outFilename: 'video.avi',
       mediaType: 'video/x-msvideo',
@@ -423,7 +423,7 @@
     let i = 0;
     while (i < lists.length) {
       await Promise.all(
-        [...lists].splice(i, i + inc).map(async (url) => {
+        lists.slice(i, i + inc).map(async (url) => {
           if (url) {
             const absURL = new URL(url, value).href;
             const buf = await fetchFile(absURL, { signal: abortCtlr.signal, });
@@ -457,11 +457,6 @@
     }
   }
 
-  resultsDep.subscribe((x) => {
-
-      console.log({ results, resultsDep, x })
-  })
-
   async function transcode ({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
     const { files } = target as HTMLInputElement;
     const file = files?.[0];
@@ -488,6 +483,9 @@
             type: /^(video|audio)/.test(mediaType) || mediaType === "vnd.apple.mpegURL" ? "video" : "image"
           });
           resultsDep.set(results);
+
+          ffmpeg.exit();
+          ffmpeg.load();
 
           try {
             new URL(value);
