@@ -213,7 +213,7 @@
   <InfoBar
     title="Note"
     closable={false}
-    class="docs-info"
+    class="docs-info select-auto"
     severity={"success"}
     id="note"
   >
@@ -226,7 +226,7 @@
   <InfoBar
     title="Fun fact"
     closable={false}
-    class="docs-info"
+    class="docs-info select-auto"
     severity={"attention"}
     id="fun-fact"
   >
