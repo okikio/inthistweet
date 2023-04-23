@@ -43,7 +43,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data: https:; script-src 'self' https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline'; connect-src 'self' https:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self'; manifest-src 'self'; media-src 'self' https:; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
+          "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://api.producthunt.com data: blob: https:; script-src 'self' https://*.bundlejs.com https://bundlejs.com https://cdn.polyfill.io 'unsafe-eval' 'unsafe-inline' blob: https://vercel.live; connect-src 'self' https: blob: data:; block-all-mixed-content; upgrade-insecure-requests; base-uri 'self'; object-src 'none'; worker-src 'self' blob:; manifest-src 'self'; media-src 'self' https: data: blob:; form-action 'self'; frame-src 'self'; frame-ancestors 'self' https:;"
         },
         {
           "key": "Permissions-Policy",
@@ -57,6 +57,19 @@
         {
           "key": "Link",
           "value": "<https://video.twimg.com/>; rel=preconnect, <https://pbs.twimg.com/>; rel=preconnect, <https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4>; rel=preload; as=video; crossorigin=anonymous"
+        }
+      ]
+    },
+    {
+      "source": "/ffmpeg",
+      "headers": [
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
         }
       ]
     }

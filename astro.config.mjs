@@ -10,39 +10,10 @@ import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 
 import serviceWorker from "astrojs-service-worker"; 
-
-import netlify from "@astrojs/netlify/edge-functions";
-import vercel from "@astrojs/vercel/serverless";
-import cloudflare from "@astrojs/cloudflare";
-import deno from "@astrojs/deno";
-import node from "@astrojs/node";
+import adapter from "astro-auto-adapter"; 
 
 import RangeRequestsPlugin from './range-requests.mjs';
 import { urlPattern } from './range-requests.mjs';
-
-const adapter = (ssr) => {
-  switch (ssr) {
-    case "netlify": 
-      return netlify({
-        dist: new URL('./dist/', import.meta.url)
-      });
-
-    case "vercel": 
-      return vercel();
-    
-    case "cloudflare": 
-      return cloudflare();
-
-    case "deno": 
-      return deno();
-    
-    case "node": 
-    default: 
-      return node({
-        mode: 'standalone'
-      });
-  }
-}
 
 // https://astro.build/config
 export default defineConfig({
@@ -134,20 +105,22 @@ export default defineConfig({
     })
   ],
   output: "server",
-  adapter: adapter(process.env?.SSR_MODE ?? 'netlify'),
-  experimental: {
-    prerender: true,
-  //   errorOverlay: true,
-  //   contentCollections: false,
-  },
-  vite: {
-    server: {
-      cors: true
+  adapter: adapter(process.env?.SSR_MODE ?? 'netlify-edge', {
+    "netlify-edge": {
+      dist: new URL('./dist/', import.meta.url)
     },
+    "vercel-edge": {
+      
+    },
+    node: {
+      mode: "middleware"
+    }
+  }),
+  vite: {
     plugins: [
       Icons({
         // experimental
-        // autoInstall: true,
+        autoInstall: true,
         compiler: 'svelte',
         customCollections: {
           // a helper to load icons from the file system
@@ -158,7 +131,7 @@ export default defineConfig({
             svg => svg.replace(/^<svg /, '<svg fill="currentColor" '),
           ),
         },
-      })
+      }),
     ]
   }
 });
