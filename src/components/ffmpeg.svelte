@@ -894,7 +894,7 @@
     severity={"success"}
     id="note"
   >
-    <div class="text-gray-900/80 dark:text-gray-200/80">
+    <div class="text-gray-900/80 dark:text-gray-200/80 select-auto">
     Thanks <a
             class="link"
             href="https://twitter.com/fbritoferreira"
@@ -1004,6 +1004,7 @@
   }
 
   :global(.info-bar.docs-info) {
+    @apply select-auto;
     @apply rounded-xl;
     --fds-control-corner-radius: theme('borderRadius.lg');
   }
