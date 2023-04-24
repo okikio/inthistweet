@@ -328,6 +328,11 @@
     --fds-control-corner-radius: theme('borderRadius.lg');
   }
 
+  :global(.info-bar.docs-info#fun-fact),
+  :global(.info-bar.docs-info#note) {
+    @apply select-auto;
+  }
+
   :global(.info-bar.docs-info#note .info-bar-icon),
   :global(.info-bar.docs-info#fun-fact .info-bar-icon) {
     margin-block-start: 24px;

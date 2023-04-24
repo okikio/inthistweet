@@ -895,13 +895,18 @@
     id="note"
   >
     <div class="text-gray-900/80 dark:text-gray-200/80 select-auto">
-    Thanks <a
-            class="link"
-            href="https://twitter.com/fbritoferreira"
-            rel="noopener">@fbritoferreira</a> for creating <a
-            class="link"
-            href="https://github.com/fbritoferreira/m3u8-parser/tree/main"
-            rel="noopener">fbritoferreira/m3u8-parser</a> it really is a beautiful library
+      Thanks <a
+              class="link"
+              href="https://twitter.com/fbritoferreira"
+              rel="noopener">@fbritoferreira</a> for creating <a
+              class="link"
+              href="https://github.com/fbritoferreira/m3u8-parser/tree/main"
+              rel="noopener">fbritoferreira/m3u8-parser</a> it really is a beautiful library.
+      <br><br>
+      The playground uses <a class="link" href="https://github.com/DreamOfIce/ffmpeg.wasm" rel="noopener">@ffmpeg.wasm/main</a>. 
+				<a class="link" href="https://ffmpeg.org/" rel="noopener">FFmpeg</a> and
+         the corresponding <a class="link" href="https://ffmpegwasm.netlify.app/#demo:~:text=DOCUMENTATION-,External%20Libraries,-ffmpeg.wasm%20is" rel="noopener">media format libraries</a> are licenced under <a class="link" href="https://ffmpeg.org/legal.html" rel="noopener">GPL</a>.
+
     </div>
   </InfoBar>
 </div>
@@ -1007,6 +1012,11 @@
     @apply select-auto;
     @apply rounded-xl;
     --fds-control-corner-radius: theme('borderRadius.lg');
+  }
+
+  :global(.info-bar.docs-info#fun-fact),
+  :global(.info-bar.docs-info#note) {
+    @apply select-auto;
   }
 
   :global(.info-bar.docs-info#note .info-bar-icon),
