@@ -24,11 +24,11 @@ export default defineConfig({
     sitemap({ customPages: ['https://inthistweet.app/'] }), 
     serviceWorker({
       // enableInDevelopment: true,
-      registration: { autoRegister: false },
+      registration: { autoRegister: true },
       // @ts-ignore
       workbox: {
-        skipWaiting: false,
-        clientsClaim: false,
+        skipWaiting: true,
+        clientsClaim: true,
 
         additionalManifestEntries: [
           "/",
