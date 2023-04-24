@@ -66,7 +66,7 @@
   let consoleView: EditorView;
 
   let searchInputEl: HTMLInputElement;
-  let uploadInputEl: HTMLInputElement;
+  let openInputEl: HTMLInputElement;
 
   let editorEl: HTMLElement;
   let consoleEl: HTMLElement;
@@ -79,7 +79,7 @@
   let progress = writable(0);
   let loading = writable(false);
   let initializing = writable(false);
-  let fileUploadMode = false;
+  let fileOpenMode = false;
 
   let results: Array<{ type?: string | null; url?: string | null }> = [];
   let error = writable<string | null>(null);
@@ -395,7 +395,7 @@
           config: JSON.stringify(ffmpegOpts)
         }).toString();
         globalThis.history.replaceState(null, "", newURL);
-        fileUploadMode = false;
+        fileOpenMode = false;
       } catch (e) {}
     }, 200))
   })
@@ -562,12 +562,12 @@
     loading.set(false);
   }
 
-  function onUpload({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
+  function onFileOpen({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
     const { files } = target as HTMLInputElement;
     const file = files?.[0];
     if (file) {
       value = file.name;
-      fileUploadMode = true;
+      fileOpenMode = true;
     }
   }
 
@@ -580,9 +580,9 @@
   }
 
   function run() {
-    if (fileUploadMode) {
+    if (fileOpenMode) {
       // @ts-ignore
-      transcode({ target: uploadInputEl })
+      transcode({ target: openInputEl })
     } else {
       onSearch(undefined);
     }
@@ -682,18 +682,18 @@
 
   <Button
     variant="accent"
-    class="file-upload-button"
-    aria-label="Upload file"
-    title="Upload file"
+    class="file-open-button"
+    aria-label="Open file"
+    title="Open file"
   >
-    {#if uploadInputEl?.files && uploadInputEl?.files?.length > 0 }
+    {#if openInputEl?.files && openInputEl?.files?.length > 0 }
       <FluentFolder24Filled />
     {:else}
       <FluentFolder24Regular />
     {/if}
-    <input type="file" id="file-upload" 
-      on:change={onUpload} 
-      bind:this={uploadInputEl} 
+    <input type="file" id="file-open" 
+      on:change={onFileOpen} 
+      bind:this={openInputEl} 
     />
   </Button>
 
@@ -881,7 +881,7 @@
           > (FFmpeg's WASM package feels older than I am, probs due Emscripten 🤷‍♂️)
         </li>
         <li>
-          Plus, it seemed pretty neat to be able convert a gif to mp4 and vice-versa without needing to upload it to a server.
+          Plus, it seemed pretty neat to be able convert a gif to mp4 and vice-versa without needing to open it to a server.
         </li>
       </ol>
     </div>
@@ -912,17 +912,17 @@
 </div>
 
 <style lang="scss">
-  .file-upload-button {
+  .file-open-button {
     position: relative;
   }
   .search-button,
   .open-in-new-tab-button,
-  .file-upload-button,
-  :global(.file-upload-button input) {
+  .file-open-button,
+  :global(.file-open-button input) {
     cursor: pointer;
   }
 
-  #file-upload {
+  #file-open {
     width: 100%;
     height: 100%;
 
