@@ -11,6 +11,9 @@ import FileIconsFfmpeg from '~icons/file-icons/ffmpeg';
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
 
+Astro.response.headers.set("Cross-Origin-Opener-Policy", "unsafe-none");
+Astro.response.headers.set("Cross-Origin-Embedder-Policy", "unsafe-none");
+
 export const prerender = true;
 ---
 
