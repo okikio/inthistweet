@@ -130,7 +130,14 @@
       forceUseArgs: null,
     }],
     ["gif -> mp4", {
-      args: [],
+      args: [
+    "-movflags",
+    "faststart",
+    "-pix_fmt",
+    "yuv420p",
+    "-vf",
+    "scale=trunc(iw/2)*2:trunc(ih/2)*2" 
+    ],
       inFilename: 'video.gif',
       outFilename: 'image.mp4',
       mediaType: 'video/mp4',
