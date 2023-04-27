@@ -188,7 +188,14 @@
       forceUseArgs: null,
     }],
     ["webm -> gif", {
-      args: [],
+      args: [
+    "-c:v", 
+    "libvpx",
+    "-movflags",
+    "faststart",
+    "-pix_fmt",
+    "yuv420p",
+  ],
       inFilename: 'video.webm',
       outFilename: 'image.gif',
       mediaType: 'image/gif',
