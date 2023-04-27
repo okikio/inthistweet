@@ -102,7 +102,7 @@
       forceUseArgs: null,
     }],
     ["mov -> mp4", {
-      args: [],
+      args: ["-vcodec", "copy", "-acodec", "copy"],
       inFilename: 'video.mov',
       outFilename: 'video.mp4',
       mediaType: 'video/mp4',
@@ -131,13 +131,13 @@
     }],
     ["gif -> mp4", {
       args: [
-    "-movflags",
-    "faststart",
-    "-pix_fmt",
-    "yuv420p",
-    "-vf",
-    "scale=trunc(iw/2)*2:trunc(ih/2)*2" 
-    ],
+        "-movflags",
+        "faststart",
+        "-pix_fmt",
+        "yuv420p",
+        "-vf",
+        "scale=trunc(iw/2)*2:trunc(ih/2)*2" 
+      ],
       inFilename: 'video.gif',
       outFilename: 'image.mp4',
       mediaType: 'video/mp4',
@@ -167,10 +167,38 @@
 
     
     ["mp4 -> mov", {
-      args: [],
+      args: ["-vcodec", "copy", "-acodec", "copy"],
       inFilename: 'video.mp4',
       outFilename: 'video.mov',
       mediaType: 'video/quicktime',
+      forceUseArgs: null,
+    }],
+    ["mp4 -> mkv", {
+      "args": ["-c:v", "libvpx", "-c:a", "libvorbis"],
+      "inFilename": "video.mp4",
+      "outFilename": "video.mkv",
+      "mediaType": "video/x-matroska",
+      forceUseArgs: null,
+    }],
+    ["mp4 -> ogg", {
+      "args": ["-c:a", "libvorbis"],
+      "inFilename": "video.mp4",
+      "outFilename": "audio.ogg",
+      "mediaType": "audio/ogg",
+      forceUseArgs: null,
+    }],
+    ["webm -> mkv", {
+      "args": ["-c:v", "copy", "-c:a", "flac"],
+      "inFilename": "video.webm",
+      "outFilename": "video.mkv",
+      "mediaType": "video/x-matroska",
+      forceUseArgs: null,
+    }],
+    ["mp3 -> ogg", {
+      "args": ["-c:a", "libvorbis"],
+      "inFilename": "audio.mp3",
+      "outFilename": "audio.ogg",
+      "mediaType": "audio/ogg",
       forceUseArgs: null,
     }],
     ["mp3 -> wav", {
@@ -201,17 +229,17 @@
     }],
     ["gif -> webm", {
       args: [
-    "-c:v",
-    "vp8",
-    "-quality",
-    "good",
-    "-movflags",
-    "faststart",
-    "-pix_fmt",
-    "yuv420p",
-    "-crf",
-    "30"
-    ],
+        "-c:v",
+        "vp8",
+        "-quality",
+        "good",
+        "-movflags",
+        "faststart",
+        "-pix_fmt",
+        "yuv420p",
+        "-crf",
+        "30"
+      ],
       inFilename: 'image.gif',
       outFilename: 'video.webm',
       mediaType: 'video/webm',
@@ -263,21 +291,18 @@
       mediaType: 'vnd.apple.mpegURL',
     }],
 	  ["mp4 -> ts", {
-
-	  args: [
-    "-c:v",
-    "mpeg2video",
-    "-qscale:v",
-    "2",
-    "-c:a",
-    "mp2",
-    "-b:a",
-    "192k"
-    ],
+      args: [
+        "-c:v",
+        "mpeg2video",
+        "-qscale:v",
+        "2",
+        "-c:a",
+        "mp2",
+        "-b:a",
+        "192k"
+      ],
 		  inFilename: 'video.mp4',
-
       outFilename: 'video.ts',
-
       mediaType: 'video/mp2t',
 
     }]
