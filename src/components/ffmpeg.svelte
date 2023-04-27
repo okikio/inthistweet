@@ -261,6 +261,25 @@
       inFilename: 'video.mp4',
       outFilename: 'video.m3u8',
       mediaType: 'vnd.apple.mpegURL',
+    }],
+	  ["mp4 -> ts", {
+
+	  args: [
+    "-c:v",
+    "mpeg2video",
+    "-qscale:v",
+    "2",
+    "-c:a",
+    "mp2",
+    "-b:a",
+    "192k"
+    ],
+		  inFilename: 'video.mp4',
+
+      outFilename: 'video.ts',
+
+      mediaType: 'video/mp2t',
+
     }]
   ])
   $: samplesArr = Array.from(samples.entries())
