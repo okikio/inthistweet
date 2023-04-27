@@ -189,12 +189,10 @@
     }],
     ["webm -> gif", {
       args: [
-    "-c:v", 
-    "libvpx",
+    "-crf", 
+    "20",
     "-movflags",
     "faststart",
-    "-pix_fmt",
-    "yuv420p",
   ],
       inFilename: 'video.webm',
       outFilename: 'image.gif',
