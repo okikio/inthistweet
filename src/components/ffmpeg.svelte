@@ -217,11 +217,11 @@
     }],
     ["webm -> gif", {
       args: [
-    "-crf", 
-    "20",
-    "-movflags",
-    "faststart",
-  ],
+        "-crf", 
+        "20",
+        "-movflags",
+        "faststart",
+      ],
       inFilename: 'video.webm',
       outFilename: 'image.gif',
       mediaType: 'image/gif',
