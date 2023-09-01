@@ -52,7 +52,7 @@ export async function getMediaURL(url: string) {
     const id = exec.pathname.groups.id;
     // if (!id) throw new Error("`id` is empty");
 
-    const url = `https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en`;
+    const url = `https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en&token=5`;
     console.log({ url })
     
     const res = await (await fetch(url)).json();
