@@ -1,7 +1,7 @@
 ---
 import "fluent-svelte/theme.css";
-import "@fontsource/inter-tight/variable.css";
-import "@fontsource/inter/variable.css";
+import "@fontsource-variable/inter-tight/index.css";
+import "@fontsource-variable/inter/index.css";
 
 import RegisterSw from "../components/register-sw.svelte";
 
@@ -12,22 +12,6 @@ export interface Props {
 }
 
 const { title, description, preload } = Astro.props;
-const _url = new URL(Astro.url).searchParams.get("q") ?? "";
-
-const result = async () => {
-  if (_url && _url.length > 0 && preload) {
-    try {
-      const req = await fetch(
-        Astro.url.origin + "/api/twitter?url=" + encodeURIComponent(_url)
-      );
-      return req.json() as Promise<{ url: string; type: string }[]>;
-    } catch (e) {
-      console.warn(e);
-    }
-  }
-
-  return [];
-};
 ---
 
 <!DOCTYPE html>
@@ -127,19 +111,19 @@ const result = async () => {
     />
     <meta
       name="twitter:image"
-      content={Astro.site?.origin.toString() + "/favicon/social-preview.png"}
+      content={Astro.url?.origin.toString() + "/favicon/social-preview.png"}
     />
 
     <meta
       name="twitter:url"
       property="og:site_name"
-      content={Astro.site?.origin.toString()}
+      content={Astro.url?.origin.toString()}
     />
 
-    <link rel="canonical" href={Astro.site.toString()} />
-    <meta itemprop="url" content={Astro.site.toString()} />
-    <meta name="shortlink" content={Astro.site.toString()} />
-    <meta property="og:url" content={Astro.site.toString()} />
+    <link rel="canonical" href={Astro.url.toString()} />
+    <meta itemprop="url" content={Astro.url.toString()} />
+    <meta name="shortlink" content={Astro.url.toString()} />
+    <meta property="og:url" content={Astro.url.toString()} />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="preconnect" href="https://video.twimg.com" />
@@ -162,38 +146,13 @@ const result = async () => {
 
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
     <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
-
-    {
-      _url && _url.length > 0 && preload ? (
-        <link
-          rel="preload"
-          href={`/api/twitter?url=${encodeURIComponent(_url)}`}
-          as="fetch"
-          type="application/json"
-          crossorigin="anonymous"
-        />
-      ) : null
-    }
-
-    {
-      (await result?.())?.map?.(({ url, type }) => {
-        if (url && url.length > 0 && preload)
-          return (
-            <link
-              rel="preload"
-              href={url}
-              as={type == "photo" ? "image" : type}
-            />
-          );
-        return null;
-      })
-    }
   </head>
   <body>
     <slot />
     <!-- <RegisterSw client:only="svelte" /> -->
   </body>
 </html>
+
 <style is:global lang="scss">
   :root {
     --accent: 124, 58, 237;
