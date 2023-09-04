@@ -39,7 +39,7 @@ function getCardDetails(res: object) {
 
 export async function getMediaURL(url: string) {
   const parsedURL = new URL(url);
-  if (parsedURL.hostname !== "twitter.com") {
+  if (!/(ads-twitter\.com|periscope\.tv|pscp\.tv|t\.co|tweetdeck\.com|twimg\.com|twitpic\.com|twitter\.co|twitter\.com|twitterinc\.com|twitteroauth\.com|twitterstat\.us|twttr\.com|x\.com)/.test(parsedURL.hostname)) {
     throw new Error("Not a twitter url")
   }
 
