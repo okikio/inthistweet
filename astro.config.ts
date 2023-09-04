@@ -12,8 +12,8 @@ import sitemap from "@astrojs/sitemap";
 import serviceWorker from "astrojs-service-worker"; 
 import adapter from "astro-auto-adapter"; 
 
-import RangeRequestsPlugin from './range-requests.mjs';
-import { urlPattern } from './range-requests.mjs';
+import type { RangeRequestsPlugin as RangeRequestsPluginType } from "workbox-range-requests"
+import RangeRequestsPlugin, { urlPattern } from './range-requests.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,7 +21,7 @@ export default defineConfig({
   integrations: [
     svelte(), 
     tailwind(), 
-    sitemap({ customPages: ['https://inthistweet.app/'] }), 
+    sitemap({ customPages: ['https://inthistweet.app/'] }),
     serviceWorker({
       // enableInDevelopment: true,
       registration: { autoRegister: true },
@@ -53,7 +53,7 @@ export default defineConfig({
                 statuses: [0, 200]
               },
               plugins: [
-                new RangeRequestsPlugin()
+                new RangeRequestsPlugin() as unknown as RangeRequestsPluginType
               ],
               matchOptions: {
                 ignoreSearch: true,
@@ -104,14 +104,13 @@ export default defineConfig({
       }
     })
   ],
-  output: "server",
-  adapter: adapter(process.env?.SSR_MODE ?? 'netlify-edge', {
-    "netlify-edge": {
+  output: "hybrid",
+  adapter: await adapter(undefined, {
+    "netlify": {
       dist: new URL('./dist/', import.meta.url)
     },
-    "vercel-edge": {},
-    node: {
-      mode: "middleware"
+    "deno": {
+      port: 4321
     }
   }),
   vite: {

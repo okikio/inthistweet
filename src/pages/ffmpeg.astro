@@ -16,7 +16,7 @@ import MdiTwitter from '~icons/mdi/twitter';
 Astro.response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
 Astro.response.headers.set("Cross-Origin-Embedder-Policy", "require-corp");
 
-export const prerender = true;
+export const prerender = false;
 ---
 
 <Layout title="FFmpeg Playground - in this tweet?" description="Using ffmpeg to convert between media types, e.g. convert a video from m3u8 to mp4, mp4 to avi, avi to gif, etc... Use it in conjunction with inthisweet.app for even better combinations">
