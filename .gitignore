@@ -19,5 +19,5 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-.netlify/edge-functions/
+.netlify
 .vercel
