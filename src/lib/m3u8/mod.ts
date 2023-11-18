@@ -27,6 +27,7 @@ export interface Manifest {
   custom: Record<string, unknown>;
   playlists: Array<{
     attributes: Record<string, unknown>;
+    uri?: string;
     manifest: Manifest;
   }>;
   mediaGroups: {

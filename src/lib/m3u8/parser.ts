@@ -2,10 +2,10 @@ import {
   Attributes,
   Options,
   Parameters,
-  ParsedLine,
-  Playlist,
-  PlaylistHeader,
-  PlaylistItem,
+  type ParsedLine,
+  type Playlist,
+  type PlaylistHeader,
+  type PlaylistItem,
   PlaylistItemValidator,
 } from "./types";
 

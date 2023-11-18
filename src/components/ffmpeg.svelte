@@ -3,9 +3,7 @@
   import type { ChangeSpec } from "@codemirror/state";
   import type { FFmpeg } from "@ffmpeg.wasm/main";
 
-  import type { Manifest } from "../lib/m3u8/mod";
-  // @ts-ignore
-  import * as m3u8Parser from "m3u8-parser"
+  import { traverseM3U8Manifests } from "../lib/m3u8/traverse";
 
   import { writable } from "svelte/store";
 	import { blur } from 'svelte/transition';
@@ -467,63 +465,6 @@
     }, 200))
   })
 
-  function getManifest(arrbuf: ArrayBuffer) {
-    const toText = new TextDecoder().decode(arrbuf);
-    const parser = new m3u8Parser.Parser()
-    parser.push(toText);
-    parser.end();
-    return parser
-  }
-
-  const inc = 10;
-  async function parseM3u8Manifests(arrbuf: ArrayBuffer, value: string) {
-    const parser = getManifest(arrbuf)
-
-    const { playlists, segments } = parser.manifest as Manifest;
-    const lists = [
-      ...new Set<string | undefined>(
-        (playlists && playlists.length > 0 ? playlists : segments)
-          .map((x: { uri?: string }) => x.uri)
-      )
-    ];
-
-    let i = 0;
-    while (i < lists.length) {
-      await Promise.all(
-        lists.slice(i, i + inc).map(async (url) => {
-          if (url) {
-            const absURL = new URL(url, value).href;
-            const buf = await fetchFile(absURL, { signal: abortCtlr.signal, });
-            console.log({ absURL })
-
-            ffmpeg.FS('writeFile', url, buf);
-
-            if (/.(m3u8|m3u)$/.test(url)) {
-              const parser2 = getManifest(buf);
-              const { playlists: playlist2, segments: segments2 } = parser2.manifest as Manifest;
-
-              const subList = diff(
-                (playlist2 && playlist2.length > 0 ? playlist2 : segments2)
-                  .map((x: { uri?: string }) => x.uri),
-                lists
-              );
-              console.log({ subList, parser2 })
-              const len = subList.length;
-              for (let j = 0; j < len; j ++) {       
-                const subURLs = subList[j]     
-                if (subURLs) { 
-                  lists.push(subURLs)
-                }
-              }
-            }
-          }
-        })
-      );
-
-      i += inc;
-    }
-  }
-
   async function transcode ({ target }: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
     const { files } = target as HTMLInputElement;
     const file = files?.[0];
@@ -585,9 +526,13 @@
       if (ffmpeg && ffmpeg?.isLoaded?.()) {
         const arrbuf = await fetchFile(value, { signal: abortCtlr.signal, });
 
-        if (/.(m3u8|m3u)$/.test(value)) {
+        let _url = new URL(value); 
+        if (/.(m3u8|m3u)$/.test(_url?.pathname)) {
           try {
-            await parseM3u8Manifests(arrbuf, value);
+            const map = await traverseM3U8Manifests(arrbuf, _url);
+            map?.forEach?.((buf, url) => {
+              ffmpeg.FS('writeFile', url, new Uint8Array(buf));
+            })
           } catch (e) {
             console.warn(`Cannot parse "${value}" as m3u8 playlist`)
           }
