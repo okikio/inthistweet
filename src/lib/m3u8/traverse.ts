@@ -1,4 +1,5 @@
-import { M3uParser } from "m3u-parser-generator"
+import { M3uMedia, M3uParser } from "m3u-parser-generator"
+import { urlToFilePath } from "./urls";
 
 /**
  * Converts an ArrayBuffer of an M3U8 file into a parsed representation.
@@ -43,11 +44,16 @@ export async function traverseM3U8Manifests(arrbuf: ArrayBuffer, baseUrl: URL, b
 
   const fileMap = new Map<string, ArrayBuffer>()
   try {
-    const { medias } = parseManifest(arrbuf);
+    const playlist = parseManifest(arrbuf);
+    const { medias } = playlist;
+    const modifiedMedias: M3uMedia[] = [];
 
     // Initial deduplication of URIs using a Set to improve performance.
     const uris = new Set<string>(
-      (medias ?? []).map(x => x.location).filter((uri): uri is string => uri !== undefined)
+      (medias ?? []).map(item => {
+        modifiedMedias.push({ ...item, location: urlToFilePath(item.location) });
+        return item.location;
+      }).filter((uri): uri is string => uri !== undefined)
     );
 
     const toProcess = Array.from(uris); // Array of URIs to process
@@ -65,21 +71,31 @@ export async function traverseM3U8Manifests(arrbuf: ArrayBuffer, baseUrl: URL, b
       // Post-fetch processing to parse nested M3U8 files and update URI lists.
       batch.forEach((uri, index) => {
         const [url, buf] = fetchedBuffers[index];
-        fileMap.set(uri, buf);
+        fileMap.set(urlToFilePath(uri), buf);
 
         // Checking and parsing nested M3U8 files for additional URIs.
         if (/\.(m3u8|m3u)$/.test(url.pathname)) {
-          const { medias: subMedias } = parseManifest(buf);
+          const subPlaylist = parseManifest(buf);
+          const { medias: subMedias } = subPlaylist;
+
+          const modifiedSubMedias: M3uMedia[] = [];
           (subMedias ?? []).forEach(item => {
             const _uri = item?.location;
             if (_uri && !uris.has(_uri)) {
+              modifiedSubMedias.push({ ...item, location: urlToFilePath(item.location) });
               uris.add(_uri);
               toProcess.push(_uri); // Adding new URIs for processing
             }
           });
+
+          subPlaylist.medias = modifiedSubMedias;
+          fileMap.set(urlToFilePath(uri), new TextEncoder().encode(subPlaylist.getM3uString()));
         }
       });
     }
+
+    playlist.medias = modifiedMedias;
+    fileMap.set(urlToFilePath(baseUrl.href), new TextEncoder().encode(playlist.getM3uString()));
 
     return fileMap
   } catch (error) {

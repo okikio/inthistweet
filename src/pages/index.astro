@@ -1,4 +1,6 @@
 ---
+import type { APIContext } from 'astro';
+
 import Layout from '../layouts/Layout.astro';
 import Search from '../components/search.svelte';
 
@@ -10,9 +12,13 @@ import FileIconsFfmpeg from '~icons/file-icons/ffmpeg';
 
 import MdiGithub from '~icons/mdi/github';
 import MdiTwitter from '~icons/mdi/twitter';
+import { GET } from './api/twitter';
 
 Astro.response.headers.set("Cross-Origin-Opener-Policy", "unsafe-none");
 Astro.response.headers.set("Cross-Origin-Embedder-Policy", "unsafe-none");
+
+const response = await GET(Astro as unknown as APIContext);
+const initialResult: Array<{ type?: string | null; url?: string | null }> = response.status === 200 ? await response.json() ?? [] : [];
 
 export const prerender = false;
 ---
@@ -62,7 +68,7 @@ export const prerender = false;
 	</header>
 
 	<main>
-		<Search value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
+		<Search results={initialResult} value={new URL(Astro.url).searchParams.get('q') ?? ''} client:load />
 	</main>
 	
 	<div>

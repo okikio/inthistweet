@@ -26,6 +26,7 @@
   import FluentPlay24Filled from '~icons/fluent/play-24-filled';
 
   import { createFFmpeg, fetchFile, diff, shell, debounce } from "./ffmpeg";
+  import { extname } from "../lib/path/mod"
 
   import { hyperLink } from '@uiw/codemirror-extensions-hyper-link';
   import { oneDark, color } from "@codemirror/theme-one-dark";
@@ -307,6 +308,18 @@
   ])
   $: samplesArr = Array.from(samples.entries())
 
+  let downloads: string[] = []
+  resultsDep.subscribe((arr) => {
+    const pathname = new URL(value, "https://inthistweet.app").pathname.slice(1);
+    const ext = extname(ffmpegOpts.outFilename);
+
+    const extValue = extname(pathname);
+    downloads = arr.map((x) => {
+      return pathname ? (pathname + (extValue === ext ? "" : ext)) : ("file-to-download" + ext)
+    })
+  })
+
+
   globalThis?.addEventListener?.("popstate", (event) => {
     const url = new URL(globalThis.location.href);
     value = url.searchParams.get("q") ?? "";
@@ -447,10 +460,8 @@
 
     if (url.searchParams.get("q")?.trim?.()) {
       value = url.searchParams.get("q") ?? "";
-    }
-  });
+    } 
 
-  onMount(() => {
     searchInputEl?.addEventListener?.('change', debounce(() => { 
       try {
         new URL(value);
@@ -785,7 +796,7 @@
           if (url) {
             link.href = url;
             link.target = "_blank";
-            link.download = "file-1"
+            link.download = value
             link.click();
           }
         })
@@ -848,9 +859,15 @@
                 {:else}
                   <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" crossorigin="anonymous" />
                 {/if}
-
                 <div class="flex lt-md:flex-col gap-2 pt-2">
-                  <Button class="w-full" variant="accent" href={url} download="file-to-download">Download</Button>
+                  <Button 
+                    class="w-full" 
+                    variant="accent" 
+                    href={url} 
+                    download={downloads[i]}
+                  >
+                    Download
+                  </Button>
                   <Button 
                     class="cursor-pointer w-full" 
                     on:click={() => {

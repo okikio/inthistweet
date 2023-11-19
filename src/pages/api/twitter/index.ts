@@ -1,11 +1,15 @@
 import type { APIContext } from "astro";
-import { getMediaURL } from "../../../utils";
+import type { Tweet } from "../../../types/index";
+import { extractAndFormatMedia, fetchEmbeddedTweet } from "../../../lib/get-tweet";
 
 export async function GET({ url }: APIContext) {
   try {
-    const json = await getMediaURL(url?.searchParams?.get?.('url') ?? '');
+    const _url = url?.searchParams?.get?.('url') ?? url?.searchParams?.get?.('q') ?? '';
 
-    return new Response(JSON.stringify(json), {
+    const tweet: Tweet = await fetchEmbeddedTweet(_url);
+    const media = extractAndFormatMedia(tweet);
+
+    return new Response(JSON.stringify(media), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
