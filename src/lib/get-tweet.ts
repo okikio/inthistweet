@@ -1,6 +1,7 @@
 // Based on `react-tweet` (https://github.com/vercel/react-tweet) and `download-twitter-video` (https://github.com/egoist/download-twitter-video)
 import type { ImageValue, TwitterCard, UnifiedCardData } from '../types/card';
 import type { Tweet, MediaDetails, TweetParent, QuotedTweet, MediaEntity } from '../types/index';
+import "urlpattern-polyfill"
 
 export const EMBED_API_URL = "https://cdn.syndication.twimg.com";
 

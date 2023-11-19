@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { MediaItem } from "../lib/get-tweet";
   import { writable } from "svelte/store";
 	import { blur } from 'svelte/transition';
 
@@ -34,7 +35,7 @@
   export let value = "";
   let loading = false;
 
-  let results: Array<{ type?: string | null; url?: string | null }> = [];
+  export let results: MediaItem[] = [];
   let error = writable<string | null>(null);
 
   globalThis?.addEventListener?.("popstate", (event) => {
@@ -71,12 +72,16 @@
     loading = false;
   }
 
-  if (value && value.length > 0) {
+  if (value && value.length > 0 && globalThis?.document && results.length <= 0) {
     onSearch();
   }
 
+  console.log({
+    results
+  })
+
   onMount(() => {
-    if (!value || value.length == 0) {
+    if (!value || value.length == 0 && results.length <= 0) {
       const url = new URL(globalThis.location?.href);
       value = url.searchParams.get("q") ?? "";
       onSearch();
@@ -185,20 +190,29 @@
           {/if}
         {:else}
           <div class="w-full flex flex-col gap-[inherit]">
-            {#each results as { url, type } (url)}
-              {#if url && type && url.length > 0}
-                {#if type == "video"}
+            {#each results as { type, variants } (JSON.stringify(variants ?? "[]"))}
+              {@const variant = variants[0]}
+              {#if variant.url && type && variant.url.length > 0}
+                {#if type == "video" || /video/.test(variant.mimeType)}
                   <video
                     crossorigin="anonymous"
                     controls
                     preload="auto"
-                    class="w-full max-h-[500px] bg-black"
+                    class="w-full bg-black object-cover"
+                    style={variant.aspectRatio ? `aspect-ratio: ${variant.aspectRatio.replace(":", "/")}` : ""}
                     in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{ amount: 10 }}" 
                   >
-                    <source src={url} />
+                    <source src={variant.url} />
                   </video>
                 {:else}
-                  <img src={url} loading="eager" in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" crossorigin="anonymous" />
+                  <img 
+                    src={variant.url} 
+                    loading="eager" 
+                    class="w-full object-cover"
+                    in:blur="{{ delay: 400, amount: 10 }}" out:blur="{{  amount: 10 }}" 
+                    style={variant.aspectRatio ? `aspect-ratio: ${variant.aspectRatio.replace(":", "/")}` : ""}
+                    crossorigin="anonymous" 
+                  />
                 {/if}
               {/if}
             {/each}

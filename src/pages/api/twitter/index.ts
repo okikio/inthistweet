@@ -2,9 +2,11 @@ import type { APIContext } from "astro";
 import type { Tweet } from "../../../types/index";
 import { extractAndFormatMedia, fetchEmbeddedTweet } from "../../../lib/get-tweet";
 
+export const prerender = false;
 export async function GET({ url }: APIContext) {
   try {
     const _url = url?.searchParams?.get?.('url') ?? url?.searchParams?.get?.('q') ?? '';
+    console.log({ _url })
 
     const tweet: Tweet = await fetchEmbeddedTweet(_url);
     const media = extractAndFormatMedia(tweet);

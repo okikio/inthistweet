@@ -22,87 +22,87 @@ export default defineConfig({
     svelte(), 
     tailwind(), 
     sitemap({ customPages: ['https://inthistweet.app/'] }),
-    serviceWorker({
-      // enableInDevelopment: true,
-      registration: { autoRegister: true },
-      // @ts-ignore
-      workbox: {
-        skipWaiting: true,
-        clientsClaim: true,
+    // serviceWorker({
+    //   // enableInDevelopment: true,
+    //   registration: { autoRegister: true },
+    //   // @ts-ignore
+    //   workbox: {
+    //     skipWaiting: true,
+    //     clientsClaim: true,
 
-        additionalManifestEntries: [
-          "/",
-          "https://inthistweet.app"
-        ],
+    //     additionalManifestEntries: [
+    //       "/",
+    //       "https://inthistweet.app"
+    //     ],
 
-        // globDirectory: outDir,
-        globPatterns: ["**/*.{html,js,css,svg,ttf,woff2,png,webp,jpg,jpeg,wasm,ico,json,xml}"], //
-        ignoreURLParametersMatching: [/index\.html\?(.*)/, /\\?(.*)/],
-        cleanupOutdatedCaches: true,
+    //     // globDirectory: outDir,
+    //     globPatterns: ["**/*.{html,js,css,svg,ttf,woff2,png,webp,jpg,jpeg,wasm,ico,json,xml}"], //
+    //     ignoreURLParametersMatching: [/index\.html\?(.*)/, /\\?(.*)/],
+    //     cleanupOutdatedCaches: true,
 
-        // Define runtime caching rules.
-        runtimeCaching: [
-          {
-            // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
-            urlPattern,
-            // Apply a network-first strategy.
-            handler: "NetworkFirst",
-            method: "GET",
-            options: {
-              cacheableResponse: {
-                statuses: [0, 200]
-              },
-              plugins: [
-                new RangeRequestsPlugin() as unknown as RangeRequestsPluginType
-              ],
-              matchOptions: {
-                ignoreSearch: true,
-                ignoreVary: true
-              }
-            }
-          },
-          {
-            // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
-            urlPattern:
-              /(?:^https:\/\/(?:.*)\.twimg\.com)|(?:\/api\/twitter)|(?:\/take-measurement$)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)))/,
-            // Apply a network-first strategy.
-            handler: "NetworkFirst",
-            method: "GET",
-            options: {
-              cacheableResponse: {
-                statuses: [0, 200]
-              },
-            }
-          },
-          {
-            // Match any request that ends with .png, .jpg, .jpeg, .svg, etc....
-            urlPattern:
-              /workbox\-(.*)\.js|\.(?:png|jpg|jpeg|svg|webp|map|ts|wasm|css)$|^https:\/\/(?:cdn\.polyfill\.io)/,
-            // Apply a stale-while-revalidate strategy.
-            handler: "NetworkFirst",
-            method: "GET",
-            options: {
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            // Cache `monaco-editor` etc...
-            urlPattern:
-              /(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
-            // Apply a network-first strategy.
-            handler: "NetworkFirst",
-            method: "GET",
-            options: {
-              cacheableResponse: {
-                statuses: [0, 200]
-              },
-            }
-          },
-        ]
-      }
-    })
+    //     // Define runtime caching rules.
+    //     runtimeCaching: [
+    //       {
+    //         // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
+    //         urlPattern,
+    //         // Apply a network-first strategy.
+    //         handler: "NetworkFirst",
+    //         method: "GET",
+    //         options: {
+    //           cacheableResponse: {
+    //             statuses: [0, 200]
+    //           },
+    //           plugins: [
+    //             new RangeRequestsPlugin() as unknown as RangeRequestsPluginType
+    //           ],
+    //           matchOptions: {
+    //             ignoreSearch: true,
+    //             ignoreVary: true
+    //           }
+    //         }
+    //       },
+    //       {
+    //         // Match any request that starts with https://api.producthunt.com, https://api.countapi.xyz, https://opencollective.com, etc...
+    //         urlPattern:
+    //           /(?:^https:\/\/(?:.*)\.twimg\.com)|(?:\/api\/twitter)|(?:\/take-measurement$)|(?:^https:\/\/((?:api\.producthunt\.com)|(?:api\.countapi\.xyz)|(?:opencollective\.com)|(?:giscus\.bundlejs\.com)))/,
+    //         // Apply a network-first strategy.
+    //         handler: "NetworkFirst",
+    //         method: "GET",
+    //         options: {
+    //           cacheableResponse: {
+    //             statuses: [0, 200]
+    //           },
+    //         }
+    //       },
+    //       {
+    //         // Match any request that ends with .png, .jpg, .jpeg, .svg, etc....
+    //         urlPattern:
+    //           /workbox\-(.*)\.js|\.(?:png|jpg|jpeg|svg|webp|map|ts|wasm|css)$|^https:\/\/(?:cdn\.polyfill\.io)/,
+    //         // Apply a stale-while-revalidate strategy.
+    //         handler: "NetworkFirst",
+    //         method: "GET",
+    //         options: {
+    //           cacheableResponse: {
+    //             statuses: [0, 200]
+    //           }
+    //         }
+    //       },
+    //       {
+    //         // Cache `monaco-editor` etc...
+    //         urlPattern:
+    //           /(?:(?:chunks|assets|favicon|fonts|giscus)\/(.*)$)/,
+    //         // Apply a network-first strategy.
+    //         handler: "NetworkFirst",
+    //         method: "GET",
+    //         options: {
+    //           cacheableResponse: {
+    //             statuses: [0, 200]
+    //           },
+    //         }
+    //       },
+    //     ]
+    //   }
+    // })
   ],
   output: "hybrid",
   adapter: await adapter(undefined, {
