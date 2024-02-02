@@ -1,4 +1,4 @@
-import type { ImageColorValue, MediaDetails } from "./media";
+import type { ImageColorValue, MediaDetails } from "./media.ts";
 
 export interface TwitterCard {
   card_platform?: CardPlatform;
@@ -105,11 +105,11 @@ export interface DestinationData {
 
 // Media entities mapping media IDs to media details
 export interface MediaEntities {
-  [key: string]: MediaEntity;
+  [key: string]: CardMediaEntity;
 }
 
 // Represents a media entity
-export interface MediaEntity {
+export interface CardMediaEntity {
   id: number;
   id_str: string;
   media_url_https: string;

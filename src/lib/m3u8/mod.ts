@@ -1,14 +1,14 @@
 // From https://deno.land/x/m3u8@v0.8.0/src/mod.ts by @fbritoferreira
 // https://github.com/fbritoferreira/m3u8-parser/tree/main
 
-export { M3U8Parser } from "./parser";
+export { M3U8Parser } from "./parser.ts";
 export {
   Attributes,
   Options,
   Parameters,
   PlaylistItemTvgValidator,
   PlaylistItemValidator,
-} from "./types";
+} from "./types.ts";
 
 export type {
   ParsedLine,
@@ -16,7 +16,7 @@ export type {
   PlaylistHeader,
   PlaylistItem,
   PlaylistItemTvg,
-} from "./types";
+} from "./types.ts";
 
 export interface Manifest {
   allowCache: boolean;

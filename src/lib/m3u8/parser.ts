@@ -7,7 +7,7 @@ import {
   type PlaylistHeader,
   type PlaylistItem,
   PlaylistItemValidator,
-} from "./types";
+} from "./types.ts";
 
 export class M3U8Parser {
   public rawPlaylist = "";

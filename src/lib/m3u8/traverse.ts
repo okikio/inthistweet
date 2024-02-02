@@ -1,5 +1,5 @@
 import { M3uMedia, M3uParser } from "m3u-parser-generator"
-import { urlToFilePath } from "./urls";
+import { urlToFilePath } from "./urls.ts";
 
 /**
  * Converts an ArrayBuffer of an M3U8 file into a parsed representation.

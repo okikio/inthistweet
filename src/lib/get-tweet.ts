@@ -1,6 +1,6 @@
 // Based on `react-tweet` (https://github.com/vercel/react-tweet) and `download-twitter-video` (https://github.com/egoist/download-twitter-video)
-import type { ImageValue, TwitterCard, UnifiedCardData } from '../types/card';
-import type { Tweet, MediaDetails, TweetParent, QuotedTweet, MediaEntity } from '../types/index';
+import type { ImageValue, TwitterCard, UnifiedCardData } from '../types/card.ts';
+import type { Tweet, MediaDetails, TweetParent, QuotedTweet, CardMediaEntity } from '../types/index.ts';
 import "urlpattern-polyfill"
 
 export const EMBED_API_URL = "https://cdn.syndication.twimg.com";
@@ -207,7 +207,7 @@ const extractCardMedia = (card: TwitterCard) => {
           if (component.type === "media" && component.data && component.data.id) {
             // Finding the media details using the media ID in the component data
             const mediaId = component.data.id;
-            const media = mediaEntities[mediaId] as unknown as (MediaDetails & MediaEntity);
+            const media = mediaEntities[mediaId] as unknown as (MediaDetails & CardMediaEntity);
             if (media) {
               additionalItems.push({
                 type: media.type,

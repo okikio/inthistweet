@@ -1,10 +1,10 @@
-import type { TwitterCard } from './card'
-import type { TweetEditControl } from './edit'
-import type { Indices, TweetEntities } from './entities'
+import type { TwitterCard } from './card.ts'
+import type { TweetEditControl } from './edit.ts'
+import type { Indices, TweetEntities } from './entities.ts'
 import type { MediaDetails } from './media'
-import type { TweetPhoto } from './photo'
-import type { TweetUser } from './user'
-import type { TweetVideo } from './video'
+import type { TweetPhoto } from './photo.ts'
+import type { TweetUser } from './user.ts'
+import type { TweetVideo } from './video.ts'
 
 /**
  * Base tweet information shared by a tweet, a parent tweet and a quoted tweet.
