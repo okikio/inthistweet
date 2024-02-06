@@ -1,5 +1,6 @@
 import type { ChangeSpec } from "@codemirror/state";
-import type { FFmpeg } from "@ffmpeg/ffmpeg";
+// import type { FFmpeg } from "@ffmpeg/ffmpeg";
+import type { FFmpeg } from "@ffmpeg.wasm/main";
 import type { EditorView } from "codemirror";
 
 import { get } from "svelte/store";
@@ -8,7 +9,7 @@ import { abortCtlr, error, loading, EMPTY_CONSOLE_TEXT } from "./state";
 import { traverseM3U8Manifests } from "./m3u8/traverse";
 import { urlToFilePath } from "./m3u8/urls";
 import { transcode } from "./transcode";
-import { fetchFile } from "./ffmpeg";
+import { fetchFile } from "../components/ffmpeg";
 
 export async function onSearch(e?: Event, ffmpeg?: FFmpeg, value?: string, consoleView?: EditorView, popState = false) {
   e?.preventDefault?.();
@@ -20,7 +21,7 @@ export async function onSearch(e?: Event, ffmpeg?: FFmpeg, value?: string, conso
   loading.set(true);
 
   try {
-    if (!ffmpeg || !ffmpeg?.loaded) return;
+    if (!ffmpeg || !ffmpeg?.isLoaded?.()) return;
 
     const arrbuf = await fetchFile(value, { signal: get(abortCtlr).signal });
     let inputArrBuf = arrbuf;
@@ -40,7 +41,8 @@ export async function onSearch(e?: Event, ffmpeg?: FFmpeg, value?: string, conso
             if (!buf) return;
 
             try {
-              ffmpeg.writeFile(url, new Uint8Array(buf));
+              ffmpeg.FS("writeFile", url, new Uint8Array(buf));
+              // ffmpeg.writeFile(url, new Uint8Array(buf));
               if (!consoleView) return;
 
               const doc = consoleView.state.doc;
