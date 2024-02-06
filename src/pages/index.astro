@@ -18,7 +18,7 @@ Astro.response.headers.set("Cross-Origin-Embedder-Policy", "unsafe-none");
 
 const url = Astro.url;
 const _url = url?.searchParams?.get?.('url') ?? url?.searchParams?.get?.('q') ?? '';
-export const prerender = false;
+export const prerender = true;
 ---
 
 <Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store." preload>
