@@ -106,9 +106,6 @@ export default defineConfig({
   ],
   output: "hybrid",
   adapter: await adapter(undefined, {
-    "netlify": {
-      dist: new URL('./dist/', import.meta.url)
-    },
     "deno": {
       port: 4321
     }
