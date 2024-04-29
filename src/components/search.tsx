@@ -79,7 +79,7 @@ export default component$(() => {
   return (
     <>
 
-<form on:submit={onSearch} class="flex flex-row gap-2">
+<form onSubmit={onSearch} class="flex flex-row gap-2">
   <TextBox
     bind:value
     type="search"
