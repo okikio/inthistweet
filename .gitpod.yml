@@ -8,5 +8,4 @@ tasks:
 
 vscode:
   extensions:
-    - svelte.svelte-vscode
     - bradlc.vscode-tailwindcss

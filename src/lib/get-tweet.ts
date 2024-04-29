@@ -1,10 +1,9 @@
 // Based on `react-tweet` (https://github.com/vercel/react-tweet) and `download-twitter-video` (https://github.com/egoist/download-twitter-video)
 import type { ImageValue, TwitterCard, UnifiedCardData } from '../types/card.ts';
 import type { Tweet, MediaDetails, TweetParent, QuotedTweet, CardMediaEntity } from '../types/index.ts';
-import "urlpattern-polyfill"
+import "urlpattern-polyfill";
 
 export const EMBED_API_URL = "https://cdn.syndication.twimg.com";
-
 
 /**
  * Custom error class for handling Twitter API errors.
@@ -234,7 +233,7 @@ const extractCardMedia = (card: TwitterCard) => {
 * @param tweet - The tweet object to extract media from.
 * @returns An array of formatted MediaItem objects.
 */
-export function extractAndFormatMedia(tweet: Tweet | TweetParent | QuotedTweet): MediaItem[] {
+export function extractAndFormatMedia(tweet?: Tweet | TweetParent | QuotedTweet): MediaItem[] {
   // This function is a comprehensive handler for all media in a tweet
   // It ensures all media types (including from cards) are processed
   let mediaItems: MediaItem[] = [];
@@ -266,7 +265,7 @@ export function extractAndFormatMedia(tweet: Tweet | TweetParent | QuotedTweet):
   });
 
   // Extract media from Twitter card if available
-  if (tweet.card) {
+  if (tweet?.card) {
     const cardMedia = extractCardMedia(tweet.card!);
     mediaItems = mediaItems.concat(cardMedia);
   }
@@ -341,13 +340,13 @@ export async function fetchEmbeddedTweet(url: string) {
 
     const res = await fetch(url);
     const isJson = res.headers.get('content-type')?.includes('application/json')
-    const data = isJson ? await res.json() : undefined
+    const data = isJson ? await res.json() as { error: string } : undefined;
 
-    if (res.ok) return data
-    if (res.status === 404) return
+    if (res.ok) return data as unknown as (Tweet | TweetParent | QuotedTweet);
+    if (res.status === 404) return;
 
     throw new TwitterApiError({
-      message: typeof data.error === 'string' ? data.error : 'Bad request.',
+      message: typeof data?.error === 'string' ? data.error : 'Bad request.',
       status: res.status,
       data,
     })

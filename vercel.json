@@ -82,12 +82,6 @@
       ]
     }
   ],
-  "rewrites": [
-    {
-      "source": "/take-measurement",
-      "destination": "https://analytics.bundlejs.com/api/collect"
-    }
-  ],
   "github": {
     "silent": true,
     "autoJobCancelation": true

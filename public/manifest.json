@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "In this tweet",
   "short_name": "In this tweet",
   "id": "inthistweet",
