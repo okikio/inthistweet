@@ -7,6 +7,7 @@ import FileIconsFfmpeg from "~icons/file-icons/ffmpeg";
 
 import MdiGithub from "~icons/mdi/github";
 import MdiTwitter from "~icons/mdi/twitter";
+import Search from "~/components/search.tsx";
 
 // const _url = url?.searchParams?.get?.('url') ?? url?.searchParams?.get?.('q') ?? '';
 export default component$(() => {
@@ -67,7 +68,8 @@ export default component$(() => {
       </header>
 
       <main>
-        <Search value={_url} client:load />
+        {/* value={_url} client:load */}
+        <Search />
       </main>
 
       <div>
