@@ -1,14 +1,14 @@
-import { writable } from "svelte/store";
+import { useSignal } from "@builder.io/qwik";
 
-export const abortCtlr = writable(new AbortController());
+export const abortCtlr = useSignal(new AbortController());
 
-export const progress = writable(0);
-export const loading = writable(false);
-export const initializing = writable(false);
-export const fileOpenMode = writable(false);
+export const progress = useSignal(0);
+export const loading = useSignal(false);
+export const initializing = useSignal(false);
+export const fileOpenMode = useSignal(false);
  
-export const error = writable<string | null>(null);
-export const results = writable<
+export const error = useSignal<string | null>(null);
+export const results = useSignal<
   Array<{ type?: string | null; url?: string | null }>
 >([]);
 

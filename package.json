@@ -47,7 +47,6 @@
     "urlpattern-polyfill": "^10.0.0"
   },
   "devDependencies": {
-    "@astrojs/vercel": "7.6.0",
     "@builder.io/qwik": "^1.5.4",
     "@builder.io/qwik-city": "^1.5.4",
     "@iconify-json/file-icons": "^1.1.8",

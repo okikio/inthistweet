@@ -1,16 +1,16 @@
-import { writable } from "svelte/store";
+import { useSignal } from "@builder.io/qwik";
 
 export function syncHeight(el: HTMLElement, initial = 0) {
-  return writable(initial, (set) => {
-    if (!el) {
-      return;
+  const signal = useSignal(initial);
+  if (!el) return;
+  
+  let ro = new ResizeObserver(() => {
+    if (el) {
+      return (signal.value = el.offsetHeight);
     }
-    let ro = new ResizeObserver(() => {
-      if (el) {
-        return set(el.offsetHeight);
-      }
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
   });
+  ro.observe(el);
+  
+  // return () => ro.disconnect();
+  return signal;
 }
