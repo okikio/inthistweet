@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import FFmpegEditor from '../components/ffmpeg.svelte';
 
-import ffmpegURL from "@ffmpeg.wasm/main/dist/ffmpeg.min.js?url";
+// import ffmpegURL from "@ffmpeg.wasm/main/dist/ffmpeg.min.js?url";
 
 import { Button, TextBlock, InfoBar } from 'fluent-svelte';
 
@@ -117,11 +117,12 @@ export const prerender = false;
 		</div>
 	</footer>
 
-	<script src={ffmpegURL} is:inline></script> 
-	<!-- <script>
+	{/**  <script src={ffmpegURL} is:inline></script>  
+
+	<script>
 		import Measure from "../scripts/measure";
 		Measure(window);
-	</script> -->
+	</script>  */}
 </Layout>
 
 <style lang="scss">

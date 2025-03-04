@@ -9,7 +9,7 @@
   import { onMount } from "svelte";
   import toast, { Toaster, resolveValue } from "svelte-french-toast";
   import CustomToast from "./custom-toast.svelte";
-  import { createServiceWorker } from "./service-worker";
+  import { createServiceWorker } from "./pwa";
 
   type CustomToastType = ToastType | "update";
   type CustomToastOptions = {
@@ -68,9 +68,10 @@
   }
 
   const intervalMS = 60 * 1000;
+  let intervalTimer: number | undefined;
 
   function RegisterServiceWorker() {
-    const { offlineReady, needRefresh, updateServiceWorker } = createServiceWorker({
+    const { offlineReady, needRefresh, refreshSW } = createServiceWorker({
       onOfflineReady() {
         customToast("success", "App ready to work offline");
       },
@@ -81,7 +82,7 @@
           {
             duration: Infinity,
             async updateClick() {
-              await toastPromise(updateServiceWorker(true), {
+              await toastPromise(refreshSW(true), {
                 loading: "Updating...",
                 success: "Update Successful",
                 error: "Error Updating",
@@ -94,12 +95,26 @@
           }
         );
       },
-      onRegistered(r) {
-        console.log("SW Registered: small change", r);
-        r &&
-          setInterval(() => {
-            r.update();
-          }, intervalMS);
+      onRegisteredSW(swUrl, r) {
+        console.log(`SW Registered: ${swUrl}`, r);
+        r && setInterval(async () => {
+          if (!(!r.installing && navigator))
+            return
+
+          if (('connection' in navigator) && !navigator.onLine)
+            return
+
+          const resp = await fetch(swUrl, {
+            cache: 'no-store',
+            headers: {
+              'cache': 'no-store',
+              'cache-control': 'no-cache',
+            },
+          })
+
+          if (resp?.status === 200)
+            await r.update()
+        }, intervalMS)
       },
       onRegisterError(error: any) {
         console.log("SW registration error", error);
@@ -107,9 +122,11 @@
     });
   }
 
-  if ("navigator" in globalThis) {
-    RegisterServiceWorker();
-  }
+  onMount(() => {
+    if ("navigator" in globalThis) {
+      RegisterServiceWorker();
+    }
+  })
 </script>
 
 <Toaster />

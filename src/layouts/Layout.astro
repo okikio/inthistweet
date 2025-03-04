@@ -3,7 +3,8 @@ import "fluent-svelte/theme.css";
 import "@fontsource-variable/inter-tight/index.css";
 import "@fontsource-variable/inter/index.css";
 
-// import RegisterSw from "../components/register-sw.svelte";
+import { pwaInfo } from "virtual:pwa-info"
+import ReloadPrompt from "../components/ReloadPrompt.svelte";
 
 export interface Props {
   title: string;
@@ -23,7 +24,6 @@ const { title, description, preload } = Astro.props;
 
     <title>{title}</title>
 
-    <link rel="manifest" href="/manifest.json" />
     <meta name="robots" content="index, follow" />
 
     <link
@@ -139,17 +139,11 @@ const { title, description, preload } = Astro.props;
       rel="pingback"
       href="https://webmention.io/webmention?forward=https://inthistweet.app/endpoint"
     />
-
-    <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
-    <!-- <script async defer data-website-id="72683bf5-0839-42eb-84e4-5d34f619a31c" src="https://analytics.bundlejs.com/umami.js"></script> -->
-    <!-- <link rel="preload" href="https://video.twimg.com/ext_tw_video/1585341912877146112/pu/vid/1920x1080/aeoVUvTgj4wHShhN.mp4" as="video" /> -->
-
-    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
-    <!-- <link rel="shortcut icon" href="/favicon/favicon.ico"> -->
+    { pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
   </head>
   <body>
     <slot />
-    <!-- <RegisterSw client:only="svelte" /> -->
+    <ReloadPrompt client:only="svelte" />
   </body>
 </html>
 

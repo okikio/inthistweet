@@ -1,62 +1,3 @@
-// import { FFmpeg } from "../../node_modules/.pnpm/@ffmpeg+ffmpeg@0.12.7/node_modules/@ffmpeg/ffmpeg/dist/esm/classes.js";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
-
-
-import FFmpegCoreUrl from "../../node_modules/@ffmpeg/core-mt/dist/umd/ffmpeg-core.js?url";
-import FFmpegWASMUrl from "../../node_modules/@ffmpeg/core-mt/dist/umd/ffmpeg-core.wasm?url";
-import FFmpegWorkerUrl from "../../node_modules/@ffmpeg/core-mt/dist/umd/ffmpeg-core.worker.js?url";
-
-// import FFmpegCoreUrl from "@ffmpeg/core-mt?url";
-// import FFmpegWASMUrl from "@ffmpeg/core-mt/wasm?url";
-// import FFmpegWorkerUrl from "./vendor/worker.ts?url";
-// import FFmpegWorkerUrl from "@ffmpeg/core-mt/dist/esm/ffmpeg-core.worker.js?url";
-
-// import FFmpegCoreUrl from "../../node_modules/@ffmpeg/core-mt/dist/esm/ffmpeg-core.js?url";
-// import FFmpegWASMUrl from "../../node_modules/@ffmpeg/core-mt/dist/esm/ffmpeg-core.wasm?url";
-// import FFmpegWorkerUrl from "../../node_modules/@ffmpeg/core-mt/dist/umd/ffmpeg-core.worker.js?url";
-// import FFmpegWorkerRaw from "../../node_modules/@ffmpeg/core-mt/dist/esm/ffmpeg-core.worker.js?raw";
-
-import { toBlobURL, toDataUrl } from "./utils/url.ts"
-
-type FFmpegLoadParams = Parameters<(typeof FFmpeg)['prototype']['load']>;
-type FFMessageLoadConfig = FFmpegLoadParams[0];
-type FFMessageOptions = FFmpegLoadParams[1];
-
-/*
- * Create ffmpeg instance.
- * Each ffmpeg instance owns an isolated MEMFS and works
- * independently.
- *
- * For example:
- *
- * ```
- * const ffmpeg = createFFmpeg({
- *  log: true,
- *  logger: () => {},
- *  progress: () => {},
- *  corePath: '',
- * })
- * ```
- *
- * For the usage of these four arguments, check config.js
- *
- */
-export async function createFFmpeg (config?: FFMessageLoadConfig, opts?: FFMessageOptions) { 
-  const ffmpegInstance = new FFmpeg();
-  const initialConfig: FFMessageLoadConfig = {
-    coreURL: FFmpegCoreUrl,
-    wasmURL: FFmpegWASMUrl,
-    // workerURL: toDataUrl(FFmpegWorkerRaw, "text/javascript"),
-    workerURL: FFmpegWorkerUrl,
-    // coreURL: await toBlobURL(FFmpegCoreUrl, 'text/javascript'),
-    // wasmURL: await toBlobURL(FFmpegWASMUrl, 'application/wasm'),
-    // workerURL: await toBlobURL(FFmpegWorkerUrl, 'text/javascript'),
-    ...config
-  }
-  console.log(initialConfig)
-  await ffmpegInstance.load(initialConfig, opts);
-  return ffmpegInstance;
-}
 
 /**
  * An util function to fetch data from url string, base64, URL, File or Blob format.
@@ -89,15 +30,17 @@ export async function createFFmpeg (config?: FFMessageLoadConfig, opts?: FFMessa
  * @param {string | ArrayBuffer | Blob | File} data - The data to be fetched.
  * @returns {Promise<Uint8Array>} - The fetched data as a Uint8Array.
  */
-export async function fetchFile(data: string | ArrayBuffer | Blob | File, opts?: RequestInit): Promise<Uint8Array> {
+export async function fetchFile(data: string | Uint8Array | ArrayBuffer | Blob | File, opts?: RequestInit): Promise<Uint8Array> {
   if (typeof data === 'string') {
     const response = await fetch(data, opts);
     const buffer = await response.arrayBuffer();
     return new Uint8Array(buffer);
   } else if (data instanceof ArrayBuffer) {
-    return Promise.resolve(new Uint8Array(data));
+    return new Uint8Array(data);
+  } else if (data instanceof Uint8Array) { 
+    return data;
   } else {
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target) {

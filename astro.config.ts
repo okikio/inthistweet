@@ -9,11 +9,8 @@ import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 
-import serviceWorker from "astrojs-service-worker"; 
-import adapter from "astro-auto-adapter"; 
-
-import type { RangeRequestsPlugin as RangeRequestsPluginType } from "workbox-range-requests"
-import RangeRequestsPlugin, { urlPattern } from './range-requests.mjs';
+import adapter from "astro-auto-adapter";
+import pwa from '@vite-pwa/astro';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,6 +19,117 @@ export default defineConfig({
     svelte(), 
     tailwind(), 
     sitemap({ customPages: ['https://inthistweet.app/'] }),
+    pwa({
+      experimental: {
+        directoryAndTrailingSlashHandler: true,
+      },
+      devOptions: {
+        enabled: false
+      }, 
+      registerType: "autoUpdate",
+      includeAssets: ['/favicon/favicon.svg', '/favicon/maskable_icon.png', '/favicon/apple-touch-icon.png', '/favicon/android-chrome-512x512.png'],
+      workbox: { 
+        // navigateFallback: '/offline', 
+        cleanupOutdatedCaches: true,
+      },
+      manifest: {
+        "name": "In this tweet",
+        "short_name": "In this tweet",
+        "id": "inthistweet",
+        "start_url": "/?utm_source=pwa",
+        "scope": "/",
+        "dir": "ltr",
+        "display": "standalone",
+        "theme_color": "#232323",
+        "background_color": "#232323",
+        "description": "✨ Futuristic ✨ twitter image, video, and gif downloader and FFmpeg video conversion playground, m3u8 to mp4, webm to mp4, mp4 to gif, etc... Enter a Tweet URL, click search, and download the images and videos in it.",
+        "icons": [
+          {
+            "src": "/favicon/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+          },
+          {
+            "src": "/favicon/maskable_icon_x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+          },
+          {
+            "src": "/favicon/maskable_icon_x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+          },
+          {
+            "src": "/favicon/maskable_icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "maskable"
+          },
+          {
+            "src": "/favicon/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+          },
+          {
+            "src": "/favicon/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+          }
+        ],
+        "lang": "en",
+        "screenshots": [
+          {
+            "src": "/screenshot-mobile-1.png",
+            "type": "image/png",
+            "sizes": "1082x2400",
+            "form_factor": "narrow"
+          },
+          {
+            "src": "/screenshot-mobile-2.png",
+            "type": "image/png",
+            "sizes": "1082x2400",
+            "form_factor": "narrow"
+          },
+          {
+            "src": "/screenshot-desktop-1.png",
+            "type": "image/png",
+            "sizes": "3206x2184",
+            "form_factor": "wide"
+          },
+          {
+            "src": "/screenshot-desktop-2.png",
+            "type": "image/png",
+            "sizes": "3206x2184",
+            "form_factor": "wide"
+          }
+        ],
+        "share_target": {
+          "action": "/",
+          "method": "GET",
+          "enctype": "application/x-www-form-urlencoded",
+          "params": {
+            "text": "q",
+            "url": "url"
+          }
+        },
+        "orientation": "natural",
+        "categories": [
+          "productivity",
+          "utility",
+          "text",
+          "social",
+          "photo",
+          "photo & video",
+          "video",
+          "multimedia",
+          "developer tools"
+        ]
+      }
+      /* your pwa options */
+    }),
     // serviceWorker({
     //   // enableInDevelopment: true,
     //   registration: { autoRegister: true },
@@ -104,6 +212,12 @@ export default defineConfig({
     //   }
     // })
   ],
+  server: {
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+    },
+  },
   output: "hybrid",
   adapter: await adapter(undefined, {
     "deno": {
@@ -111,6 +225,18 @@ export default defineConfig({
     }
   }),
   vite: {
+    // worker: {
+    //   format: "es"
+    // },
+    optimizeDeps: {
+      exclude: ["@ffmpeg/core-mt", "@ffmpeg/ffmpeg", "@ffmpeg/util"],
+    },
+    server: {
+      headers: {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp",
+      },
+    },
     plugins: [
       Icons({
         // experimental

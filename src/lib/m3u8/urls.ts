@@ -8,12 +8,12 @@
  * @param urlStr - The URL string to be converted to a file path.
  * @returns A string representing the file path including the URL's origin.
  */
-export function urlToFilePath(urlStr: string): string {
-  const url = new URL(urlStr);
+export function uriToFilePath(urlStr: string | URL, baseUrl?: string | URL): string {
+  const url = new URL(urlStr, baseUrl);
 
   // Replace special characters that are not valid in file paths.
   // Adjust the replacement logic based on your file system and requirements.
-  const safePath = url.pathname.replace(/[^a-zA-Z0-9\-_\.\/]/g, '_');
+  const safePath = url.pathname.replace(/[^a-zA-Z0-9\-_\.]/g, '_');
 
   // Combine the origin and the pathname to form the file path.
   // The origin replaces '://' with '_' and removes any trailing slashes for a cleaner path.

@@ -1,0 +1,141 @@
+---
+import type { APIContext } from 'astro';
+
+import Layout from '../layouts/Layout.astro';
+
+import { Button, TextBlock, InfoBar } from 'fluent-svelte';
+
+import Logo from "~icons/local/logo";
+import ProductHuntLogo from "~icons/local/product-hunt-logo";
+import FileIconsFfmpeg from '~icons/file-icons/ffmpeg';
+
+import MdiGithub from '~icons/mdi/github';
+import MdiTwitter from '~icons/mdi/twitter';
+
+Astro.response.headers.set("Cross-Origin-Opener-Policy", "unsafe-none");
+Astro.response.headers.set("Cross-Origin-Embedder-Policy", "unsafe-none");
+
+export const prerender = true;
+---
+
+<Layout title="Video, gif and image downloader for twitter - in this tweet?" description="✨ Futuristic ✨ twitter video, gif and image downloader. Enter a Tweet URL, click search and download the resulting videos, gifs, and images to share, create a meme, and/or to store." preload>
+	<section class="social-media">
+		<menu class="flex justify-center gap-1 sm:gap-4">
+			<Button href="/" variant="standard" rel="noopener" aria-label="Go home">
+				<span class="flex flex-row items-center gap-2">
+					<Logo class="logo" /><span class="lt-sm:hidden font-[family:Inter]">In this tweet</span>
+				</span>
+			</Button>
+
+			<div class="flex-grow" />
+			
+			<Button class="flex gap-2" variant="hyperlink" href="/ffmpeg">
+				<FileIconsFfmpeg />	FFmpeg
+			</Button>
+			
+			<Button class="flex gap-2" variant="hyperlink" href="https://github.com/okikio/inthistweet" rel="noopener">
+				<MdiGithub />	GitHub
+			</Button>
+
+			<Button class="flex gap-2" variant="hyperlink" href="https://twitter.com/@inthistweet_dev" rel="noopener">
+				<MdiTwitter /> Twitter
+			</Button>
+		</menu>
+	</section>
+
+	<header class="pt-8 py-4 sm:py-8 md:pt-36 text-center">
+		<div class="title">
+			<TextBlock variant="display">
+				<span class="inline-flex items-center gap-6 title-display" id="title-display">
+					<Logo class="logo" />
+					Offline
+				</span>
+			</TextBlock>
+		</div>
+	
+		<div class="text-gray-900/60 dark:text-gray-200/80 max-w-[48ch] lg:max-w-[60ch] xl:max-w-[75ch] mx-auto">
+			<TextBlock variant="body">
+				<span class="leading-7">
+					Please connect to a network to use <code class="px-2 py-1 rounded bg-gray-300/80 dark:bg-gray-600/80">inthistweet.app</code>
+				</span>
+			</TextBlock>
+		</div>
+	</header>
+
+	<footer class="copyright py-4 sm:py-8">
+		<div class="flex flex-row flex-wrap gap-x-8 gap-y-4 justify-center">
+			<div class="inline-flex gap-1">
+				<span> © {new Date().getFullYear()} </span>
+				<a class="copyright-link" href="https://okikio.dev" rel="noopener">Okiki Ojo</a>
+			</div>
+
+			<div>
+				<span>Inspired by </span>
+				<a class="credit-link" href="https://github.com/egoist/download-twitter-video" rel="noopener">egoist</a>
+			</div>
+		</div>
+	</footer>
+
+	<script>
+		import Measure from "../scripts/measure";
+		Measure(window);
+	</script>
+</Layout>
+
+<style lang="scss">
+	.social-media,
+	header,
+	footer,
+	main {
+		margin: auto;
+		padding: 0.75rem;
+
+		@apply max-w-[60ch] md:max-w-[75ch] xl:max-w-[80ch];
+	}
+
+	.logo-short {
+		height: 1em;
+	}
+
+	.logo :global(path) {
+		@apply stroke-black;
+		@apply dark:stroke-white;
+	}
+
+	@sm {
+		.social-media,
+		header,
+		footer,
+		main {
+			padding: 1.5rem;
+		}
+	}
+
+	:global(.title #title-display) {
+		@apply pb-4;
+		@apply lt-sm:text-4xl lt-md:text-6xl;
+	}
+
+	:global(.icon-button svg.logo) {
+		inline-size: auto;
+		flex-shrink: 0;
+	}
+
+	.copyright {
+		text-align: center;
+	}
+
+	:global(.link),
+	.copyright-link,
+	.credit-link {
+		color: var(--fds-accent-default);
+		display: inline-flex;
+		align-items: center;
+		@apply gap-1;
+	}
+
+	.copyright-link:hover,
+	.credit-link:hover {
+		text-decoration: underline;
+	}
+</style>

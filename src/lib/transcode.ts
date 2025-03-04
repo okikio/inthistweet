@@ -1,13 +1,14 @@
-// import type { FFmpeg } from "@ffmpeg/ffmpeg";
 import type { FFmpeg } from "@ffmpeg.wasm/main";
 import { get } from "svelte/store";
 
-import { abortCtlr, error, ffmpegOpts, loading, results } from "./state";
-import { fetchFile } from "../components/ffmpeg";
-import { tryURL } from "./utils/url";
+import { abortCtlr, error, ffmpegOpts, loading, results } from "./state.ts";
+import { fetchFile } from "./ffmpeg.ts";
+import { tryURL } from "./utils/url.ts";
+
+import { FFMPEG_DEFAULT_OPTS, } from "./state.ts";
 
 export async function transcode({ target }: Event & { currentTarget: EventTarget & HTMLInputElement }, ffmpeg: FFmpeg, value: string, popState = false) {
-  const ffmpegOptions = get(ffmpegOpts);
+  const ffmpegOptions = Object.assign({}, FFMPEG_DEFAULT_OPTS, get(ffmpegOpts) );
 
   const { files } = target as HTMLInputElement;
   const file = files?.[0];
@@ -17,15 +18,16 @@ export async function transcode({ target }: Event & { currentTarget: EventTarget
 
   try {
     if (!file) return;
-    if (!ffmpeg || !ffmpeg?.isLoaded?.()) return;
+    if (!ffmpeg) return;
+    //  || !ffmpeg?.isLoaded?.()
+
+    console.log({
+      inFilename: ffmpegOptions.inFilename,
+      file,
+    })
 
     abortCtlr.set(new AbortController());
-    // await ffmpeg.writeFile(
-    //   ffmpegOptions.inFilename,
-    //   await fetchFile(file, { signal: get(abortCtlr).signal })
-    // );
-    await ffmpeg.FS(
-      "writeFile",
+    ffmpeg.fs.writeFile(
       ffmpegOptions.inFilename,
       await fetchFile(file, { signal: get(abortCtlr).signal })
     );
@@ -49,8 +51,7 @@ export async function transcode({ target }: Event & { currentTarget: EventTarget
     }
 
     const { mediaType } = ffmpegOptions;
-    // const data = await ffmpeg.readFile(ffmpegOptions.outFilename);
-    const data = await ffmpeg.FS("readFile", ffmpegOptions.outFilename);
+    const data = ffmpeg.fs.readFile(ffmpegOptions.outFilename);
     const url = URL.createObjectURL(
       new Blob([data], { type: mediaType })
     );
@@ -60,8 +61,8 @@ export async function transcode({ target }: Event & { currentTarget: EventTarget
     results.set(tempResults);
 
     // ffmpeg.terminate();
-    ffmpeg.exit();
-    await ffmpeg.load();
+    // ffmpeg.exit();
+    // await ffmpeg.load();
     
     if (!popState && tryURL(value)) {
       const newURL = new URL(globalThis.location.href);
